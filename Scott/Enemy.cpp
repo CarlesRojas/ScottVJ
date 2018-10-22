@@ -1,4 +1,5 @@
 #include "Enemy.h"
+#include "Physics.h"
 
 
 Enemy * Enemy::createEnemy(const int enemy, const glm::vec2 & initialPos, const int windowHeight, ShaderProgram * program)
@@ -9,6 +10,7 @@ Enemy * Enemy::createEnemy(const int enemy, const glm::vec2 & initialPos, const 
 
 Enemy::Enemy(const int enemy, const glm::vec2 & initialPos, const int windowHeight, ShaderProgram * shaderProgram)
 {
+	this->state = enemyState::IDLE;
 	this->enemyType = enemy;
 	this->pos = initialPos;
 
@@ -172,6 +174,7 @@ Enemy::Enemy(const int enemy, const glm::vec2 & initialPos, const int windowHeig
 		// Add Boxes
 		hitBox = Box::createBox(Box::ENEMY, Box::HIT, pos, glm::vec2(40 * scaleFactor, 70 * scaleFactor));
 		baseBox = Box::createBox(Box::ENEMY, Box::BASE, pos, glm::vec2(40 * scaleFactor, 10 * scaleFactor));
+		fire = Attack::createAttack(Box::ENEMY, pos, glm::vec2(80 * scaleFactor, -7 * scaleFactor), glm::vec2(70 * scaleFactor, 60 * scaleFactor), 12.5f / 8.f, 5.f / 8.f, 3.5f / 8.f, true, false, glm::vec2(0, 0));
 		break;
 	}
 
@@ -184,6 +187,8 @@ void Enemy::update(int deltaTime)
 	sprite->update(deltaTime);
 	float dt = deltaTime / 1000.f;
 
+	if (delay <= 0 && delay2 > 0) delay2 -= dt;
+
 	if (delay > 0) delay -= dt;
 	else
 	{
@@ -194,13 +199,58 @@ void Enemy::update(int deltaTime)
 			dead = true;
 		}
 	}
-
+	enemyIA();
 	sprite->setPosition(pos);
 }
 
 void Enemy::render()
 {
 	sprite->render(flip);
+}
+
+void Enemy::enemyIA() 
+{
+	switch (state)
+	{
+	case Enemy::IDLE:
+		if (delay > 0) 
+		{
+			sprite->changeAnimation(EnemyAnims::IDLE);
+			if (delay2 > 0)
+			{
+				if (Physics::instance().isCloseThan(this, 20)) state = enemyState::ATTACK;
+				else if (Physics::instance().isCloseThan(this, 400)) state = MOVE;
+			}
+		}
+		break;
+	case Enemy::MOVE:
+
+		break;
+	case Enemy::ATTACK:
+		if (delay > 0) 
+		{
+			fire->activate(pos, flip);
+			delay = 12.5f / 8.f;
+			fixAnim = true;
+			fixPos = true;
+			sprite->changeAnimation(EnemyAnims::ATTACK);
+			state = MASK;
+		}
+		break;
+	case Enemy::MASK:
+		if (delay > 0)
+		{
+			delay = 16.5f / 8.f;
+			delay2 = 12.f / 8.f;
+			fixAnim = true;
+			fixPos = true;
+			sprite->changeAnimation(EnemyAnims::SPECIAL);
+			state = IDLE;
+		}
+		break;
+	default:
+		break;
+	}
 }
 
 void Enemy::move(glm::vec2 deltaPos, float deltaTime)
@@ -223,7 +273,7 @@ void Enemy::revertMove()
 void Enemy::kill()
 {
 	// Down
-	if (!dying && sprite->animation() != DOWN && !fixAnim)
+	if ((state == IDLE || state == MASK) && !dying && sprite->animation() != DOWN && !fixAnim)
 	{
 		hitBox->active = false;
 		baseBox->active = false;

@@ -26,6 +26,7 @@ public:
 	static bool overlap(Box * box1, Box * box2);
 	bool correctPosition(Box * box);
 	void attack(Attack * attack);
+	bool isCloseThan(Enemy * e, int dist);
 
 
 	ShaderProgram *program;

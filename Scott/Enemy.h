@@ -19,6 +19,7 @@ public:
 	void update(int deltaTime);
 	void render();
 
+	void enemyIA();
 	void move(glm::vec2 deltaPos, float deltaTime);
 	void revertMove();
 	void kill();
@@ -26,6 +27,7 @@ public:
 
 	Box *hitBox;
 	Box *baseBox;
+	Attack *fire;
 
 	bool dead, flip, fixAnim, fixPos, dying;
 	glm::vec2 pos;
@@ -36,7 +38,10 @@ private:
 	Sprite *sprite;
 
 	int enemyType, speed;
-	float delay, scaleFactor;
+	float delay, delay2, scaleFactor;
+
+	enum enemyState { IDLE, MOVE, ATTACK, MASK };
+	enemyState state;
 };
 
 
