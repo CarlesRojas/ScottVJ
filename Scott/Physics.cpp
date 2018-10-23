@@ -75,7 +75,25 @@ bool Physics::isCloseThan(Enemy * e, int dist)
 	glm::vec2 diff = e->baseBox->getPos() - player->baseBox->getPos();
 	diff.x = pow(diff.x, 2);
 	diff.y = pow(diff.y, 2);
-	return dist >= (diff.x + diff.y);
+	return (diff.x + diff.y) <= pow(dist, 2);
+}
+
+bool Physics::isInAttackRange(Enemy * e, glm::vec2 min, glm::vec2 max) 
+{
+	glm::vec2 diff = e->baseBox->getPos() - player->baseBox->getPos();
+	diff.x = abs(diff.x);
+
+	return diff.x >= min.x && diff.x <= max.x && diff.y <= min.y && diff.y >= max.y;
+}
+
+glm::vec2 Physics::distToPlayer(Enemy * e) 
+{
+	return e->baseBox->getPos() - player->baseBox->getPos();
+}
+
+glm::vec2 Physics::getPlayerPos()
+{
+	return player->pos;
 }
 
 void Physics::loadOutlineTextures()

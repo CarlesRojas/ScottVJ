@@ -3,8 +3,8 @@
 
 #include "Level.h"
 
-#define SCREEN_WIDTH 1920  // 960 1280
-#define SCREEN_HEIGHT 1080 // 540 720
+#define SCREEN_WIDTH 1920  // 960 1280 1920
+#define SCREEN_HEIGHT 1080 // 540 720 1080
 
 class Game
 {

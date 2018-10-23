@@ -27,6 +27,9 @@ public:
 	bool correctPosition(Box * box);
 	void attack(Attack * attack);
 	bool isCloseThan(Enemy * e, int dist);
+	bool isInAttackRange(Enemy * e, glm::vec2 min, glm::vec2 max);
+	glm::vec2 distToPlayer(Enemy * e);
+	glm::vec2 getPlayerPos();
 
 
 	ShaderProgram *program;

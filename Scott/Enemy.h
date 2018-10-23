@@ -3,6 +3,7 @@
 
 
 #include <vector>
+#include <random>
 #include "Sprite.h"
 #include "Attack.h"
 
@@ -11,37 +12,33 @@ class Enemy
 {
 
 public:
-	enum EnemyAnims { DOWN, ATTACK, RUN, WALK, IDLE, SPECIAL };
-
 	static Enemy * createEnemy(const int enemy, const glm::vec2 & initialPos, const int windowHeight, ShaderProgram * program);
-	Enemy(const int enemy, const glm::vec2 &initialPos, const int windowHeight, ShaderProgram * shaderProgram);
+	Enemy() {};
 
+	virtual void init(const glm::vec2 &initialPos, const int windowHeight, ShaderProgram * shaderProgram);
 	void update(int deltaTime);
 	void render();
 
-	void enemyIA();
-	void move(glm::vec2 deltaPos, float deltaTime);
-	void revertMove();
-	void kill();
-	vector<Attack*> getAttacks();
+	virtual void enemyIA(int deltaTime);
+	virtual void move(glm::vec2 deltaPos, float deltaTime);
+	virtual void kill();
+	virtual vector<Attack*> getAttacks();
 
 	Box *hitBox;
 	Box *baseBox;
-	Attack *fire;
 
 	bool dead, flip, fixAnim, fixPos, dying;
 	glm::vec2 pos;
 
-private:
+protected:
 	glm::vec2 lastDeltaPos;
 	Texture spritesheet;
 	Sprite *sprite;
 
-	int enemyType, speed;
-	float delay, delay2, scaleFactor;
-
-	enum enemyState { IDLE, MOVE, ATTACK, MASK };
-	enemyState state;
+	int speed, alertRange, movingAlongX;
+	glm::vec2 maxAttackRange, minAttackRange;
+	float delay, scaleFactor;
+	mt19937 random;
 };
 
 

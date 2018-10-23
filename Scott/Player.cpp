@@ -316,7 +316,7 @@ void Player::update(int deltaTime)
 			{
 				reviving = true;
 				delay = 9.5f / 8.f;
-				sprite->changeAnimation(REVIVE);
+				if(sprite->animation() != REVIVE) sprite->changeAnimation(REVIVE);
 			}
 			else
 			{

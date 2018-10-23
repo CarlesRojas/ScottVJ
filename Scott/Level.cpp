@@ -51,17 +51,23 @@ void Level::init()
 	Physics::instance().player = player;
 
 	// Enemies
-	enemies.push_back(Enemy::createEnemy(0, glm::vec2(2.0f * SCREEN_WIDTH / 4, 3 * SCREEN_HEIGHT / 4), SCREEN_HEIGHT, &texProgram));
-	Physics::instance().enemies.push_back(enemies[enemies.size() - 1]);
-	enemies.push_back(Enemy::createEnemy(0, glm::vec2(2.5f * SCREEN_WIDTH / 4, 3 * SCREEN_HEIGHT / 4), SCREEN_HEIGHT, &texProgram));
-	Physics::instance().enemies.push_back(enemies[enemies.size() - 1]);
-	enemies.push_back(Enemy::createEnemy(2, glm::vec2(3.0f * SCREEN_WIDTH / 4, 3 * SCREEN_HEIGHT / 4), SCREEN_HEIGHT, &texProgram));
-	Physics::instance().enemies.push_back(enemies[enemies.size() - 1]);
-	enemies.push_back(Enemy::createEnemy(2, glm::vec2(3.5f * SCREEN_WIDTH / 4, 3 * SCREEN_HEIGHT / 4), SCREEN_HEIGHT, &texProgram));
-	Physics::instance().enemies.push_back(enemies[enemies.size() - 1]);
-	enemies.push_back(Enemy::createEnemy(2, glm::vec2(4.0f * SCREEN_WIDTH / 4, 3 * SCREEN_HEIGHT / 4), SCREEN_HEIGHT, &texProgram));
+	enemies.push_back(Enemy::createEnemy(0, glm::vec2(3.0f * SCREEN_WIDTH / 4, 3.5f * SCREEN_HEIGHT / 4), SCREEN_HEIGHT, &texProgram));
 	Physics::instance().enemies.push_back(enemies[enemies.size() - 1]);
 
+	enemies.push_back(Enemy::createEnemy(0, glm::vec2(2.5f * SCREEN_WIDTH / 4, 3.f * SCREEN_HEIGHT / 4), SCREEN_HEIGHT, &texProgram));
+	Physics::instance().enemies.push_back(enemies[enemies.size() - 1]);
+
+	enemies.push_back(Enemy::createEnemy(2, glm::vec2(3.5f * SCREEN_WIDTH / 4, 2.5f * SCREEN_HEIGHT / 4), SCREEN_HEIGHT, &texProgram));
+	Physics::instance().enemies.push_back(enemies[enemies.size() - 1]);
+
+	enemies.push_back(Enemy::createEnemy(0, glm::vec2(12.0f * SCREEN_WIDTH / 4, 3 * SCREEN_HEIGHT / 4), SCREEN_HEIGHT, &texProgram));
+	Physics::instance().enemies.push_back(enemies[enemies.size() - 1]);
+
+	enemies.push_back(Enemy::createEnemy(1, glm::vec2(8.0f * SCREEN_WIDTH / 4, 3 * SCREEN_HEIGHT / 4), SCREEN_HEIGHT, &texProgram));
+	Physics::instance().enemies.push_back(enemies[enemies.size() - 1]);
+
+	enemies.push_back(Enemy::createEnemy(2, glm::vec2(15.0f * SCREEN_WIDTH / 4, 3 * SCREEN_HEIGHT / 4), SCREEN_HEIGHT, &texProgram));
+	Physics::instance().enemies.push_back(enemies[enemies.size() - 1]);
 }
 
 void Level::update(int deltaTime)
