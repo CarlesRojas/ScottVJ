@@ -14,8 +14,9 @@ public:
 	enum PlayerAnims { DOWN, REVIVE, SPIN, SPECIAL, PUNCH3, PUNCH2, PUNCH1, RUN, WALK, IDLE };
 
 	static Player *createPlayer(const int player, const glm::vec2 &initialPos, UI *ui, const int windowHeight, ShaderProgram *program);
-	Player(const int player, const glm::vec2 &initialPos, UI *ui, const int windowHeight, ShaderProgram *shaderProgram);
+	Player() { }
 
+	virtual void init(const glm::vec2 &initialPos, UI *ui, const int windowHeight, ShaderProgram *shaderProgram);
 	void update(int deltaTime);
 	void render();
 
@@ -33,12 +34,13 @@ public:
 	glm::vec2 pos;
 	bool flip, fixAnim, fixPos, dying, reviving;
 
-private:
+protected:
+	virtual float getSpecialAttackDuration();
 	glm::vec2 lastDeltaPos;
 	Texture spriteSheet;
 	UI *ui;
 
-	int playerType, speed, runSpeed, hp;
+	int speed, runSpeed, hp;
 	float delay, scaleFactor;
 };
 

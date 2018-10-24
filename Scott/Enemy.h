@@ -27,13 +27,13 @@ public:
 	Box *hitBox;
 	Box *baseBox;
 
+	Sprite *sprite;
 	bool dead, flip, fixAnim, fixPos, dying;
 	glm::vec2 pos;
 
 protected:
 	glm::vec2 lastDeltaPos;
 	Texture spritesheet;
-	Sprite *sprite;
 
 	int speed, alertRange, movingAlongX;
 	glm::vec2 maxAttackRange, minAttackRange;

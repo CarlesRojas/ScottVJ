@@ -69,6 +69,15 @@
     <ClCompile Include="Malcolm.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Scott.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Kim.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Ramona.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Attack.h">
@@ -123,6 +132,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Malcolm.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Scott.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Kim.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Ramona.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
