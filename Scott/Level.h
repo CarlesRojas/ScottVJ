@@ -21,17 +21,12 @@ public:
 	Level();
 	~Level();
 
-	void init();
+	void init(ShaderProgram * program);
 	void update(int deltaTime);
 	void render();
 
 private:
-	void initShaders();
-
-	// Render
-	float currentTime;
-	glm::mat4 projection;
-	ShaderProgram texProgram;
+	ShaderProgram * program;
 
 	// Components
 	Physics *physics;

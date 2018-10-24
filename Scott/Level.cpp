@@ -1,4 +1,3 @@
-#include <iostream>
 #include <cmath>
 #include <algorithm>
 #include <glm/gtc/matrix_transform.hpp>
@@ -24,56 +23,44 @@ Level::~Level()
 	for (auto e : enemies) delete e;
 }
 
-void Level::init()
+void Level::init(ShaderProgram * program)
 {
-	// Render
-	initShaders();
+	this->program = program;
 
 	// LevelInfo
 	lvl = 1;
 	character = 2;
 
 	// Physics
-	Physics::instance().init(&texProgram);
+	Physics::instance().init(program);
 
 	// Background
-	background = Background::createBackground(lvl, glm::vec2(SCREEN_WIDTH, SCREEN_HEIGHT), &texProgram);
+	background = Background::createBackground(lvl, glm::vec2(SCREEN_WIDTH, SCREEN_HEIGHT), program);
 	Physics::instance().background = background;
 
 	// Cam & UI
 	cam = Camera::createCamera(glm::vec2(SCREEN_WIDTH, SCREEN_HEIGHT), background->getSize());
-	ui = UI::createUI(character, 0.5f, 5.f, 10.f, glm::vec2(SCREEN_WIDTH, SCREEN_HEIGHT), &texProgram);
-	projection = cam->getProjectionMatrix();
-	currentTime = 0.0f;
+	ui = UI::createUI(character, 0.5f, 5.f, 10.f, glm::vec2(SCREEN_WIDTH, SCREEN_HEIGHT), program);
+	Game::instance().projection = cam->getProjectionMatrix();
 
 	// Player
-	player = Player::createPlayer(character, glm::vec2(SCREEN_WIDTH / 4, 3 * SCREEN_HEIGHT / 4), ui, SCREEN_HEIGHT, &texProgram);
+	player = Player::createPlayer(character, glm::vec2(SCREEN_WIDTH / 4, 3 * SCREEN_HEIGHT / 4), ui, SCREEN_HEIGHT, program);
 	Physics::instance().player = player;
 
 	// Enemies
-	enemies.push_back(Enemy::createEnemy(0, glm::vec2(3.0f * SCREEN_WIDTH / 4, 3.5f * SCREEN_HEIGHT / 4), SCREEN_HEIGHT, &texProgram));
+	enemies.push_back(Enemy::createEnemy(0, glm::vec2(3.0f * SCREEN_WIDTH / 4, 3.5f * SCREEN_HEIGHT / 4), SCREEN_HEIGHT, program));
 	Physics::instance().enemies.push_back(enemies[enemies.size() - 1]);
 
-	enemies.push_back(Enemy::createEnemy(0, glm::vec2(2.5f * SCREEN_WIDTH / 4, 3.f * SCREEN_HEIGHT / 4), SCREEN_HEIGHT, &texProgram));
+	enemies.push_back(Enemy::createEnemy(0, glm::vec2(2.5f * SCREEN_WIDTH / 4, 3.f * SCREEN_HEIGHT / 4), SCREEN_HEIGHT, program));
 	Physics::instance().enemies.push_back(enemies[enemies.size() - 1]);
 
-	enemies.push_back(Enemy::createEnemy(2, glm::vec2(3.5f * SCREEN_WIDTH / 4, 2.5f * SCREEN_HEIGHT / 4), SCREEN_HEIGHT, &texProgram));
+	enemies.push_back(Enemy::createEnemy(1, glm::vec2(7.f * SCREEN_WIDTH / 4, 2.5f * SCREEN_HEIGHT / 4), SCREEN_HEIGHT, program));
 	Physics::instance().enemies.push_back(enemies[enemies.size() - 1]);
 
-	enemies.push_back(Enemy::createEnemy(0, glm::vec2(12.0f * SCREEN_WIDTH / 4, 3 * SCREEN_HEIGHT / 4), SCREEN_HEIGHT, &texProgram));
-	Physics::instance().enemies.push_back(enemies[enemies.size() - 1]);
-
-	enemies.push_back(Enemy::createEnemy(1, glm::vec2(8.0f * SCREEN_WIDTH / 4, 3 * SCREEN_HEIGHT / 4), SCREEN_HEIGHT, &texProgram));
-	Physics::instance().enemies.push_back(enemies[enemies.size() - 1]);
-
-	enemies.push_back(Enemy::createEnemy(2, glm::vec2(15.0f * SCREEN_WIDTH / 4, 3 * SCREEN_HEIGHT / 4), SCREEN_HEIGHT, &texProgram));
-	Physics::instance().enemies.push_back(enemies[enemies.size() - 1]);
 }
 
 void Level::update(int deltaTime)
 {
-	currentTime += deltaTime;
-
 	player->update(deltaTime);
 
 	for (int i = 0; i < enemies.size(); ++i)
@@ -87,22 +74,9 @@ void Level::update(int deltaTime)
 		}
 	}
 
-	/*
-	// Player attacks
-	for (auto a : player->getAttacks())
-		if (a->box->active)
-			attack(a);
-
-	// Enemy attacks
-	for (auto e : enemies)
-		for (auto a : e->getAttacks())
-			if (a->box->active)
-				attack(a);
-	*/
-
 	// Camera
 	cam->update(deltaTime, player->pos);
-	projection = cam->getProjectionMatrix();
+	Game::instance().projection = cam->getProjectionMatrix();
 
 	// UI & Background
 	ui->update(deltaTime, cam->getPos());
@@ -111,14 +85,6 @@ void Level::update(int deltaTime)
 
 void Level::render()
 {
-	glm::mat4 modelview;
-	texProgram.use();
-	texProgram.setUniformMatrix4f("projection", projection);
-	texProgram.setUniform4f("color", 1.0f, 1.0f, 1.0f, 1.0f);
-	modelview = glm::mat4(1.0f);
-	texProgram.setUniformMatrix4f("modelview", modelview);
-	texProgram.setUniform2f("texCoordDispl", 0.f, 0.f);
-
 	// Background && UI
 	background->render();
 	ui->render();
@@ -145,35 +111,4 @@ void Level::render()
 
 	// Debug
 	Physics::instance().render();
-
-}
-
-void Level::initShaders()
-{
-	Shader vShader, fShader;
-
-	vShader.initFromFile(VERTEX_SHADER, "shaders/texture.vert");
-	if (!vShader.isCompiled())
-	{
-		cout << "Vertex Shader Error" << endl;
-		cout << "" << vShader.log() << endl << endl;
-	}
-	fShader.initFromFile(FRAGMENT_SHADER, "shaders/texture.frag");
-	if (!fShader.isCompiled())
-	{
-		cout << "Fragment Shader Error" << endl;
-		cout << "" << fShader.log() << endl << endl;
-	}
-	texProgram.init();
-	texProgram.addShader(vShader);
-	texProgram.addShader(fShader);
-	texProgram.link();
-	if (!texProgram.isLinked())
-	{
-		cout << "Shader Linking Error" << endl;
-		cout << "" << texProgram.log() << endl << endl;
-	}
-	texProgram.bindFragmentOutput("outColor");
-	vShader.free();
-	fShader.free();
 }
