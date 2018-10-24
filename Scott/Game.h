@@ -3,14 +3,15 @@
 
 #include "Level.h"
 #include "Screen.h"
+#include "Camera.h"
 
-#define SCREEN_WIDTH 960  // 960 1280 1920
-#define SCREEN_HEIGHT 540 // 540 720 1080
+#define SCREEN_WIDTH 1280  // 960 1280 1920
+#define SCREEN_HEIGHT 720 // 540 720 1080
 
 class Game
 {
 public:
-	enum GameState { MAIN, CHOOSE, LVL1, LVL2, LVL3, GAMEOVER, THEEND };
+	enum GameState { MAIN, CHOOSE, LVL0, LVL1, LVL2, GAMEOVER, THEEND };
 	Game() {}
 
 	static Game &instance()
@@ -46,20 +47,25 @@ public:
 	void setMouseKey(int key, bool set);
 
 	glm::mat4 projection;
+	bool theEnd, gameOver;
 
 private:
 	void initShaders();
+	float currentTime;
+	ShaderProgram program;
 
-	GameState state;
 	bool keepPlaying;
-	Level level;
 	bool keys[256], specialKeys[256], mouseKeys[6];
 	glm::vec2 mousePos;
 
+	GameState state;
+	Level *level;
 	Screen *screen;
+	Camera *cam;
 
-	float currentTime;
-	ShaderProgram program;
+	int player, difficulty;
+	float delay;
+
 };
 
 #endif // _GAME_INCLUDE

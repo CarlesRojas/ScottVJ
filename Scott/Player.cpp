@@ -134,10 +134,7 @@ void Player::update(int deltaTime)
 			&& !fixAnim)
 			sprite->changeAnimation(IDLE);
 	}
-
-	// BORRAR
-	if (Game::instance().getKey('k')) kill();
-
+	
 	sprite->setPosition(pos);
 }
 

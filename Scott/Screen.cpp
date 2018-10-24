@@ -3,7 +3,8 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 
-Screen * Screen::createScreen(int id, const glm::vec2 windowSize, ShaderProgram * program)
+
+Screen *Screen::createScreen(int id, const glm::vec2 windowSize, ShaderProgram * program)
 {
 	Screen *s = new Screen(id, windowSize, program);
 	return s;
@@ -11,120 +12,135 @@ Screen * Screen::createScreen(int id, const glm::vec2 windowSize, ShaderProgram 
 
 Screen::Screen(int id, const glm::vec2 windowSize, ShaderProgram * program)
 {
-	this->id = id;
+	this->id = id; 
+	this->program = program;
+	scaleFactor = (float)windowSize.y / 540.f;
 
-	texture.loadFromFile("sprites/screens/screens_1920x1080.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	texture.loadFromFile("sprites/screens/screens_960x540.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	texture.setWrapS(GL_CLAMP_TO_EDGE);
 	texture.setWrapT(GL_CLAMP_TO_EDGE);
 	texture.setMinFilter(GL_NEAREST);
 	texture.setMagFilter(GL_NEAREST);
-	scaleFactor = (float)windowSize.y / 1080.f;
-	glm::vec2 texSize = glm::vec2(1.f / 8.f, 1.f / 6.f);
+	glm::vec2 texSize = glm::vec2(1.f / 7.f, 1.f / 7.f);
 
-	sprite = Sprite::createSprite(true, glm::vec2(1920.f * scaleFactor, 1080.f * scaleFactor), texSize, &texture, program);
-	sprite->setNumberAnimations(8);
+	screen = Sprite::createSprite(false, glm::vec2(960.f * scaleFactor, 540.f * scaleFactor), texSize, &texture, program);
+	screen->setNumberAnimations(9);
 
-	sprite->setAnimationSpeed(S_MAIN, 8);
-	sprite->addKeyframe(S_MAIN, glm::vec2(0 * texSize.x, 0 * texSize.y));
+	screen->setAnimationSpeed(S_MAIN, 8);
+	screen->addKeyframe(S_MAIN, glm::vec2(0 * texSize.x, 0 * texSize.y));
 
-	sprite->setAnimationSpeed(S_TRIA_SCOTT, 8);
-	sprite->addKeyframe(S_TRIA_SCOTT, glm::vec2(0 * texSize.x, 1 * texSize.y));
-	sprite->addKeyframe(S_TRIA_SCOTT, glm::vec2(1 * texSize.x, 1 * texSize.y));
-	sprite->addKeyframe(S_TRIA_SCOTT, glm::vec2(2 * texSize.x, 1 * texSize.y));
-	sprite->addKeyframe(S_TRIA_SCOTT, glm::vec2(3 * texSize.x, 1 * texSize.y));
-	sprite->addKeyframe(S_TRIA_SCOTT, glm::vec2(4 * texSize.x, 1 * texSize.y));
-	sprite->addKeyframe(S_TRIA_SCOTT, glm::vec2(5 * texSize.x, 1 * texSize.y));
-	sprite->addKeyframe(S_TRIA_SCOTT, glm::vec2(6 * texSize.x, 1 * texSize.y));
-	sprite->addKeyframe(S_TRIA_SCOTT, glm::vec2(7 * texSize.x, 1 * texSize.y));
+	screen->setAnimationSpeed(S_TRIA_SCOTT, 8);
+	screen->addKeyframe(S_TRIA_SCOTT, glm::vec2(1 * texSize.x, 0 * texSize.y));
+	screen->addKeyframe(S_TRIA_SCOTT, glm::vec2(2 * texSize.x, 0 * texSize.y));
+	screen->addKeyframe(S_TRIA_SCOTT, glm::vec2(3 * texSize.x, 0 * texSize.y));
+	screen->addKeyframe(S_TRIA_SCOTT, glm::vec2(4 * texSize.x, 0 * texSize.y));
+	screen->addKeyframe(S_TRIA_SCOTT, glm::vec2(5 * texSize.x, 0 * texSize.y));
+	screen->addKeyframe(S_TRIA_SCOTT, glm::vec2(6 * texSize.x, 0 * texSize.y));
+	screen->addKeyframe(S_TRIA_SCOTT, glm::vec2(0 * texSize.x, 1 * texSize.y));
+	screen->addKeyframe(S_TRIA_SCOTT, glm::vec2(1 * texSize.x, 1 * texSize.y));
 
-	sprite->setAnimationSpeed(S_TRIA_RAMONA, 8);
-	sprite->addKeyframe(S_TRIA_RAMONA, glm::vec2(0 * texSize.x, 2 * texSize.y));
-	sprite->addKeyframe(S_TRIA_RAMONA, glm::vec2(1 * texSize.x, 2 * texSize.y));
-	sprite->addKeyframe(S_TRIA_RAMONA, glm::vec2(2 * texSize.x, 2 * texSize.y));
-	sprite->addKeyframe(S_TRIA_RAMONA, glm::vec2(3 * texSize.x, 2 * texSize.y));
+	screen->setAnimationSpeed(S_TRIA_RAMONA, 8);
+	screen->addKeyframe(S_TRIA_RAMONA, glm::vec2(2 * texSize.x, 1 * texSize.y));
+	screen->addKeyframe(S_TRIA_RAMONA, glm::vec2(3 * texSize.x, 1 * texSize.y));
+	screen->addKeyframe(S_TRIA_RAMONA, glm::vec2(4 * texSize.x, 1 * texSize.y));
+	screen->addKeyframe(S_TRIA_RAMONA, glm::vec2(5 * texSize.x, 1 * texSize.y));
 
-	sprite->setAnimationSpeed(S_TRIA_KIM, 8);
-	sprite->addKeyframe(S_TRIA_KIM, glm::vec2(4 * texSize.x, 2 * texSize.y));
-	sprite->addKeyframe(S_TRIA_KIM, glm::vec2(5 * texSize.x, 2 * texSize.y));
-	sprite->addKeyframe(S_TRIA_KIM, glm::vec2(6 * texSize.x, 2 * texSize.y));
-	sprite->addKeyframe(S_TRIA_KIM, glm::vec2(7 * texSize.x, 2 * texSize.y));
+	screen->setAnimationSpeed(S_TRIA_KIM, 8);
+	screen->addKeyframe(S_TRIA_KIM, glm::vec2(6 * texSize.x, 1 * texSize.y));
+	screen->addKeyframe(S_TRIA_KIM, glm::vec2(0 * texSize.x, 2 * texSize.y));
+	screen->addKeyframe(S_TRIA_KIM, glm::vec2(1 * texSize.x, 2 * texSize.y));
+	screen->addKeyframe(S_TRIA_KIM, glm::vec2(2 * texSize.x, 2 * texSize.y));
 
-	sprite->setAnimationSpeed(S_GO_SCOTT, 8);
-	sprite->addKeyframe(S_GO_SCOTT, glm::vec2(0 * texSize.x, 3 * texSize.y));
-	sprite->addKeyframe(S_GO_SCOTT, glm::vec2(1 * texSize.x, 3 * texSize.y));
-	sprite->addKeyframe(S_GO_SCOTT, glm::vec2(2 * texSize.x, 3 * texSize.y));
-	sprite->addKeyframe(S_GO_SCOTT, glm::vec2(3 * texSize.x, 3 * texSize.y));
+	screen->setAnimationSpeed(S_GO_SCOTT, 8);
+	screen->addKeyframe(S_GO_SCOTT, glm::vec2(3 * texSize.x, 2 * texSize.y));
+	screen->addKeyframe(S_GO_SCOTT, glm::vec2(4 * texSize.x, 2 * texSize.y));
+	screen->addKeyframe(S_GO_SCOTT, glm::vec2(5 * texSize.x, 2 * texSize.y));
+	screen->addKeyframe(S_GO_SCOTT, glm::vec2(6 * texSize.x, 2 * texSize.y));
 
-	sprite->setAnimationSpeed(S_GO_RAMONA, 8);
-	sprite->addKeyframe(S_GO_RAMONA, glm::vec2(0 * texSize.x, 4 * texSize.y));
-	sprite->addKeyframe(S_GO_RAMONA, glm::vec2(1 * texSize.x, 4 * texSize.y));
-	sprite->addKeyframe(S_GO_RAMONA, glm::vec2(2 * texSize.x, 4 * texSize.y));
-	sprite->addKeyframe(S_GO_RAMONA, glm::vec2(3 * texSize.x, 4 * texSize.y));
+	screen->setAnimationSpeed(S_GO_KIM, 8);
+	screen->addKeyframe(S_GO_KIM, glm::vec2(0 * texSize.x, 3 * texSize.y));
+	screen->addKeyframe(S_GO_KIM, glm::vec2(1 * texSize.x, 3 * texSize.y));
+	screen->addKeyframe(S_GO_KIM, glm::vec2(2 * texSize.x, 3 * texSize.y));
+	screen->addKeyframe(S_GO_KIM, glm::vec2(3 * texSize.x, 3 * texSize.y));
 
-	sprite->setAnimationSpeed(S_GO_KIM, 8);
-	sprite->addKeyframe(S_GO_KIM, glm::vec2(4 * texSize.x, 3 * texSize.y));
-	sprite->addKeyframe(S_GO_KIM, glm::vec2(5 * texSize.x, 3 * texSize.y));
-	sprite->addKeyframe(S_GO_KIM, glm::vec2(6 * texSize.x, 3 * texSize.y));
-	sprite->addKeyframe(S_GO_KIM, glm::vec2(7 * texSize.x, 3 * texSize.y));
+	screen->setAnimationSpeed(S_GO_RAMONA, 8);
+	screen->addKeyframe(S_GO_RAMONA, glm::vec2(4 * texSize.x, 3 * texSize.y));
+	screen->addKeyframe(S_GO_RAMONA, glm::vec2(5 * texSize.x, 3 * texSize.y));
+	screen->addKeyframe(S_GO_RAMONA, glm::vec2(6 * texSize.x, 3 * texSize.y));
+	screen->addKeyframe(S_GO_RAMONA, glm::vec2(0 * texSize.x, 4 * texSize.y));
 
-	sprite->setAnimationSpeed(S_THEEND, 8);
-	sprite->addKeyframe(S_THEEND, glm::vec2(0 * texSize.x, 5 * texSize.y));
-	sprite->addKeyframe(S_THEEND, glm::vec2(1 * texSize.x, 5 * texSize.y));
-	sprite->addKeyframe(S_THEEND, glm::vec2(2 * texSize.x, 5 * texSize.y));
-	sprite->addKeyframe(S_THEEND, glm::vec2(3 * texSize.x, 5 * texSize.y));
-	sprite->addKeyframe(S_THEEND, glm::vec2(4 * texSize.x, 5 * texSize.y));
+	screen->setAnimationSpeed(S_THEEND, 8);
+	screen->addKeyframe(S_THEEND, glm::vec2(1 * texSize.x, 4 * texSize.y));
+	screen->addKeyframe(S_THEEND, glm::vec2(2 * texSize.x, 4 * texSize.y));
+	screen->addKeyframe(S_THEEND, glm::vec2(3 * texSize.x, 4 * texSize.y));
+	screen->addKeyframe(S_THEEND, glm::vec2(4 * texSize.x, 4 * texSize.y));
+	screen->addKeyframe(S_THEEND, glm::vec2(5 * texSize.x, 4 * texSize.y));
 
-	switch (id)
-	{
-	case 0:
-		sprite->changeAnimation(S_MAIN);
-		break;
-	case 1:
-		sprite->changeAnimation(S_TRIA_SCOTT);
-		break;
-	case 2:
-		sprite->changeAnimation(S_THEEND);
-		break;
-	case 3:
-		sprite->changeAnimation(S_GO_SCOTT);
-		break;
-	default:
-		break;
-	}
+	screen->setAnimationSpeed(S_NONE, 8);
+	screen->addKeyframe(S_NONE, glm::vec2(6 * texSize.x, 6 * texSize.y));
+	
+	screen->changeAnimation(S_NONE);
+	screen->setPosition(glm::vec2(0.f));
+	
+	// Message
+	message = Sprite::createSprite(false, glm::vec2(960.f * scaleFactor, 540.f * scaleFactor), texSize, &texture, program);
+	message->setNumberAnimations(4);
 
-	sprite->changeAnimation(S_MAIN);
-	sprite->setPosition(glm::vec2(0.f, 0.f));
-	Game::instance().projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1), 0.f);
+	message->setAnimationSpeed(M_START, 2);
+	message->addKeyframe(M_START, glm::vec2(6 * texSize.x, 4 * texSize.y));
+	message->addKeyframe(M_START, glm::vec2(6 * texSize.x, 5 * texSize.y));
+
+	message->setAnimationSpeed(M_PLAY, 2);
+	message->addKeyframe(M_PLAY, glm::vec2(0 * texSize.x, 5 * texSize.y));
+	message->addKeyframe(M_PLAY, glm::vec2(0 * texSize.x, 6 * texSize.y));
+	
+	message->setAnimationSpeed(M_MENU, 2);
+	message->addKeyframe(M_MENU, glm::vec2(1 * texSize.x, 5 * texSize.y));
+	message->addKeyframe(M_MENU, glm::vec2(1 * texSize.x, 6 * texSize.y));
+	
+	message->setAnimationSpeed(M_NONE, 2);
+	message->addKeyframe(M_NONE, glm::vec2(6 * texSize.x, 6 * texSize.y));
+
+	message->changeAnimation(M_NONE);
+	message->setPosition(glm::vec2(0.f));
+
+	// Difficulty
+	difficulty = Sprite::createSprite(false, glm::vec2(960.f * scaleFactor, 540.f * scaleFactor), texSize, &texture, program);
+	difficulty->setNumberAnimations(4);
+
+	difficulty->setAnimationSpeed(D_EASY, 8);
+	difficulty->addKeyframe(D_EASY, glm::vec2(2 * texSize.x, 5 * texSize.y));
+
+	difficulty->setAnimationSpeed(D_MEDIUM, 8);
+	difficulty->addKeyframe(D_MEDIUM, glm::vec2(3 * texSize.x, 5 * texSize.y));
+
+	difficulty->setAnimationSpeed(D_HARD, 8);
+	difficulty->addKeyframe(D_HARD, glm::vec2(4 * texSize.x, 5 * texSize.y));
+	
+	difficulty->setAnimationSpeed(D_NONE, 8);
+	difficulty->addKeyframe(D_NONE, glm::vec2(6 * texSize.x, 6 * texSize.y));
+
+	difficulty->changeAnimation(D_NONE);
+	difficulty->setPosition(glm::vec2(0.f));
 }
 
 void Screen::update(int deltaTime)
 {
-	sprite->update(deltaTime);
+	float dt = deltaTime / 1000.f;
 
-	if (id == 1) {
-		if (Game::instance().getKey('d'))
-		{
-			if (sprite->animation() == S_TRIA_SCOTT)
-				sprite->changeAnimation(S_TRIA_RAMONA);
-			else if (sprite->animation() == S_TRIA_RAMONA)
-				sprite->changeAnimation(S_TRIA_KIM);
-			else if (sprite->animation() == S_TRIA_KIM)
-				sprite->changeAnimation(S_TRIA_SCOTT);
-		}
-		if (Game::instance().getKey('a'))
-		{
-			if (sprite->animation() == S_TRIA_SCOTT)
-				sprite->changeAnimation(S_TRIA_KIM);
-			else if (sprite->animation() == S_TRIA_KIM)
-				sprite->changeAnimation(S_TRIA_RAMONA);
-			else if (sprite->animation() == S_TRIA_RAMONA)
-				sprite->changeAnimation(S_TRIA_SCOTT);
-		}
-	}
-	Game::instance().projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1), 0.f);
+	screen->update(deltaTime);
+	screen->setPosition(glm::vec2(0.f));
+
+	message->update(deltaTime);
+	message->setPosition(glm::vec2(0.f));
+
+	difficulty->update(deltaTime);
+	difficulty->setPosition(glm::vec2(0.f));
 }
 
 void Screen::render()
 {
-	sprite->render(false);
+	screen->render(false);
+	difficulty->render(false);
+	message->render(false);
 }

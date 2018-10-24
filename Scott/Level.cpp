@@ -23,13 +23,18 @@ Level::~Level()
 	for (auto e : enemies) delete e;
 }
 
-void Level::init(ShaderProgram * program)
+Level * Level::createLevel(int character, int difficulty, int lvl, ShaderProgram * program)
+{
+	Level *l = new Level(character, difficulty, lvl, program);
+	return l;
+}
+
+Level::Level(int character, int difficulty, int lvl, ShaderProgram * program)
 {
 	this->program = program;
-
-	// LevelInfo
-	lvl = 1;
-	character = 2;
+	this->lvl = lvl;
+	this->difficulty = difficulty;
+	this->character = character;
 
 	// Physics
 	Physics::instance().init(program);
@@ -56,13 +61,12 @@ void Level::init(ShaderProgram * program)
 
 	enemies.push_back(Enemy::createEnemy(1, glm::vec2(7.f * SCREEN_WIDTH / 4, 2.5f * SCREEN_HEIGHT / 4), SCREEN_HEIGHT, program));
 	Physics::instance().enemies.push_back(enemies[enemies.size() - 1]);
-
 }
 
 void Level::update(int deltaTime)
 {
+	// Entities
 	player->update(deltaTime);
-
 	for (int i = 0; i < enemies.size(); ++i)
 	{
 		enemies[i]->update(deltaTime);
@@ -81,12 +85,18 @@ void Level::update(int deltaTime)
 	// UI & Background
 	ui->update(deltaTime, cam->getPos());
 	background->update(deltaTime, cam->getPos());
+
+	// End level if player has no hit poits left
+	if (player->hp <= 0) gameOver();
+
+	// Debug
+	if (Game::instance().getKey('v')) theEnd();
 }
 
 void Level::render()
 {
 	// Background && UI
-	background->render();
+	if(background != NULL) background->render();
 	ui->render();
 
 	// Enemies & Player in order
@@ -112,3 +122,14 @@ void Level::render()
 	// Debug
 	Physics::instance().render();
 }
+
+void Level::gameOver()
+{
+	Game::instance().gameOver = true;
+}
+
+void Level::theEnd() 
+{
+	Game::instance().theEnd = true;
+}
+

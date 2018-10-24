@@ -33,6 +33,7 @@ public:
 	Sprite *sprite;
 	glm::vec2 pos;
 	bool flip, fixAnim, fixPos, dying, reviving;
+	int hp;
 
 protected:
 	virtual float getSpecialAttackDuration();
@@ -40,7 +41,7 @@ protected:
 	Texture spriteSheet;
 	UI *ui;
 
-	int speed, runSpeed, hp;
+	int speed, runSpeed;
 	float delay, scaleFactor;
 };
 

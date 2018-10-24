@@ -8,53 +8,209 @@
 void Game::init()
 {
 	keepPlaying = true;
-	glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
+	glClearColor(1.0f, 0.3f, 0.3f, 1.0f);
 	currentTime = 0.0f;
+	delay = -1.f;
 	initShaders();
-	//level.init(&program);
-	//state = Game::MAIN;
+	theEnd = gameOver = false;
+
+	level == NULL;
 	screen = Screen::createScreen(0, glm::vec2(SCREEN_WIDTH, SCREEN_HEIGHT), &program);
+	cam = Camera::createCamera(glm::vec2(SCREEN_WIDTH, SCREEN_HEIGHT), glm::vec2(SCREEN_WIDTH, SCREEN_HEIGHT));
+
+	state = Game::LVL0;
+	screen->screen->changeAnimation(Screen::S_MAIN);
+	screen->message->changeAnimation(Screen::M_START);
+	screen->difficulty->changeAnimation(Screen::D_NONE);
+
+	level = Level::createLevel(player, difficulty, 0, &program);
 }
 
 bool Game::update(int deltaTime)
 {
-	projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1), 0.f);
 	currentTime += deltaTime;
-	/*
+	if (delay > 0) delay -= (deltaTime / 1000.f);
+
+	if (level == NULL)
+	{
+		screen->update(deltaTime);
+		cam->update(deltaTime, glm::vec2(SCREEN_WIDTH / 2.f, SCREEN_HEIGHT / 2.f));
+		Game::instance().projection = cam->getProjectionMatrix();
+	}
+	else level->update(deltaTime);
+
 	switch (state)
 	{
 	case Game::MAIN:
-		if (Game::instance().getKey(' ')) state = CHOOSE;
+		if (delay <= 0 && Game::instance().getKey(' '))
+		{
+			delay = .5f;
+			screen->screen->changeAnimation(Screen::S_TRIA_SCOTT);
+			screen->message->changeAnimation(Screen::M_PLAY);
+			screen->difficulty->changeAnimation(Screen::D_EASY);
+			state = CHOOSE;
+		}
 
 		break;
 	case Game::CHOOSE:
-		if (Game::instance().getKey(' ')) state = LVL1;
 
+		// Right
+		if (delay <= 0 && Game::instance().getKey('d'))
+		{
+			delay = .3f;
+			if (screen->screen->animation() == Screen::S_TRIA_SCOTT)
+				screen->screen->changeAnimation(Screen::S_TRIA_RAMONA);
+			else if (screen->screen->animation() == Screen::S_TRIA_RAMONA)
+				screen->screen->changeAnimation(Screen::S_TRIA_KIM);
+			else if (screen->screen->animation() == Screen::S_TRIA_KIM)
+				screen->screen->changeAnimation(Screen::S_TRIA_SCOTT);
+		}
+
+		// Left
+		else if (delay <= 0 && Game::instance().getKey('a'))
+		{
+			delay = .3f;
+			if (screen->screen->animation() == Screen::S_TRIA_SCOTT)
+				screen->screen->changeAnimation(Screen::S_TRIA_KIM);
+			else if (screen->screen->animation() == Screen::S_TRIA_KIM)
+				screen->screen->changeAnimation(Screen::S_TRIA_RAMONA);
+			else if (screen->screen->animation() == Screen::S_TRIA_RAMONA)
+				screen->screen->changeAnimation(Screen::S_TRIA_SCOTT);
+		}
+
+		// Up
+		else if (delay <= 0 && Game::instance().getKey('w'))
+		{
+			delay = .3f;
+			if (screen->difficulty->animation() == Screen::D_EASY)
+				screen->difficulty->changeAnimation(Screen::D_HARD);
+			else if (screen->difficulty->animation() == Screen::D_MEDIUM)
+				screen->difficulty->changeAnimation(Screen::D_EASY);
+			else if (screen->difficulty->animation() == Screen::D_HARD)
+				screen->difficulty->changeAnimation(Screen::D_MEDIUM);
+		}
+
+		// Down
+		else if (delay <= 0 && Game::instance().getKey('s'))
+		{
+			delay = .3f;
+			if (screen->difficulty->animation() == Screen::D_EASY)
+				screen->difficulty->changeAnimation(Screen::D_MEDIUM);
+			else if (screen->difficulty->animation() == Screen::D_MEDIUM)
+				screen->difficulty->changeAnimation(Screen::D_HARD);
+			else if (screen->difficulty->animation() == Screen::D_HARD)
+				screen->difficulty->changeAnimation(Screen::D_EASY);
+		}
+
+		if (delay <= 0 && Game::instance().getKey(' '))
+		{
+			delay = .5f;
+
+			if (screen->screen->animation() == Screen::S_TRIA_SCOTT) player = 0;
+			else if (screen->screen->animation() == Screen::S_TRIA_RAMONA) player = 1;
+			else if (screen->screen->animation() == Screen::S_TRIA_KIM) player = 2;
+
+			if (screen->difficulty->animation() == Screen::D_EASY) difficulty = 0;
+			else if (screen->difficulty->animation() == Screen::D_MEDIUM) difficulty = 1;
+			else if (screen->difficulty->animation() == Screen::D_HARD) difficulty = 2;
+
+			screen->screen->changeAnimation(Screen::S_NONE);
+			screen->message->changeAnimation(Screen::M_NONE);
+			screen->difficulty->changeAnimation(Screen::D_NONE);
+			state = LVL0;
+
+			level = Level::createLevel(player, difficulty, 0, &program);
+		}
+		break;
+	case Game::LVL0:
+		if (theEnd) 
+		{
+			theEnd = gameOver = false;
+			level = Level::createLevel(player, difficulty, 1, &program);
+			state = LVL1;
+		}
+		if (gameOver)
+		{
+			theEnd = gameOver = false;
+			if(player == 0) screen->screen->changeAnimation(Screen::S_GO_SCOTT);
+			else if (player == 1) screen->screen->changeAnimation(Screen::S_GO_RAMONA);
+			else screen->screen->changeAnimation(Screen::S_GO_KIM);
+			
+			delete level;
+			level == NULL;
+
+			screen->message->changeAnimation(Screen::M_MENU);
+			screen->difficulty->changeAnimation(Screen::D_NONE);
+			state = GAMEOVER;
+		}
 		break;
 	case Game::LVL1:
-		true;
+		if (theEnd) 
+		{
+			theEnd = gameOver = false;
+			level = Level::createLevel(player, difficulty, 2, &program);
+			state = LVL2;
+		}
+		if (gameOver)
+		{
+			theEnd = gameOver = false;
+			if (player == 0) screen->screen->changeAnimation(Screen::S_GO_SCOTT);
+			else if (player == 1) screen->screen->changeAnimation(Screen::S_GO_RAMONA);
+			else screen->screen->changeAnimation(Screen::S_GO_KIM);
+
+			delete level;
+			level == NULL;
+
+			screen->message->changeAnimation(Screen::M_MENU);
+			screen->difficulty->changeAnimation(Screen::D_NONE);
+			state = GAMEOVER;
+		}
 		break;
 	case Game::LVL2:
-		true;
-		break;
-	case Game::LVL3:
-		true;
+		if (theEnd)
+		{
+			theEnd = gameOver = false;
+			screen->screen->changeAnimation(Screen::S_THEEND);
+			screen->message->changeAnimation(Screen::M_MENU);
+			screen->difficulty->changeAnimation(Screen::D_NONE);
+			state = THEEND;
+		}
+		if (gameOver)
+		{
+			theEnd = gameOver = false;
+			if (player == 0) screen->screen->changeAnimation(Screen::S_GO_SCOTT);
+			else if (player == 1) screen->screen->changeAnimation(Screen::S_GO_RAMONA);
+			else screen->screen->changeAnimation(Screen::S_GO_KIM);
+
+			delete level;
+			level == NULL;
+
+			screen->message->changeAnimation(Screen::M_MENU);
+			screen->difficulty->changeAnimation(Screen::D_NONE);
+			state = GAMEOVER;
+		}
 		break;
 	case Game::GAMEOVER:
-		if (Game::instance().getKey(' ')) state = MAIN;
+		if (Game::instance().getKey(' '))
+		{
+			screen->screen->changeAnimation(Screen::S_MAIN);
+			screen->message->changeAnimation(Screen::M_START);
+			screen->difficulty->changeAnimation(Screen::D_NONE);
+			state = MAIN;
+		}
 		break;
 	case Game::THEEND:
-		if (Game::instance().getKey(' ')) state = MAIN;
+		if (Game::instance().getKey(' '))
+		{
+			screen->screen->changeAnimation(Screen::S_MAIN);
+			screen->message->changeAnimation(Screen::M_START);
+			screen->difficulty->changeAnimation(Screen::D_NONE);
+			state = MAIN;
+		}
 		break;
-	default:
-
-		true;
-		break;
+	default: break;
 	}
-	*/
-	//level.update(deltaTime);
-	screen->update(deltaTime);
-
+	
 	return keepPlaying;
 }
 
@@ -70,8 +226,8 @@ void Game::render()
 	program.setUniformMatrix4f("modelview", modelview);
 	program.setUniform2f("texCoordDispl", 0.f, 0.f);
 
-	//level.render();
-	screen->render();
+	if (level == NULL) screen->render();
+	else level->render();
 }
 
 void Game::keyPressed(int key)

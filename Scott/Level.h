@@ -12,6 +12,7 @@
 #include "UI.h"
 #include "Texture.h"
 #include "Physics.h"
+#include "Screen.h"
 
 class Level
 {
@@ -21,9 +22,14 @@ public:
 	Level();
 	~Level();
 
-	void init(ShaderProgram * program);
+	static Level * createLevel(int character, int difficulty, int lvl, ShaderProgram * program);
+	Level(int character, int difficulty, int lvl, ShaderProgram * program);
+
 	void update(int deltaTime);
 	void render();
+
+	void gameOver();
+	void theEnd();
 
 private:
 	ShaderProgram * program;
@@ -37,7 +43,7 @@ private:
 	vector<Enemy*> enemies;
 
 	// Level Info
-	int character, lvl;
+	int character, lvl, difficulty;
 };
 
 
