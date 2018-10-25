@@ -1,4 +1,5 @@
 #include "Kim.h"
+#include "Load.h"
 
 void Kim::init(const glm::vec2 & initialPos, UI * ui, const int windowHeight, ShaderProgram * shaderProgram)
 {
@@ -11,13 +12,7 @@ void Kim::init(const glm::vec2 & initialPos, UI * ui, const int windowHeight, Sh
 	flip = fixAnim = fixPos = dying = reviving = false;
 	scaleFactor = ((float)windowHeight / 256.f);
 
-	spriteSheet.loadFromFile("sprites/kim/kim_256.png", TEXTURE_PIXEL_FORMAT_RGBA);
-	spriteSheet.setWrapS(GL_CLAMP_TO_EDGE);
-	spriteSheet.setWrapT(GL_CLAMP_TO_EDGE);
-	spriteSheet.setMinFilter(GL_NEAREST);
-	spriteSheet.setMagFilter(GL_NEAREST);
-
-	sprite = Sprite::createSprite(true, glm::vec2(256.f * scaleFactor, 256.f * scaleFactor), glm::vec2(0.05, 0.05), &spriteSheet, shaderProgram);
+	sprite = Sprite::createSprite(true, glm::vec2(256.f * scaleFactor, 256.f * scaleFactor), glm::vec2(0.05, 0.05), &Load::instance().kim, shaderProgram);
 	sprite->setNumberAnimations(10);
 
 	sprite->setAnimationSpeed(IDLE, 8);
@@ -126,7 +121,7 @@ void Kim::init(const glm::vec2 & initialPos, UI * ui, const int windowHeight, Sh
 	special = Attack::createAttack(Box::PLAYER, pos, glm::vec2(53 * scaleFactor, -8 * scaleFactor), glm::vec2(60 * scaleFactor, 50 * scaleFactor), 8.5f / 8.f, 5.f / 8.f, .5f / 8.f, false, true, glm::vec2(800.f, 0));
 
 	// Special Attack Sprite
-	Sprite * monster = Sprite::createSprite(true, glm::vec2(256.f * scaleFactor, 256.f * scaleFactor), glm::vec2(0.05, 0.05), &spriteSheet, shaderProgram);
+	Sprite * monster = Sprite::createSprite(true, glm::vec2(256.f * scaleFactor, 256.f * scaleFactor), glm::vec2(0.05, 0.05), &Load::instance().kim, shaderProgram);
 	monster->setNumberAnimations(1);
 
 	monster->setAnimationSpeed(0, 8);

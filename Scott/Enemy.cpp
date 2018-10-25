@@ -4,6 +4,20 @@
 #include "Turret.h"
 #include "Roxilla.h"
 
+Enemy::Enemy()
+{
+	hitBox = NULL;
+	baseBox = NULL;
+	sprite = NULL;
+}
+
+Enemy::~Enemy()
+{
+	if (hitBox != NULL) delete hitBox;
+	if (baseBox != NULL) delete baseBox;
+	if (sprite != NULL) delete sprite;
+}
+
 Enemy * Enemy::createEnemy(const int enemy, const glm::vec2 & initialPos, const int windowHeight, ShaderProgram * program)
 {
 	switch (enemy) 

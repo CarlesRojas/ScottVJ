@@ -7,6 +7,24 @@ enum UIAnims
 	WHITE, COOLDOWN
 };
 
+UI::UI()
+{
+	program = NULL;
+	hpSprite = NULL;
+	attackSprite = NULL;
+	spinSprite = NULL;
+	specialSprite = NULL;
+}
+
+UI::~UI()
+{
+	if (program != NULL) delete program;
+	if (hpSprite != NULL) delete hpSprite;
+	if (attackSprite != NULL) delete attackSprite;
+	if (spinSprite != NULL) delete spinSprite;
+	if (specialSprite != NULL) delete specialSprite;
+}
+
 UI * UI::createUI(int playerCharacter, float attackCD, float spinCD, float specialCD, const glm::vec2 windowSize, ShaderProgram * program)
 {
 	UI *ui = new UI(playerCharacter, attackCD, spinCD, specialCD, windowSize, program);

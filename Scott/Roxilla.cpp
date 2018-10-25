@@ -1,5 +1,16 @@
 #include "Roxilla.h"
 #include "Physics.h"
+#include "Load.h"
+
+Roxilla::Roxilla()
+{
+	fire = NULL;
+}
+
+Roxilla::~Roxilla()
+{
+	if (fire != NULL) delete fire;
+}
 
 void Roxilla::init(const glm::vec2 & initialPos, const int windowHeight, ShaderProgram * shaderProgram)
 {
@@ -10,13 +21,7 @@ void Roxilla::init(const glm::vec2 & initialPos, const int windowHeight, ShaderP
 	speed = 150;
 	fireCooldown = 5.f;
 
-	spritesheet.loadFromFile("sprites/roxilla/roxilla_256.png", TEXTURE_PIXEL_FORMAT_RGBA);
-	spritesheet.setWrapS(GL_CLAMP_TO_EDGE);
-	spritesheet.setWrapT(GL_CLAMP_TO_EDGE);
-	spritesheet.setMinFilter(GL_NEAREST);
-	spritesheet.setMagFilter(GL_NEAREST);
-
-	sprite = Sprite::createSprite(true, glm::vec2(256.f * scaleFactor, 256.f * scaleFactor), glm::vec2(0.05, 0.05), &spritesheet, shaderProgram);
+	sprite = Sprite::createSprite(true, glm::vec2(256.f * scaleFactor, 256.f * scaleFactor), glm::vec2(0.05, 0.05), &Load::instance().roxilla, shaderProgram);
 	sprite->setNumberAnimations(5);
 
 	sprite->setAnimationSpeed(IDLE, 8);

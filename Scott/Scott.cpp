@@ -1,4 +1,5 @@
 #include "Scott.h"
+#include "Load.h"
 
 void Scott::init(const glm::vec2 & initialPos, UI * ui, const int windowHeight, ShaderProgram * shaderProgram)
 {
@@ -10,14 +11,8 @@ void Scott::init(const glm::vec2 & initialPos, UI * ui, const int windowHeight, 
 	delay = 0.f;
 	flip = fixAnim = fixPos = dying = reviving = false;
 	scaleFactor = ((float)windowHeight / 256.f);
-
-	spriteSheet.loadFromFile("sprites/scott/scott_256.png", TEXTURE_PIXEL_FORMAT_RGBA);
-	spriteSheet.setWrapS(GL_CLAMP_TO_EDGE);
-	spriteSheet.setWrapT(GL_CLAMP_TO_EDGE);
-	spriteSheet.setMinFilter(GL_NEAREST);
-	spriteSheet.setMagFilter(GL_NEAREST);
-
-	sprite = Sprite::createSprite(true, glm::vec2(256.f * scaleFactor, 256.f * scaleFactor), glm::vec2(0.05, 0.05), &spriteSheet, shaderProgram);
+	
+	sprite = Sprite::createSprite(true, glm::vec2(256.f * scaleFactor, 256.f * scaleFactor), glm::vec2(0.05, 0.05), &Load::instance().scott, shaderProgram);
 	sprite->setNumberAnimations(10);
 
 	sprite->setAnimationSpeed(IDLE, 8);

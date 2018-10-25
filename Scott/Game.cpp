@@ -5,6 +5,20 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 
+Game::Game()
+{
+	level = NULL;
+	screen = NULL;
+	cam = NULL;
+}
+
+Game::~Game()
+{
+	if (level != NULL) delete level;
+	if (screen != NULL) delete screen;
+	if (cam != NULL) delete cam;
+}
+
 void Game::init()
 {
 	keepPlaying = true;
@@ -13,17 +27,18 @@ void Game::init()
 	delay = -1.f;
 	initShaders();
 	theEnd = gameOver = false;
+	Load::instance().init();
 
 	level == NULL;
 	screen = Screen::createScreen(0, glm::vec2(SCREEN_WIDTH, SCREEN_HEIGHT), &program);
 	cam = Camera::createCamera(glm::vec2(SCREEN_WIDTH, SCREEN_HEIGHT), glm::vec2(SCREEN_WIDTH, SCREEN_HEIGHT));
 
-	state = Game::LVL0;
+	state = Game::MAIN;
 	screen->screen->changeAnimation(Screen::S_MAIN);
 	screen->message->changeAnimation(Screen::M_START);
 	screen->difficulty->changeAnimation(Screen::D_NONE);
 
-	level = Level::createLevel(player, difficulty, 0, &program);
+	//level = Level::createLevel(player, difficulty, 0, &program);
 }
 
 bool Game::update(int deltaTime)

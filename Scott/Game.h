@@ -4,6 +4,7 @@
 #include "Level.h"
 #include "Screen.h"
 #include "Camera.h"
+#include "Load.h"
 
 #define SCREEN_WIDTH 1280  // 960 1280 1920
 #define SCREEN_HEIGHT 720 // 540 720 1080
@@ -12,12 +13,11 @@ class Game
 {
 public:
 	enum GameState { MAIN, CHOOSE, LVL0, LVL1, LVL2, GAMEOVER, THEEND };
-	Game() {}
-
+	Game();
+	~Game();
 	static Game &instance()
 	{
 		static Game G;
-
 		return G;
 	}
 
@@ -53,6 +53,7 @@ private:
 	void initShaders();
 	float currentTime;
 	ShaderProgram program;
+	static Load load;
 
 	bool keepPlaying;
 	bool keys[256], specialKeys[256], mouseKeys[6];

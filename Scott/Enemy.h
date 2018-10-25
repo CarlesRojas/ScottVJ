@@ -12,8 +12,10 @@ class Enemy
 {
 
 public:
+	Enemy();
+	~Enemy();
 	static Enemy * createEnemy(const int enemy, const glm::vec2 & initialPos, const int windowHeight, ShaderProgram * program);
-	Enemy() {};
+
 
 	virtual void init(const glm::vec2 &initialPos, const int windowHeight, ShaderProgram * shaderProgram);
 	void update(int deltaTime);
@@ -33,7 +35,6 @@ public:
 
 protected:
 	glm::vec2 lastDeltaPos;
-	Texture spritesheet;
 
 	int speed, alertRange, movingAlongX;
 	glm::vec2 maxAttackRange, minAttackRange;

@@ -3,6 +3,26 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include "Physics.h"
 
+Physics::Physics()
+{
+	program = NULL;
+	background = NULL;
+	player = NULL;
+	enemies.clear();
+}
+
+Physics::~Physics()
+{
+	if (program != NULL) delete program;
+	if (background != NULL) delete background;
+	if (player != NULL) delete player;
+	for (int i = 0; i < enemies.size(); i++) {
+		Enemy* p = enemies[i];
+		delete p;
+	}
+	enemies.clear();
+}
+
 void Physics::init(ShaderProgram * texProgram)
 {
 	program = texProgram;

@@ -11,6 +11,8 @@ class Background
 {
 
 public:
+	Background();
+	~Background();
 	static Background *createBackground(const int lvlNum, const glm::vec2 windowSize, ShaderProgram *program);
 	Background(const int lvlNum, const glm::vec2 windowSize, ShaderProgram *program);
 	void render();
@@ -26,8 +28,7 @@ private:
 	vector<float> vertices;
 	GLint posLocation, texCoordLocation;
 	glm::vec2 tileTexSize, backgroundSize, winSize, posDispl, textDispl;
-	Texture texture;
-	int numHorizontalTiles, numTilesVisible, firstTile;
+	int lvlNum, numHorizontalTiles, numTilesVisible, firstTile;
 
 };
 

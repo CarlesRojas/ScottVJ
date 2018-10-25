@@ -14,6 +14,8 @@ public:
 	enum MessageAnim { M_START, M_PLAY, M_MENU, M_NONE };
 	enum DiffAnim { D_EASY, D_MEDIUM, D_HARD, D_NONE };
 
+	Screen();
+	~Screen();
 	static Screen * createScreen(int id, const glm::vec2 windowSize, ShaderProgram * program);
 	Screen(int id, const glm::vec2 windowSize, ShaderProgram * program);
 	void update(int deltaTime);
@@ -25,10 +27,7 @@ public:
 
 private:
 	int id;
-
 	ShaderProgram * program;
-	Texture texture;
-
 	float scaleFactor;
 };
 

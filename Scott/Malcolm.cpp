@@ -1,5 +1,18 @@
 #include "Malcolm.h"
 #include "Physics.h"
+#include "Load.h"
+
+Malcolm::Malcolm() 
+{
+	punch = NULL;
+	kick = NULL;
+}
+
+Malcolm::~Malcolm() 
+{
+	if (punch != NULL) delete punch;
+	if (kick != NULL) delete kick;
+}
 
 void Malcolm::init(const glm::vec2 & initialPos, const int windowHeight, ShaderProgram * shaderProgram)
 {
@@ -10,13 +23,7 @@ void Malcolm::init(const glm::vec2 & initialPos, const int windowHeight, ShaderP
 	speed = 200;
 	atkCooldown = 3.f;
 
-	spritesheet.loadFromFile("sprites/malcolm/malcolm_256.png", TEXTURE_PIXEL_FORMAT_RGBA);
-	spritesheet.setWrapS(GL_CLAMP_TO_EDGE);
-	spritesheet.setWrapT(GL_CLAMP_TO_EDGE);
-	spritesheet.setMinFilter(GL_NEAREST);
-	spritesheet.setMagFilter(GL_NEAREST);
-
-	sprite = Sprite::createSprite(true, glm::vec2(256.f * scaleFactor, 256.f * scaleFactor), glm::vec2(0.05, 0.05), &spritesheet, shaderProgram);
+	sprite = Sprite::createSprite(true, glm::vec2(256.f * scaleFactor, 256.f * scaleFactor), glm::vec2(0.05, 0.05), &Load::instance().malcolm, shaderProgram);
 	sprite->setNumberAnimations(7);
 
 	sprite->setAnimationSpeed(IDLE, 8);

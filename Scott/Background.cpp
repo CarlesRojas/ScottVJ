@@ -1,6 +1,23 @@
 #include "Background.h"
+#include "Load.h"
 #include <glm/gtc/matrix_transform.hpp>
 
+
+Background::Background()
+{
+	program = NULL;
+	walls.clear();
+}
+
+Background::~Background()
+{
+	if (program != NULL) delete program;
+	for (int i = 0; i < walls.size(); i++) {
+		Box* p = walls[i];
+		delete p;
+	}
+	walls.clear();
+}
 
 Background *Background::createBackground(const int lvlNum, const glm::vec2 windowSize, ShaderProgram * program)
 {
@@ -11,15 +28,17 @@ Background *Background::createBackground(const int lvlNum, const glm::vec2 windo
 Background::Background(const int lvlNum, const glm::vec2 windowSize, ShaderProgram * program)
 {
 	this->program = program;
-	texture.loadFromFile("sprites/background/lvl" + to_string(lvlNum) + ".png", TEXTURE_PIXEL_FORMAT_RGBA);
-	texture.setWrapS(GL_CLAMP_TO_EDGE);
-	texture.setWrapT(GL_CLAMP_TO_EDGE);
-	texture.setMinFilter(GL_NEAREST);
-	texture.setMagFilter(GL_NEAREST);
+	this->lvlNum = lvlNum;
+
+	switch (lvlNum)
+	{
+		case 0:  numHorizontalTiles = (int)(Load::instance().lvl0.width() / 256.f); break;
+		case 1:  numHorizontalTiles = (int)(Load::instance().lvl1.width() / 256.f); break;
+		default: numHorizontalTiles = (int)(Load::instance().lvl2.width() / 256.f); break;
+	}
 
 	winSize = windowSize;
 	backgroundSize.y = winSize.y;
-	numHorizontalTiles = (int)(texture.width() / 256.f);
 	backgroundSize.x = backgroundSize.y * numHorizontalTiles;
 	tileTexSize = glm::vec2(1.f / (float)numHorizontalTiles, 1.f);
 	numTilesVisible = ceil((float)winSize.x / (float)winSize.y) + 1;
@@ -67,7 +86,12 @@ void Background::render()
 		program->setUniform2f("texCoordDispl", textDispl.x, textDispl.y);
 
 		glEnable(GL_TEXTURE_2D);
-		texture.use();
+		switch (lvlNum)
+		{
+			case 0:  Load::instance().lvl0.use(); break;
+			case 1:  Load::instance().lvl1.use(); break;
+			default: Load::instance().lvl2.use(); break;
+		}
 		glBindVertexArray(vao);
 		glEnableVertexAttribArray(posLocation);
 		glEnableVertexAttribArray(texCoordLocation);
@@ -81,7 +105,6 @@ void Background::update(int deltaTime, glm::vec2 camPos)
 	firstTile = floor((camPos.x - (winSize.x / 2.f)) / backgroundSize.y);
 	if (firstTile < 0) firstTile = 0;
 	if (firstTile >= numHorizontalTiles) firstTile = numHorizontalTiles - 1;
-
 }
 
 void Background::free()

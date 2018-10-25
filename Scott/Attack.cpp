@@ -2,6 +2,18 @@
 #include "Physics.h"
 
 
+Attack::Attack()
+{
+	box = NULL;
+	sprite == NULL;
+}
+
+Attack::~Attack()
+{
+	if (box != NULL) delete box;
+	if (sprite != NULL) delete sprite;
+}
+
 Attack * Attack::createAttack(Box::BoxOwner owner, glm::vec2 playerOrigin, glm::vec2 displacement, glm::vec2 size, float duration, float startDelay, float impactDelay, bool oneKillOnly, bool multiHits, glm::vec2 deltaPos)
 {
 	Attack *a = new Attack(owner, playerOrigin, displacement, size, duration, startDelay, impactDelay, oneKillOnly, multiHits, deltaPos);

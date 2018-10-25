@@ -10,7 +10,8 @@ class Physics
 {
 public:
 	// Singleton
-	Physics() {}
+	Physics();
+	~Physics();
 	static Physics &instance()
 	{
 		static Physics P;

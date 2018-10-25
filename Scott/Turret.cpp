@@ -1,5 +1,16 @@
 #include "Turret.h"
 #include "Physics.h"
+#include "Load.h"
+
+Turret::Turret()
+{
+	shoot = NULL;
+}
+
+Turret::~Turret()
+{
+	if (shoot != NULL) delete shoot;
+}
 
 void Turret::init(const glm::vec2 & initialPos, const int windowHeight, ShaderProgram * shaderProgram)
 {
@@ -8,13 +19,7 @@ void Turret::init(const glm::vec2 & initialPos, const int windowHeight, ShaderPr
 	flip = fixAnim = fixPos = dying = dead = false;
 	scaleFactor = ((float)windowHeight / 256.f);
 
-	spritesheet.loadFromFile("sprites/turret/turret_256.png", TEXTURE_PIXEL_FORMAT_RGBA);
-	spritesheet.setWrapS(GL_CLAMP_TO_EDGE);
-	spritesheet.setWrapT(GL_CLAMP_TO_EDGE);
-	spritesheet.setMinFilter(GL_NEAREST);
-	spritesheet.setMagFilter(GL_NEAREST);
-
-	sprite = Sprite::createSprite(true, glm::vec2(256.f * scaleFactor, 256.f * scaleFactor), glm::vec2(0.05, 0.05), &spritesheet, shaderProgram);
+	sprite = Sprite::createSprite(true, glm::vec2(256.f * scaleFactor, 256.f * scaleFactor), glm::vec2(0.05, 0.05), &Load::instance().turret, shaderProgram);
 	sprite->setNumberAnimations(6);
 
 	sprite->setAnimationSpeed(DOWN, 8);
@@ -71,7 +76,7 @@ void Turret::init(const glm::vec2 & initialPos, const int windowHeight, ShaderPr
 	shoot = Attack::createAttack(Box::ENEMY, pos, glm::vec2(-46 * scaleFactor, -46 * scaleFactor), glm::vec2(8 * scaleFactor, 8 * scaleFactor), 3, 0, 0,true, false, glm::vec2(-1000.f, 0));
 
 	// Shoot Attack Sprite
-	Sprite * shot = Sprite::createSprite(true, glm::vec2(256.f * scaleFactor, 256.f * scaleFactor), glm::vec2(0.05, 0.05), &spritesheet, shaderProgram);
+	Sprite * shot = Sprite::createSprite(true, glm::vec2(256.f * scaleFactor, 256.f * scaleFactor), glm::vec2(0.05, 0.05), &Load::instance().turret, shaderProgram);
 	shot->setNumberAnimations(1);
 
 	shot->setAnimationSpeed(0, 8);

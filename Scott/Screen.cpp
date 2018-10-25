@@ -4,6 +4,22 @@
 
 
 
+Screen::Screen()
+{
+	difficulty = NULL;
+	message = NULL;
+	screen = NULL;
+	program = NULL;
+}
+
+Screen::~Screen()
+{
+	if (difficulty != NULL) delete difficulty;
+	if (message != NULL) delete message;
+	if (screen != NULL) delete screen;
+	if (program != NULL) delete program;
+}
+
 Screen *Screen::createScreen(int id, const glm::vec2 windowSize, ShaderProgram * program)
 {
 	Screen *s = new Screen(id, windowSize, program);
@@ -16,14 +32,9 @@ Screen::Screen(int id, const glm::vec2 windowSize, ShaderProgram * program)
 	this->program = program;
 	scaleFactor = (float)windowSize.y / 540.f;
 
-	texture.loadFromFile("sprites/screens/screens_960x540.png", TEXTURE_PIXEL_FORMAT_RGBA);
-	texture.setWrapS(GL_CLAMP_TO_EDGE);
-	texture.setWrapT(GL_CLAMP_TO_EDGE);
-	texture.setMinFilter(GL_NEAREST);
-	texture.setMagFilter(GL_NEAREST);
 	glm::vec2 texSize = glm::vec2(1.f / 7.f, 1.f / 7.f);
 
-	screen = Sprite::createSprite(false, glm::vec2(960.f * scaleFactor, 540.f * scaleFactor), texSize, &texture, program);
+	screen = Sprite::createSprite(false, glm::vec2(960.f * scaleFactor, 540.f * scaleFactor), texSize, &Load::instance().screens, program);
 	screen->setNumberAnimations(9);
 
 	screen->setAnimationSpeed(S_MAIN, 8);
@@ -83,7 +94,7 @@ Screen::Screen(int id, const glm::vec2 windowSize, ShaderProgram * program)
 	screen->setPosition(glm::vec2(0.f));
 	
 	// Message
-	message = Sprite::createSprite(false, glm::vec2(960.f * scaleFactor, 540.f * scaleFactor), texSize, &texture, program);
+	message = Sprite::createSprite(false, glm::vec2(960.f * scaleFactor, 540.f * scaleFactor), texSize, &Load::instance().screens, program);
 	message->setNumberAnimations(4);
 
 	message->setAnimationSpeed(M_START, 2);
@@ -105,7 +116,7 @@ Screen::Screen(int id, const glm::vec2 windowSize, ShaderProgram * program)
 	message->setPosition(glm::vec2(0.f));
 
 	// Difficulty
-	difficulty = Sprite::createSprite(false, glm::vec2(960.f * scaleFactor, 540.f * scaleFactor), texSize, &texture, program);
+	difficulty = Sprite::createSprite(false, glm::vec2(960.f * scaleFactor, 540.f * scaleFactor), texSize, &Load::instance().screens, program);
 	difficulty->setNumberAnimations(4);
 
 	difficulty->setAnimationSpeed(D_EASY, 8);

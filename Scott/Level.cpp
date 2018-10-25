@@ -7,20 +7,28 @@
 
 Level::Level()
 {
+	program = NULL;
+	physics = NULL;
 	background = NULL;
-	player = NULL;
 	cam = NULL;
 	ui = NULL;
+	player = NULL;
 	enemies.clear();
 }
 
 Level::~Level()
 {
+	if (program != NULL) delete program;
+	if (physics != NULL) delete physics;
 	if (background != NULL) delete background;
-	if (player != NULL) delete player;
 	if (cam != NULL) delete cam;
 	if (ui != NULL) delete ui;
-	for (auto e : enemies) delete e;
+	if (player != NULL) delete player;
+	for (int i = 0; i < enemies.size(); i++) {
+		Enemy* p = enemies[i];
+		delete p;
+	}
+	enemies.clear();
 }
 
 Level * Level::createLevel(int character, int difficulty, int lvl, ShaderProgram * program)
@@ -96,7 +104,7 @@ void Level::update(int deltaTime)
 void Level::render()
 {
 	// Background && UI
-	if(background != NULL) background->render();
+	background->render();
 	ui->render();
 
 	// Enemies & Player in order
