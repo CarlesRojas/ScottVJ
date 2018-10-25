@@ -41,6 +41,12 @@ void Load::init()
 	scott.setMinFilter(GL_NEAREST);
 	scott.setMagFilter(GL_NEAREST);
 
+	ramona.loadFromFile("sprites/ramona/ramona_256.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	ramona.setWrapS(GL_CLAMP_TO_EDGE);
+	ramona.setWrapT(GL_CLAMP_TO_EDGE);
+	ramona.setMinFilter(GL_NEAREST);
+	ramona.setMagFilter(GL_NEAREST);
+
 	kim.loadFromFile("sprites/kim/kim_256.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	kim.setWrapS(GL_CLAMP_TO_EDGE);
 	kim.setWrapT(GL_CLAMP_TO_EDGE);

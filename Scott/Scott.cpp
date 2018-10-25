@@ -122,11 +122,11 @@ void Scott::init(const glm::vec2 & initialPos, UI * ui, const int windowHeight, 
 	punch = Attack::createAttack(Box::PLAYER, pos, glm::vec2(20 * scaleFactor, -25 * scaleFactor), glm::vec2(40 * scaleFactor, 20 * scaleFactor), 3.5f / 8.f, 0, 1.5f / 8.f, true, false, glm::vec2(0, 0));
 	spin = Attack::createAttack(Box::PLAYER, pos, glm::vec2(0, 0), glm::vec2(120 * scaleFactor, 50 * scaleFactor), 16.5f / 8.f, 0, .5f / 8.f, false, true, glm::vec2(0, 0));
 	special = Attack::createAttack(Box::PLAYER, pos, glm::vec2(0, 0), glm::vec2(120 * scaleFactor, 120 * scaleFactor), 8.5f / 8.f, 0, 4.f / 8.f, false, false, glm::vec2(0, 0));
-	
+
 	// Add Boxes
 	hitBox = Box::createBox(Box::PLAYER, Box::HIT, pos, glm::vec2(20 * scaleFactor, 60 * scaleFactor));
 	baseBox = Box::createBox(Box::PLAYER, Box::BASE, pos, glm::vec2(20 * scaleFactor, 10 * scaleFactor));
-
+	
 	sprite->changeAnimation(IDLE);
 	sprite->setPosition(pos);
 }
