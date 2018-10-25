@@ -10,8 +10,11 @@
 class UI
 {
 public:
+	enum UIAnims { WHITE, COOLDOWN };
+
 	UI();
 	~UI();
+
 	static UI * createUI(int playerCharacter, float attackCD, float spinCD, float specialCD, const glm::vec2 windowSize, ShaderProgram * program);
 	UI(int playerCharacter, float attackCD, float spinCD, float specialCD, const glm::vec2 windowSize, ShaderProgram * program);
 
@@ -24,8 +27,6 @@ public:
 	void changeHP(int hp);
 
 private:
-	Texture spriteSheet;
-
 	// Static UI
 	ShaderProgram *program;
 	GLuint vao, vbo;

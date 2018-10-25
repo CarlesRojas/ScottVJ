@@ -16,7 +16,7 @@ public:
 
 	Screen();
 	~Screen();
-	static Screen * createScreen(int id, const glm::vec2 windowSize, ShaderProgram * program);
+	static Screen *createScreen(int id, const glm::vec2 windowSize, ShaderProgram * program);
 	Screen(int id, const glm::vec2 windowSize, ShaderProgram * program);
 	void update(int deltaTime);
 	void render();

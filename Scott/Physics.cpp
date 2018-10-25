@@ -2,10 +2,10 @@
 #include <algorithm>
 #include <glm/gtc/matrix_transform.hpp>
 #include "Physics.h"
+#include "Load.h"
 
 Physics::Physics()
 {
-	program = NULL;
 	background = NULL;
 	player = NULL;
 	enemies.clear();
@@ -13,13 +13,8 @@ Physics::Physics()
 
 Physics::~Physics()
 {
-	if (program != NULL) delete program;
-	if (background != NULL) delete background;
-	if (player != NULL) delete player;
-	for (int i = 0; i < enemies.size(); i++) {
-		Enemy* p = enemies[i];
-		delete p;
-	}
+	background = NULL;
+ 	player = NULL;
 	enemies.clear();
 }
 
@@ -35,6 +30,13 @@ void Physics::render()
 {
 	// Debug
 	Physics::instance().printBoxes(true);
+}
+
+void Physics::reset()
+{
+	background = NULL;
+	player = NULL;
+	enemies.clear();
 }
 
 bool Physics::overlap(Box * box1, Box * box2)
@@ -63,6 +65,10 @@ bool Physics::correctPosition(Box * box)
 		{
 			if (overlap(box, player->baseBox))
 				return false;
+
+			for (int i = 0; i < enemies.size(); ++i)
+				if (enemies[i]->baseBox != box && overlap(box, enemies[i]->baseBox))
+					return false;
 		}
 
 		return true;
@@ -118,30 +124,6 @@ glm::vec2 Physics::getPlayerPos()
 
 void Physics::loadOutlineTextures()
 {
-	red.loadFromFile("sprites/debug/outline_red.png", TEXTURE_PIXEL_FORMAT_RGBA);
-	red.setWrapS(GL_CLAMP_TO_EDGE);
-	red.setWrapT(GL_CLAMP_TO_EDGE);
-	red.setMinFilter(GL_NEAREST);
-	red.setMagFilter(GL_NEAREST);
-
-	green.loadFromFile("sprites/debug/outline_green.png", TEXTURE_PIXEL_FORMAT_RGBA);
-	green.setWrapS(GL_CLAMP_TO_EDGE);
-	green.setWrapT(GL_CLAMP_TO_EDGE);
-	green.setMinFilter(GL_NEAREST);
-	green.setMagFilter(GL_NEAREST);
-
-	blue.loadFromFile("sprites/debug/outline_blue.png", TEXTURE_PIXEL_FORMAT_RGBA);
-	blue.setWrapS(GL_CLAMP_TO_EDGE);
-	blue.setWrapT(GL_CLAMP_TO_EDGE);
-	blue.setMinFilter(GL_NEAREST);
-	blue.setMagFilter(GL_NEAREST);
-
-	yellow.loadFromFile("sprites/debug/outline_yellow.png", TEXTURE_PIXEL_FORMAT_RGBA);
-	yellow.setWrapS(GL_CLAMP_TO_EDGE);
-	yellow.setWrapT(GL_CLAMP_TO_EDGE);
-	yellow.setMinFilter(GL_NEAREST);
-	yellow.setMagFilter(GL_NEAREST);
-
 	vertices = { 0, 0, 0, 0,
 				 256, 0, 1, 0,
 				 256, 256, 1, 1,
@@ -173,7 +155,7 @@ void Physics::printBoxes(bool printBackground)
 		program->setUniform2f("texCoordDispl", 0.f, 0.f);
 
 		glEnable(GL_TEXTURE_2D);
-		red.use();
+		Load::instance().red.use();
 		glBindVertexArray(vao);
 		glEnableVertexAttribArray(posLocation);
 		glEnableVertexAttribArray(texCoordLocation);
@@ -193,7 +175,7 @@ void Physics::printBoxes(bool printBackground)
 		program->setUniform2f("texCoordDispl", 0.f, 0.f);
 
 		glEnable(GL_TEXTURE_2D);
-		yellow.use();
+		Load::instance().yellow.use();
 		glBindVertexArray(vao);
 		glEnableVertexAttribArray(posLocation);
 		glEnableVertexAttribArray(texCoordLocation);
@@ -216,7 +198,7 @@ void Physics::printBoxes(bool printBackground)
 			program->setUniform2f("texCoordDispl", 0.f, 0.f);
 
 			glEnable(GL_TEXTURE_2D);
-			green.use();
+			Load::instance().green.use();
 			glBindVertexArray(vao);
 			glEnableVertexAttribArray(posLocation);
 			glEnableVertexAttribArray(texCoordLocation);
@@ -242,7 +224,7 @@ void Physics::printBoxes(bool printBackground)
 				program->setUniform2f("texCoordDispl", 0.f, 0.f);
 
 				glEnable(GL_TEXTURE_2D);
-				yellow.use();
+				Load::instance().yellow.use();
 				glBindVertexArray(vao);
 				glEnableVertexAttribArray(posLocation);
 				glEnableVertexAttribArray(texCoordLocation);
@@ -268,7 +250,7 @@ void Physics::printBoxes(bool printBackground)
 			program->setUniform2f("texCoordDispl", 0.f, 0.f);
 
 			glEnable(GL_TEXTURE_2D);
-			red.use();
+			Load::instance().red.use();
 			glBindVertexArray(vao);
 			glEnableVertexAttribArray(posLocation);
 			glEnableVertexAttribArray(texCoordLocation);
@@ -288,7 +270,7 @@ void Physics::printBoxes(bool printBackground)
 			program->setUniform2f("texCoordDispl", 0.f, 0.f);
 
 			glEnable(GL_TEXTURE_2D);
-			yellow.use();
+			Load::instance().yellow.use();
 			glBindVertexArray(vao);
 			glEnableVertexAttribArray(posLocation);
 			glEnableVertexAttribArray(texCoordLocation);
@@ -310,7 +292,7 @@ void Physics::printBoxes(bool printBackground)
 				program->setUniform2f("texCoordDispl", 0.f, 0.f);
 
 				glEnable(GL_TEXTURE_2D);
-				green.use();
+				Load::instance().green.use();
 				glBindVertexArray(vao);
 				glEnableVertexAttribArray(posLocation);
 				glEnableVertexAttribArray(texCoordLocation);

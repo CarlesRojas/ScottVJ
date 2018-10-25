@@ -9,14 +9,12 @@ Game::Game()
 {
 	level = NULL;
 	screen = NULL;
-	cam = NULL;
 }
 
 Game::~Game()
 {
 	if (level != NULL) delete level;
 	if (screen != NULL) delete screen;
-	if (cam != NULL) delete cam;
 }
 
 void Game::init()
@@ -27,18 +25,16 @@ void Game::init()
 	delay = -1.f;
 	initShaders();
 	theEnd = gameOver = false;
+	
 	Load::instance().init();
-
-	level == NULL;
-	screen = Screen::createScreen(0, glm::vec2(SCREEN_WIDTH, SCREEN_HEIGHT), &program);
-	cam = Camera::createCamera(glm::vec2(SCREEN_WIDTH, SCREEN_HEIGHT), glm::vec2(SCREEN_WIDTH, SCREEN_HEIGHT));
+	Camera::instance().init(glm::vec2(SCREEN_WIDTH, SCREEN_HEIGHT), glm::vec2(SCREEN_WIDTH, SCREEN_HEIGHT));
+	Physics::instance().init(&program);
 
 	state = Game::MAIN;
+	screen = Screen::createScreen(0, glm::vec2(SCREEN_WIDTH, SCREEN_HEIGHT), &program);
 	screen->screen->changeAnimation(Screen::S_MAIN);
 	screen->message->changeAnimation(Screen::M_START);
 	screen->difficulty->changeAnimation(Screen::D_NONE);
-
-	//level = Level::createLevel(player, difficulty, 0, &program);
 }
 
 bool Game::update(int deltaTime)
@@ -46,13 +42,18 @@ bool Game::update(int deltaTime)
 	currentTime += deltaTime;
 	if (delay > 0) delay -= (deltaTime / 1000.f);
 
-	if (level == NULL)
+	if ((state == LVL0 || state == LVL1 || state == LVL2) && level != NULL) {
+		level->update(deltaTime);
+
+		// Debug
+		if (delay <= 0 && Game::instance().getKey('v')) { delay = 1.f; level->theEnd(); }
+	}
+	else if (state != LVL0 && state != LVL1 && state != LVL2 && screen != NULL)
 	{
 		screen->update(deltaTime);
-		cam->update(deltaTime, glm::vec2(SCREEN_WIDTH / 2.f, SCREEN_HEIGHT / 2.f));
-		Game::instance().projection = cam->getProjectionMatrix();
+		Camera::instance().update(deltaTime, glm::vec2(SCREEN_WIDTH / 2.f, SCREEN_HEIGHT / 2.f));
+		Game::instance().projection = Camera::instance().getProjectionMatrix();
 	}
-	else level->update(deltaTime);
 
 	switch (state)
 	{
@@ -134,6 +135,7 @@ bool Game::update(int deltaTime)
 			screen->difficulty->changeAnimation(Screen::D_NONE);
 			state = LVL0;
 
+			Physics::instance().reset();
 			level = Level::createLevel(player, difficulty, 0, &program);
 		}
 		break;
@@ -141,19 +143,19 @@ bool Game::update(int deltaTime)
 		if (theEnd) 
 		{
 			theEnd = gameOver = false;
+			Physics::instance().reset();
 			level = Level::createLevel(player, difficulty, 1, &program);
 			state = LVL1;
 		}
 		if (gameOver)
 		{
-			theEnd = gameOver = false;
 			if(player == 0) screen->screen->changeAnimation(Screen::S_GO_SCOTT);
 			else if (player == 1) screen->screen->changeAnimation(Screen::S_GO_RAMONA);
 			else screen->screen->changeAnimation(Screen::S_GO_KIM);
-			
-			delete level;
-			level == NULL;
 
+			Physics::instance().reset();
+			Camera::instance().init(glm::vec2(SCREEN_WIDTH, SCREEN_HEIGHT), glm::vec2(SCREEN_WIDTH, SCREEN_HEIGHT));
+			theEnd = gameOver = false;
 			screen->message->changeAnimation(Screen::M_MENU);
 			screen->difficulty->changeAnimation(Screen::D_NONE);
 			state = GAMEOVER;
@@ -163,19 +165,19 @@ bool Game::update(int deltaTime)
 		if (theEnd) 
 		{
 			theEnd = gameOver = false;
+			Physics::instance().reset();
 			level = Level::createLevel(player, difficulty, 2, &program);
 			state = LVL2;
 		}
 		if (gameOver)
 		{
-			theEnd = gameOver = false;
 			if (player == 0) screen->screen->changeAnimation(Screen::S_GO_SCOTT);
 			else if (player == 1) screen->screen->changeAnimation(Screen::S_GO_RAMONA);
 			else screen->screen->changeAnimation(Screen::S_GO_KIM);
 
-			delete level;
-			level == NULL;
-
+			Physics::instance().reset();
+			Camera::instance().init(glm::vec2(SCREEN_WIDTH, SCREEN_HEIGHT), glm::vec2(SCREEN_WIDTH, SCREEN_HEIGHT));
+			theEnd = gameOver = false;
 			screen->message->changeAnimation(Screen::M_MENU);
 			screen->difficulty->changeAnimation(Screen::D_NONE);
 			state = GAMEOVER;
@@ -184,6 +186,8 @@ bool Game::update(int deltaTime)
 	case Game::LVL2:
 		if (theEnd)
 		{
+			Physics::instance().reset();
+			Camera::instance().init(glm::vec2(SCREEN_WIDTH, SCREEN_HEIGHT), glm::vec2(SCREEN_WIDTH, SCREEN_HEIGHT));
 			theEnd = gameOver = false;
 			screen->screen->changeAnimation(Screen::S_THEEND);
 			screen->message->changeAnimation(Screen::M_MENU);
@@ -192,14 +196,13 @@ bool Game::update(int deltaTime)
 		}
 		if (gameOver)
 		{
-			theEnd = gameOver = false;
 			if (player == 0) screen->screen->changeAnimation(Screen::S_GO_SCOTT);
 			else if (player == 1) screen->screen->changeAnimation(Screen::S_GO_RAMONA);
 			else screen->screen->changeAnimation(Screen::S_GO_KIM);
 
-			delete level;
-			level == NULL;
-
+			Physics::instance().reset();
+			Camera::instance().init(glm::vec2(SCREEN_WIDTH, SCREEN_HEIGHT), glm::vec2(SCREEN_WIDTH, SCREEN_HEIGHT));
+			theEnd = gameOver = false;
 			screen->message->changeAnimation(Screen::M_MENU);
 			screen->difficulty->changeAnimation(Screen::D_NONE);
 			state = GAMEOVER;
@@ -208,6 +211,7 @@ bool Game::update(int deltaTime)
 	case Game::GAMEOVER:
 		if (Game::instance().getKey(' '))
 		{
+			delay = .5f;
 			screen->screen->changeAnimation(Screen::S_MAIN);
 			screen->message->changeAnimation(Screen::M_START);
 			screen->difficulty->changeAnimation(Screen::D_NONE);
@@ -217,6 +221,7 @@ bool Game::update(int deltaTime)
 	case Game::THEEND:
 		if (Game::instance().getKey(' '))
 		{
+			delay = .5f;
 			screen->screen->changeAnimation(Screen::S_MAIN);
 			screen->message->changeAnimation(Screen::M_START);
 			screen->difficulty->changeAnimation(Screen::D_NONE);
@@ -241,8 +246,8 @@ void Game::render()
 	program.setUniformMatrix4f("modelview", modelview);
 	program.setUniform2f("texCoordDispl", 0.f, 0.f);
 
-	if (level == NULL) screen->render();
-	else level->render();
+	if ((state == LVL0 || state == LVL1 || state == LVL2) && level != NULL) level->render();
+	else if (state != LVL0 && state != LVL1 && state != LVL2 && screen != NULL) screen->render();
 }
 
 void Game::keyPressed(int key)

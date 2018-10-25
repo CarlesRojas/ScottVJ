@@ -2,13 +2,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <cmath>
 
-Camera * Camera::createCamera(glm::vec2 windowSize, glm::vec2 backgroundSize)
-{
-	Camera *c = new Camera(windowSize, backgroundSize);
-	return c;
-}
-
-Camera::Camera(glm::vec2 windowSize, glm::vec2 backgroundSize)
+void Camera::init(glm::vec2 windowSize, glm::vec2 backgroundSize)
 {
 	pos = glm::vec2(windowSize.x / 2.f, windowSize.y / 2.f);
 	winSize = windowSize;

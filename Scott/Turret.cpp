@@ -16,7 +16,8 @@ void Turret::init(const glm::vec2 & initialPos, const int windowHeight, ShaderPr
 {
 	this->pos = initialPos;
 	delay = 0.f;
-	flip = fixAnim = fixPos = dying = dead = false;
+	flip = true;
+	fixAnim = fixPos = dying = dead = false;
 	scaleFactor = ((float)windowHeight / 256.f);
 
 	sprite = Sprite::createSprite(true, glm::vec2(256.f * scaleFactor, 256.f * scaleFactor), glm::vec2(0.05, 0.05), &Load::instance().turret, shaderProgram);
@@ -73,7 +74,7 @@ void Turret::init(const glm::vec2 & initialPos, const int windowHeight, ShaderPr
 	// Add Boxes
 	hitBox = Box::createBox(Box::ENEMY, Box::HIT, pos, glm::vec2(86 * scaleFactor, 77 * scaleFactor));
 	baseBox = Box::createBox(Box::ENEMY, Box::BASE, pos, glm::vec2(86 * scaleFactor, 29 * scaleFactor));
-	shoot = Attack::createAttack(Box::ENEMY, pos, glm::vec2(-46 * scaleFactor, -46 * scaleFactor), glm::vec2(8 * scaleFactor, 8 * scaleFactor), 3, 0, 0,true, false, glm::vec2(-1000.f, 0));
+	shoot = Attack::createAttack(Box::ENEMY, pos, glm::vec2(-46 * scaleFactor, -46 * scaleFactor), glm::vec2(8 * scaleFactor, 8 * scaleFactor), 3, 0, 0, true, false, glm::vec2(-1000.f, 0));
 
 	// Shoot Attack Sprite
 	Sprite * shot = Sprite::createSprite(true, glm::vec2(256.f * scaleFactor, 256.f * scaleFactor), glm::vec2(0.05, 0.05), &Load::instance().turret, shaderProgram);
@@ -90,7 +91,7 @@ void Turret::init(const glm::vec2 & initialPos, const int windowHeight, ShaderPr
 	sprite->changeAnimation(IDLE);
 	sprite->setPosition(pos);
 	state = INACTIVE;
-	alertRange = windowHeight;
+	alertRange = windowHeight * 5;
 
 	// Random
 	random.seed(random_device()());
@@ -109,7 +110,9 @@ void Turret::enemyIA(int deltaTime)
 		if (delay <= 0)
 		{
 			if (sprite->animation() != HIDDEN) sprite->changeAnimation(HIDDEN);
-			if (Physics::instance().isCloseThan(this, alertRange)) 
+
+			glm::vec2 playerPos = Physics::instance().getPlayerPos();
+			if (playerPos.x - pos.x > 0 && Physics::instance().isCloseThan(this, alertRange))
 			{
 				if (sprite->animation() != DEPLOY) sprite->changeAnimation(DEPLOY);
 				delay = 9.5f / 8.f;
@@ -121,7 +124,9 @@ void Turret::enemyIA(int deltaTime)
 		if (delay <= 0)
 		{
 			if (sprite->animation() != IDLE) sprite->changeAnimation(IDLE);
-			if (!Physics::instance().isCloseThan(this, alertRange)) 
+
+			glm::vec2 playerPos = Physics::instance().getPlayerPos();
+			if (playerPos.x - pos.x < 0 || !Physics::instance().isCloseThan(this, alertRange))
 			{
 				if (sprite->animation() != HIDE) sprite->changeAnimation(HIDE);
 				delay = 9.5f / 8.f;
@@ -135,7 +140,7 @@ void Turret::enemyIA(int deltaTime)
 		{
 			if (sprite->animation() != SHOOT) sprite->changeAnimation(SHOOT);
 			shoot->activate(pos, flip);
-			shootCooldownTimer = 2;
+			shootCooldownTimer = 1.f;
 			delay = 1.5f / 8.f;
 			state = WAIT;
 		}
@@ -148,7 +153,7 @@ void Turret::enemyIA(int deltaTime)
 void Turret::kill()
 {
 	// Down
-	if (!dying)
+	if (sprite->animation() != HIDDEN && !dying)
 	{
 		state = DEAD;
 		hitBox->active = false;

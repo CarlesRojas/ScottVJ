@@ -5,13 +5,11 @@
 
 Background::Background()
 {
-	program = NULL;
 	walls.clear();
 }
 
 Background::~Background()
 {
-	if (program != NULL) delete program;
 	for (int i = 0; i < walls.size(); i++) {
 		Box* p = walls[i];
 		delete p;

@@ -6,9 +6,18 @@
 class Camera
 {
 public:
-	static Camera *createCamera(glm::vec2 windowSize, glm::vec2 backgroundSize);
-	Camera(glm::vec2 windowSize, glm::vec2 backgroundSize);
+	Camera() { }
+	static Camera &instance()
+	{
+		static Camera C;
+		return C;
+	}
+	Camera(Camera const&) = delete;
+	void operator=(Camera const&) = delete;
+
+	void init(glm::vec2 windowSize, glm::vec2 backgroundSize);
 	void update(int deltaTime, glm::vec2 playerPos);
+
 	glm::mat4 getProjectionMatrix();
 	glm::vec2 getPos();
 

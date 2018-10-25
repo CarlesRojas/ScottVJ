@@ -35,9 +35,7 @@ private:
 	ShaderProgram * program;
 
 	// Components
-	Physics *physics;
 	Background *background;
-	Camera *cam;
 	UI *ui;
 	Player *player;
 	vector<Enemy*> enemies;

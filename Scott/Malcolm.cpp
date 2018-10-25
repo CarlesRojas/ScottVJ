@@ -89,7 +89,7 @@ void Malcolm::init(const glm::vec2 & initialPos, const int windowHeight, ShaderP
 	hitBox = Box::createBox(Box::ENEMY, Box::HIT, pos, glm::vec2(35 * ((float)windowHeight / 256.f), 70 * ((float)windowHeight / 256.f)));
 	baseBox = Box::createBox(Box::ENEMY, Box::BASE, pos, glm::vec2(35 * ((float)windowHeight / 256.f), 10 * ((float)windowHeight / 256.f)));
 	punch = Attack::createAttack(Box::ENEMY, pos, glm::vec2(42 * scaleFactor, -35 * scaleFactor), glm::vec2(44 * scaleFactor, 13 * scaleFactor), 3.5f / 8.f, 0, 1.f / 8.f, true, false, glm::vec2(0, 0));
-	kick = Attack::createAttack(Box::ENEMY, pos, glm::vec2(42 * scaleFactor, -35 * scaleFactor), glm::vec2(44 * scaleFactor, 13 * scaleFactor), 3.5f / 8.f, 0, 1.f / 8.f, true, false, glm::vec2(0, 0));
+	kick = Attack::createAttack(Box::ENEMY, pos, glm::vec2(53 * scaleFactor, -33 * scaleFactor), glm::vec2(44 * scaleFactor, 13 * scaleFactor), 3.5f / 8.f, 0, 1.f / 8.f, true, false, glm::vec2(0, 0));
 
 	sprite->changeAnimation(IDLE);
 	sprite->setPosition(pos);
@@ -256,6 +256,7 @@ void Malcolm::move(glm::vec2 deltaPos, float deltaTime)
 		baseBox->increasePos(-lastDeltaPos);
 		punch->box->increasePos(-lastDeltaPos);
 		kick->box->increasePos(-lastDeltaPos);
+		movingAlongX = !movingAlongX;
 	}
 }
 

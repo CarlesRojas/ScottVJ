@@ -20,7 +20,6 @@ public:
 		static Game G;
 		return G;
 	}
-
 	Game(Game const&) = delete;
 	void operator=(Game const&) = delete;
 
@@ -53,16 +52,17 @@ private:
 	void initShaders();
 	float currentTime;
 	ShaderProgram program;
-	static Load load;
-
 	bool keepPlaying;
 	bool keys[256], specialKeys[256], mouseKeys[6];
 	glm::vec2 mousePos;
-
 	GameState state;
-	Level *level;
+
+	static Physics physics;
+	static Camera cam;
+	static Load load;
+
 	Screen *screen;
-	Camera *cam;
+	Level *level;
 
 	int player, difficulty;
 	float delay;

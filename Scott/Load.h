@@ -12,13 +12,13 @@ public:
 		static Load L;
 		return L;
 	}
-
 	Load(Load const&) = delete;
 	void operator=(Load const&) = delete;
 
 	void init();
 
 	Texture screens;
+	Texture ui;
 
 	Texture lvl0;
 	Texture lvl1;
@@ -31,6 +31,11 @@ public:
 	Texture malcolm;
 	Texture roxilla;
 	Texture turret;
+
+	Texture red;
+	Texture green;
+	Texture blue;
+	Texture yellow;
 };
 
 #endif // _LOAD_INCLUDE

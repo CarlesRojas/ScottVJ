@@ -224,6 +224,7 @@ void Roxilla::move(glm::vec2 deltaPos, float deltaTime)
 		hitBox->increasePos(-lastDeltaPos);
 		baseBox->increasePos(-lastDeltaPos);
 		fire->box->increasePos(-lastDeltaPos);
+		movingAlongX = !movingAlongX;
 	}
 }
 

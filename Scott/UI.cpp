@@ -1,15 +1,9 @@
 #include "UI.h"
 #include <glm/gtc/matrix_transform.hpp>
-
-
-enum UIAnims
-{
-	WHITE, COOLDOWN
-};
+#include "Load.h"
 
 UI::UI()
 {
-	program = NULL;
 	hpSprite = NULL;
 	attackSprite = NULL;
 	spinSprite = NULL;
@@ -18,7 +12,6 @@ UI::UI()
 
 UI::~UI()
 {
-	if (program != NULL) delete program;
 	if (hpSprite != NULL) delete hpSprite;
 	if (attackSprite != NULL) delete attackSprite;
 	if (spinSprite != NULL) delete spinSprite;
@@ -42,13 +35,6 @@ UI::UI(int playerCharacter, float attackCD, float spinCD, float specialCD, const
 	attackCooldownTimer = 0;
 	spinCooldownTimer = 0;
 	specialCooldownTimer = 0;
-
-	// Static UI
-	spriteSheet.loadFromFile("sprites/ui/Scott_UI_256.png", TEXTURE_PIXEL_FORMAT_RGBA);
-	spriteSheet.setWrapS(GL_CLAMP_TO_EDGE);
-	spriteSheet.setWrapT(GL_CLAMP_TO_EDGE);
-	spriteSheet.setMinFilter(GL_NEAREST);
-	spriteSheet.setMagFilter(GL_NEAREST);
 
 	player = playerCharacter;
 	winSize = windowSize;
@@ -83,7 +69,7 @@ UI::UI(int playerCharacter, float attackCD, float spinCD, float specialCD, const
 	texCoordLocation = program->bindVertexAttribute("texCoord", 2, 4 * sizeof(float), (void *)(2 * sizeof(float)));
 
 	// Animatied UI - Numbers
-	hpSprite = Sprite::createSprite(false, glm::vec2(256.f * ((float)windowSize.y / 256.f), 256.f * ((float)windowSize.y / 256.f)), glm::vec2(0.05, 0.05), &spriteSheet, program);
+	hpSprite = Sprite::createSprite(false, glm::vec2(256.f * ((float)windowSize.y / 256.f), 256.f * ((float)windowSize.y / 256.f)), glm::vec2(0.05, 0.05), &Load::instance().ui, program);
 	hpSprite->setNumberAnimations(4);
 
 	hpSprite->setAnimationSpeed(0, 1);
@@ -98,7 +84,7 @@ UI::UI(int playerCharacter, float attackCD, float spinCD, float specialCD, const
 	hpSprite->setPosition(glm::vec2(0.f, 0.f));
 
 	// Animatied UI - Attack
-	attackSprite = Sprite::createSprite(false, glm::vec2(256.f * ((float)windowSize.y / 256.f), 256.f * ((float)windowSize.y / 256.f)), glm::vec2(0.05, 0.05), &spriteSheet, program);
+	attackSprite = Sprite::createSprite(false, glm::vec2(256.f * ((float)windowSize.y / 256.f), 256.f * ((float)windowSize.y / 256.f)), glm::vec2(0.05, 0.05), &Load::instance().ui, program);
 	attackSprite->setNumberAnimations(2);
 
 	attackSprite->setAnimationSpeed(WHITE, 1);
@@ -126,7 +112,7 @@ UI::UI(int playerCharacter, float attackCD, float spinCD, float specialCD, const
 	attackSprite->setPosition(glm::vec2(0.f, 0.f));
 
 	// Animatied UI - Spin
-	spinSprite = Sprite::createSprite(false, glm::vec2(256.f * ((float)windowSize.y / 256.f), 256.f * ((float)windowSize.y / 256.f)), glm::vec2(0.05, 0.05), &spriteSheet, program);
+	spinSprite = Sprite::createSprite(false, glm::vec2(256.f * ((float)windowSize.y / 256.f), 256.f * ((float)windowSize.y / 256.f)), glm::vec2(0.05, 0.05), &Load::instance().ui, program);
 	spinSprite->setNumberAnimations(2);
 
 	spinSprite->setAnimationSpeed(WHITE, 1);
@@ -154,7 +140,7 @@ UI::UI(int playerCharacter, float attackCD, float spinCD, float specialCD, const
 	spinSprite->setPosition(glm::vec2(0.f, 0.f));
 
 	// Animatied UI - Special
-	specialSprite = Sprite::createSprite(false, glm::vec2(256.f * ((float)windowSize.y / 256.f), 256.f * ((float)windowSize.y / 256.f)), glm::vec2(0.05, 0.05), &spriteSheet, program);
+	specialSprite = Sprite::createSprite(false, glm::vec2(256.f * ((float)windowSize.y / 256.f), 256.f * ((float)windowSize.y / 256.f)), glm::vec2(0.05, 0.05), &Load::instance().ui, program);
 	specialSprite->setNumberAnimations(2);
 
 	specialSprite->setAnimationSpeed(WHITE, 1);
@@ -189,7 +175,7 @@ void UI::render() const
 	program->setUniform2f("texCoordDispl", textDispl.x, textDispl.y);
 
 	glEnable(GL_TEXTURE_2D);
-	spriteSheet.use();
+	Load::instance().ui.use();
 	glBindVertexArray(vao);
 	glEnableVertexAttribArray(posLocation);
 	glEnableVertexAttribArray(texCoordLocation);

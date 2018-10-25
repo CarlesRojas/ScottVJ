@@ -2,12 +2,18 @@
 
 void Load::init()
 {
-	// Screens
+	// Screens & UI
 	screens.loadFromFile("sprites/screens/screens_960x540.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	screens.setWrapS(GL_CLAMP_TO_EDGE);
 	screens.setWrapT(GL_CLAMP_TO_EDGE);
 	screens.setMinFilter(GL_NEAREST);
 	screens.setMagFilter(GL_NEAREST);
+
+	ui.loadFromFile("sprites/ui/Scott_UI_256.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	ui.setWrapS(GL_CLAMP_TO_EDGE);
+	ui.setWrapT(GL_CLAMP_TO_EDGE);
+	ui.setMinFilter(GL_NEAREST);
+	ui.setMagFilter(GL_NEAREST);
 
 	// Backgrounds
 	lvl0.loadFromFile("sprites/background/lvl0.png", TEXTURE_PIXEL_FORMAT_RGBA);
@@ -61,4 +67,29 @@ void Load::init()
 	turret.setMagFilter(GL_NEAREST);
 
 	// Bosses
+
+	// Outlines
+	red.loadFromFile("sprites/debug/outline_red.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	red.setWrapS(GL_CLAMP_TO_EDGE);
+	red.setWrapT(GL_CLAMP_TO_EDGE);
+	red.setMinFilter(GL_NEAREST);
+	red.setMagFilter(GL_NEAREST);
+
+	green.loadFromFile("sprites/debug/outline_green.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	green.setWrapS(GL_CLAMP_TO_EDGE);
+	green.setWrapT(GL_CLAMP_TO_EDGE);
+	green.setMinFilter(GL_NEAREST);
+	green.setMagFilter(GL_NEAREST);
+
+	blue.loadFromFile("sprites/debug/outline_blue.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	blue.setWrapS(GL_CLAMP_TO_EDGE);
+	blue.setWrapT(GL_CLAMP_TO_EDGE);
+	blue.setMinFilter(GL_NEAREST);
+	blue.setMagFilter(GL_NEAREST);
+
+	yellow.loadFromFile("sprites/debug/outline_yellow.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	yellow.setWrapS(GL_CLAMP_TO_EDGE);
+	yellow.setWrapT(GL_CLAMP_TO_EDGE);
+	yellow.setMinFilter(GL_NEAREST);
+	yellow.setMagFilter(GL_NEAREST);
 }

@@ -7,10 +7,7 @@
 
 Level::Level()
 {
-	program = NULL;
-	physics = NULL;
 	background = NULL;
-	cam = NULL;
 	ui = NULL;
 	player = NULL;
 	enemies.clear();
@@ -18,16 +15,16 @@ Level::Level()
 
 Level::~Level()
 {
-	if (program != NULL) delete program;
-	if (physics != NULL) delete physics;
+	
 	if (background != NULL) delete background;
-	if (cam != NULL) delete cam;
 	if (ui != NULL) delete ui;
 	if (player != NULL) delete player;
+	
 	for (int i = 0; i < enemies.size(); i++) {
 		Enemy* p = enemies[i];
 		delete p;
 	}
+	
 	enemies.clear();
 }
 
@@ -52,9 +49,9 @@ Level::Level(int character, int difficulty, int lvl, ShaderProgram * program)
 	Physics::instance().background = background;
 
 	// Cam & UI
-	cam = Camera::createCamera(glm::vec2(SCREEN_WIDTH, SCREEN_HEIGHT), background->getSize());
+	Camera::instance().init(glm::vec2(SCREEN_WIDTH, SCREEN_HEIGHT), background->getSize());
 	ui = UI::createUI(character, 0.5f, 5.f, 10.f, glm::vec2(SCREEN_WIDTH, SCREEN_HEIGHT), program);
-	Game::instance().projection = cam->getProjectionMatrix();
+	Game::instance().projection = Camera::instance().getProjectionMatrix();
 
 	// Player
 	player = Player::createPlayer(character, glm::vec2(SCREEN_WIDTH / 4, 3 * SCREEN_HEIGHT / 4), ui, SCREEN_HEIGHT, program);
@@ -87,18 +84,15 @@ void Level::update(int deltaTime)
 	}
 
 	// Camera
-	cam->update(deltaTime, player->pos);
-	Game::instance().projection = cam->getProjectionMatrix();
+	Camera::instance().update(deltaTime, player->pos);
+	Game::instance().projection = Camera::instance().getProjectionMatrix();
 
 	// UI & Background
-	ui->update(deltaTime, cam->getPos());
-	background->update(deltaTime, cam->getPos());
+	ui->update(deltaTime, Camera::instance().getPos());
+	background->update(deltaTime, Camera::instance().getPos());
 
 	// End level if player has no hit poits left
 	if (player->hp <= 0) gameOver();
-
-	// Debug
-	if (Game::instance().getKey('v')) theEnd();
 }
 
 void Level::render()

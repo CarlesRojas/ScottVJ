@@ -2,14 +2,11 @@
 #include "Game.h"
 #include <glm/gtc/matrix_transform.hpp>
 
-
-
 Screen::Screen()
 {
 	difficulty = NULL;
 	message = NULL;
 	screen = NULL;
-	program = NULL;
 }
 
 Screen::~Screen()
@@ -17,10 +14,9 @@ Screen::~Screen()
 	if (difficulty != NULL) delete difficulty;
 	if (message != NULL) delete message;
 	if (screen != NULL) delete screen;
-	if (program != NULL) delete program;
 }
 
-Screen *Screen::createScreen(int id, const glm::vec2 windowSize, ShaderProgram * program)
+Screen * Screen::createScreen(int id, const glm::vec2 windowSize, ShaderProgram * program)
 {
 	Screen *s = new Screen(id, windowSize, program);
 	return s;
@@ -28,7 +24,7 @@ Screen *Screen::createScreen(int id, const glm::vec2 windowSize, ShaderProgram *
 
 Screen::Screen(int id, const glm::vec2 windowSize, ShaderProgram * program)
 {
-	this->id = id; 
+	this->id = id;
 	this->program = program;
 	scaleFactor = (float)windowSize.y / 540.f;
 
@@ -89,10 +85,10 @@ Screen::Screen(int id, const glm::vec2 windowSize, ShaderProgram * program)
 
 	screen->setAnimationSpeed(S_NONE, 8);
 	screen->addKeyframe(S_NONE, glm::vec2(6 * texSize.x, 6 * texSize.y));
-	
+
 	screen->changeAnimation(S_NONE);
 	screen->setPosition(glm::vec2(0.f));
-	
+
 	// Message
 	message = Sprite::createSprite(false, glm::vec2(960.f * scaleFactor, 540.f * scaleFactor), texSize, &Load::instance().screens, program);
 	message->setNumberAnimations(4);
@@ -104,11 +100,11 @@ Screen::Screen(int id, const glm::vec2 windowSize, ShaderProgram * program)
 	message->setAnimationSpeed(M_PLAY, 2);
 	message->addKeyframe(M_PLAY, glm::vec2(0 * texSize.x, 5 * texSize.y));
 	message->addKeyframe(M_PLAY, glm::vec2(0 * texSize.x, 6 * texSize.y));
-	
+
 	message->setAnimationSpeed(M_MENU, 2);
 	message->addKeyframe(M_MENU, glm::vec2(1 * texSize.x, 5 * texSize.y));
 	message->addKeyframe(M_MENU, glm::vec2(1 * texSize.x, 6 * texSize.y));
-	
+
 	message->setAnimationSpeed(M_NONE, 2);
 	message->addKeyframe(M_NONE, glm::vec2(6 * texSize.x, 6 * texSize.y));
 
@@ -127,7 +123,7 @@ Screen::Screen(int id, const glm::vec2 windowSize, ShaderProgram * program)
 
 	difficulty->setAnimationSpeed(D_HARD, 8);
 	difficulty->addKeyframe(D_HARD, glm::vec2(4 * texSize.x, 5 * texSize.y));
-	
+
 	difficulty->setAnimationSpeed(D_NONE, 8);
 	difficulty->addKeyframe(D_NONE, glm::vec2(6 * texSize.x, 6 * texSize.y));
 

@@ -16,7 +16,6 @@ Player::Player()
 	spin = NULL;
 	special = NULL;
 	sprite = NULL;
-	ui = NULL;
 }
 
 Player::~Player()
@@ -27,7 +26,6 @@ Player::~Player()
 	if (spin != NULL) delete spin;
 	if (special != NULL) delete special;
 	if (sprite != NULL) delete sprite;
-	if (ui != NULL) delete ui;
 }
 
 Player * Player::createPlayer(const int player, const glm::vec2 & initialPos, UI *ui, const int windowHeight, ShaderProgram * program)

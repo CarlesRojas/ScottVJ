@@ -23,6 +23,7 @@ public:
 
 	void init(ShaderProgram * texProgram);
 	void render();
+	void reset();
 
 	static bool overlap(Box * box1, Box * box2);
 	bool correctPosition(Box * box);
@@ -42,7 +43,6 @@ private:
 	// Debug
 	void loadOutlineTextures();
 	void printBoxes(bool printBackground);
-	Texture red, blue, green, yellow;
 	GLuint vao, vbo;
 	vector<float> vertices;
 	GLint posLocation, texCoordLocation;
