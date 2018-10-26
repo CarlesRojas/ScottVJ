@@ -4,7 +4,6 @@
 #include "Game.h"
 #include <glm/gtc/matrix_transform.hpp>
 
-
 Game::Game()
 {
 	level = NULL;
@@ -22,7 +21,6 @@ void Game::init()
 	keepPlaying = true;
 	glClearColor(1.0f, 0.3f, 0.3f, 1.0f);
 	currentTime = 0.0f;
-	delay = -1.f;
 	initShaders();
 	theEnd = gameOver = false;
 	
@@ -40,13 +38,12 @@ void Game::init()
 bool Game::update(int deltaTime)
 {
 	currentTime += deltaTime;
-	if (delay > 0) delay -= (deltaTime / 1000.f);
 
 	if ((state == LVL0 || state == LVL1 || state == LVL2) && level != NULL) {
 		level->update(deltaTime);
 
 		// Debug
-		if (delay <= 0 && Game::instance().getKey('v')) { delay = 1.f; level->theEnd(); }
+		if (Game::instance().getKey('v')) { Game::instance().setKey('v', false); level->theEnd(); }
 	}
 	else if (state != LVL0 && state != LVL1 && state != LVL2 && screen != NULL)
 	{
@@ -58,9 +55,9 @@ bool Game::update(int deltaTime)
 	switch (state)
 	{
 	case Game::MAIN:
-		if (delay <= 0 && Game::instance().getKey(' '))
+		if (Game::instance().getKey(' '))
 		{
-			delay = .5f;
+			Game::instance().setKey(' ', false);
 			screen->screen->changeAnimation(Screen::S_TRIA_SCOTT);
 			screen->message->changeAnimation(Screen::M_PLAY);
 			screen->difficulty->changeAnimation(Screen::D_EASY);
@@ -71,9 +68,9 @@ bool Game::update(int deltaTime)
 	case Game::CHOOSE:
 
 		// Right
-		if (delay <= 0 && Game::instance().getKey('d'))
+		if (Game::instance().getKey('d'))
 		{
-			delay = .3f;
+			Game::instance().setKey('d', false);
 			if (screen->screen->animation() == Screen::S_TRIA_SCOTT)
 				screen->screen->changeAnimation(Screen::S_TRIA_RAMONA);
 			else if (screen->screen->animation() == Screen::S_TRIA_RAMONA)
@@ -83,9 +80,9 @@ bool Game::update(int deltaTime)
 		}
 
 		// Left
-		else if (delay <= 0 && Game::instance().getKey('a'))
+		else if (Game::instance().getKey('a'))
 		{
-			delay = .3f;
+			Game::instance().setKey('a', false);
 			if (screen->screen->animation() == Screen::S_TRIA_SCOTT)
 				screen->screen->changeAnimation(Screen::S_TRIA_KIM);
 			else if (screen->screen->animation() == Screen::S_TRIA_KIM)
@@ -94,41 +91,26 @@ bool Game::update(int deltaTime)
 				screen->screen->changeAnimation(Screen::S_TRIA_SCOTT);
 		}
 
-		// Up
-		else if (delay <= 0 && Game::instance().getKey('w'))
+		// Up || Down
+		else if (Game::instance().getKey('w') || Game::instance().getKey('s'))
 		{
-			delay = .3f;
+			Game::instance().setKey('w', false);
+			Game::instance().setKey('s', false);
 			if (screen->difficulty->animation() == Screen::D_EASY)
-				screen->difficulty->changeAnimation(Screen::D_HARD);
-			else if (screen->difficulty->animation() == Screen::D_MEDIUM)
-				screen->difficulty->changeAnimation(Screen::D_EASY);
-			else if (screen->difficulty->animation() == Screen::D_HARD)
-				screen->difficulty->changeAnimation(Screen::D_MEDIUM);
-		}
-
-		// Down
-		else if (delay <= 0 && Game::instance().getKey('s'))
-		{
-			delay = .3f;
-			if (screen->difficulty->animation() == Screen::D_EASY)
-				screen->difficulty->changeAnimation(Screen::D_MEDIUM);
-			else if (screen->difficulty->animation() == Screen::D_MEDIUM)
 				screen->difficulty->changeAnimation(Screen::D_HARD);
 			else if (screen->difficulty->animation() == Screen::D_HARD)
 				screen->difficulty->changeAnimation(Screen::D_EASY);
 		}
 
-		if (delay <= 0 && Game::instance().getKey(' '))
+		if (Game::instance().getKey(' '))
 		{
-			delay = .5f;
-
+			Game::instance().setKey(' ', false);
 			if (screen->screen->animation() == Screen::S_TRIA_SCOTT) player = 0;
 			else if (screen->screen->animation() == Screen::S_TRIA_RAMONA) player = 1;
 			else if (screen->screen->animation() == Screen::S_TRIA_KIM) player = 2;
 
-			if (screen->difficulty->animation() == Screen::D_EASY) difficulty = 0;
-			else if (screen->difficulty->animation() == Screen::D_MEDIUM) difficulty = 1;
-			else if (screen->difficulty->animation() == Screen::D_HARD) difficulty = 2;
+			if (screen->difficulty->animation() == Screen::D_EASY) hardDifficulty = false;
+			else if (screen->difficulty->animation() == Screen::D_HARD) hardDifficulty = true;
 
 			screen->screen->changeAnimation(Screen::S_NONE);
 			screen->message->changeAnimation(Screen::M_NONE);
@@ -136,7 +118,7 @@ bool Game::update(int deltaTime)
 			state = LVL0;
 
 			Physics::instance().reset();
-			level = Level::createLevel(player, difficulty, 0, &program);
+			level = Level::createLevel(player, hardDifficulty, 0, &program);
 		}
 		break;
 	case Game::LVL0:
@@ -144,7 +126,7 @@ bool Game::update(int deltaTime)
 		{
 			theEnd = gameOver = false;
 			Physics::instance().reset();
-			level = Level::createLevel(player, difficulty, 1, &program);
+			level = Level::createLevel(player, hardDifficulty, 1, &program);
 			state = LVL1;
 		}
 		if (gameOver)
@@ -166,7 +148,7 @@ bool Game::update(int deltaTime)
 		{
 			theEnd = gameOver = false;
 			Physics::instance().reset();
-			level = Level::createLevel(player, difficulty, 2, &program);
+			level = Level::createLevel(player, hardDifficulty, 2, &program);
 			state = LVL2;
 		}
 		if (gameOver)
@@ -211,7 +193,7 @@ bool Game::update(int deltaTime)
 	case Game::GAMEOVER:
 		if (Game::instance().getKey(' '))
 		{
-			delay = .5f;
+			Game::instance().setKey(' ', false);
 			screen->screen->changeAnimation(Screen::S_MAIN);
 			screen->message->changeAnimation(Screen::M_START);
 			screen->difficulty->changeAnimation(Screen::D_NONE);
@@ -221,7 +203,7 @@ bool Game::update(int deltaTime)
 	case Game::THEEND:
 		if (Game::instance().getKey(' '))
 		{
-			delay = .5f;
+			Game::instance().setKey(' ', false);
 			screen->screen->changeAnimation(Screen::S_MAIN);
 			screen->message->changeAnimation(Screen::M_START);
 			screen->difficulty->changeAnimation(Screen::D_NONE);
@@ -279,14 +261,18 @@ void Game::mouseMove(int x, int y)
 
 void Game::mousePress(int button)
 {
-	if (button < 7 && button >= 0)
+	if (button < 7 && button >= 0) 
+	{
 		mouseKeys[button] = true;
+	}
 }
 
 void Game::mouseRelease(int button)
 {
-	if (button < 7 && button >= 0)
+	if (button < 7 && button >= 0) 
+	{
 		mouseKeys[button] = false;
+	}
 }
 
 bool Game::getKey(int key) const

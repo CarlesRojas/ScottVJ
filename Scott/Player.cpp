@@ -12,7 +12,9 @@ Player::Player()
 {
 	hitBox = NULL;
 	baseBox = NULL;
-	punch = NULL;
+	punch0 = NULL;
+	punch1 = NULL;
+	punch2 = NULL;
 	spin = NULL;
 	special = NULL;
 	sprite = NULL;
@@ -22,7 +24,9 @@ Player::~Player()
 {
 	if (hitBox != NULL) delete hitBox;
 	if (baseBox != NULL) delete baseBox;
-	if (punch != NULL) delete punch;
+	if (punch0 != NULL) delete punch0;
+	if (punch1 != NULL) delete punch1;
+	if (punch2 != NULL) delete punch2;
 	if (spin != NULL) delete spin;
 	if (special != NULL) delete special;
 	if (sprite != NULL) delete sprite;
@@ -61,11 +65,15 @@ void Player::init(const glm::vec2 & initialPos, UI * ui, const int windowHeight,
 void Player::update(int deltaTime)
 {
 	sprite->update(deltaTime);
-	punch->update(deltaTime);
+	punch0->update(deltaTime);
+	punch1->update(deltaTime);
+	punch2->update(deltaTime);
 	spin->update(deltaTime);
 	special->update(deltaTime);
 
 	float dt = deltaTime / 1000.f;
+	if (punchTimer > 0) punchTimer -= dt;
+	else punchType = 0;
 
 	if (delay > 0) delay -= dt;
 	else
@@ -114,14 +122,35 @@ void Player::update(int deltaTime)
 			move(glm::vec2(0.f, 1.f), dt);
 
 		// Punch
-		if (Game::instance().getKey('i') && sprite->animation() != PUNCH1 && !fixAnim && ui->canAttack())
+		if (Game::instance().getKey('i') && !fixAnim && ui->canAttack())
 		{
-			punch->activate(pos, flip);
+			if (punchType == 0)
+			{
+				punch0->activate(pos, flip);
+				delay = 3.5f / 8.f;
+				punchType = 1;
+				punchTimer = 1.f;
+				if(sprite->animation() != PUNCH1) sprite->changeAnimation(PUNCH1);
+			}
+			else if (punchType == 1)
+			{
+				punch1->activate(pos, flip);
+				delay = 3.5f / 8.f;
+				punchType = 2;
+				punchTimer = 1.f;
+				if (sprite->animation() != PUNCH2) sprite->changeAnimation(PUNCH2);
+			}
+			else
+			{
+				punch2->activate(pos, flip);
+				delay = getLastPunchDuration() / 8.f;
+				punchType = 0;
+				punchTimer = -1.f;
+				if (sprite->animation() != PUNCH3) sprite->changeAnimation(PUNCH3);
+			}
 
 			fixAnim = true;
 			fixPos = true;
-			delay = 3.5f / 8.f;
-			sprite->changeAnimation(PUNCH1);
 		}
 
 		// Spin
@@ -194,7 +223,9 @@ void Player::kill()
 	// Down
 	if (!dying && !reviving && sprite->animation() != DOWN && !fixAnim)
 	{
-		punch->deactivate();
+		punch0->deactivate();
+		punch1->deactivate();
+		punch2->deactivate();
 		spin->deactivate();
 		special->deactivate();
 
@@ -209,10 +240,14 @@ void Player::kill()
 vector<Attack*> Player::getAttacks()
 {
 	vector<Attack*> a;
-	a.push_back(punch);
+	a.push_back(punch0);
+	a.push_back(punch1);
+	a.push_back(punch2);
 	a.push_back(spin);
 	a.push_back(special);
 	return a;
 }
 
 float Player::getSpecialAttackDuration() { return 0.f; }
+
+float Player::getLastPunchDuration() { return 3.5f; }

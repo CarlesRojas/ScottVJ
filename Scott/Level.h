@@ -22,8 +22,8 @@ public:
 	Level();
 	~Level();
 
-	static Level * createLevel(int character, int difficulty, int lvl, ShaderProgram * program);
-	Level(int character, int difficulty, int lvl, ShaderProgram * program);
+	static Level * createLevel(int character, bool hardDifficulty, int lvl, ShaderProgram * program);
+	Level(int character, bool hardDifficulty, int lvl, ShaderProgram * program);
 
 	void update(int deltaTime);
 	void render();
@@ -41,7 +41,8 @@ private:
 	vector<Enemy*> enemies;
 
 	// Level Info
-	int character, lvl, difficulty;
+	int character, lvl;
+	bool hardDifficulty;
 };
 
 

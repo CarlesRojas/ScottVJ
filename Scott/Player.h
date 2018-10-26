@@ -26,7 +26,9 @@ public:
 
 	Box *hitBox;
 	Box *baseBox;
-	Attack *punch;
+	Attack *punch0;
+	Attack *punch1;
+	Attack *punch2;
 	Attack *spin;
 	Attack *special;
 
@@ -37,11 +39,12 @@ public:
 
 protected:
 	virtual float getSpecialAttackDuration();
+	virtual float getLastPunchDuration();
 	glm::vec2 lastDeltaPos;
 	UI *ui;
 
-	int speed, runSpeed;
-	float delay, scaleFactor;
+	int speed, runSpeed, punchType;
+	float delay, scaleFactor, punchTimer;
 };
 
 #endif // _PLAYER_INCLUDE

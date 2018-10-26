@@ -52,10 +52,11 @@ private:
 	void initShaders();
 	float currentTime;
 	ShaderProgram program;
+	GameState state;
 	bool keepPlaying;
+
 	bool keys[256], specialKeys[256], mouseKeys[6];
 	glm::vec2 mousePos;
-	GameState state;
 
 	static Physics physics;
 	static Camera cam;
@@ -64,8 +65,8 @@ private:
 	Screen *screen;
 	Level *level;
 
-	int player, difficulty;
-	float delay;
+	int player;
+	bool hardDifficulty;
 
 };
 

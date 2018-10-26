@@ -12,7 +12,7 @@ class Screen
 public:
 	enum ScreenAnim { S_MAIN, S_TRIA_SCOTT, S_TRIA_RAMONA , S_TRIA_KIM, S_GO_SCOTT, S_GO_RAMONA, S_GO_KIM, S_THEEND, S_NONE };
 	enum MessageAnim { M_START, M_PLAY, M_MENU, M_NONE };
-	enum DiffAnim { D_EASY, D_MEDIUM, D_HARD, D_NONE };
+	enum DiffAnim { D_EASY, D_HARD, D_NONE };
 
 	Screen();
 	~Screen();

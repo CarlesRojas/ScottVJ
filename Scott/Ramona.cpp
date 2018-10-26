@@ -126,7 +126,9 @@ void Ramona::init(const glm::vec2 & initialPos, UI * ui, const int windowHeight,
 	sprite->addKeyframe(REVIVE, glm::vec2(3 * 0.05f, 4 * 0.05f));
 
 	// Add Attacks
-	punch = Attack::createAttack(Box::PLAYER, pos, glm::vec2(17 * scaleFactor, -25 * scaleFactor), glm::vec2(34 * scaleFactor, 15 * scaleFactor), 3.5f / 8.f, 0, 1.5f / 8.f, true, false, glm::vec2(0, 0));
+	punch0 = Attack::createAttack(Box::PLAYER, pos, glm::vec2(17 * scaleFactor, -25 * scaleFactor), glm::vec2(34 * scaleFactor, 15 * scaleFactor), 3.5f / 8.f, 0, 1.5f / 8.f, true, false, glm::vec2(0, 0));
+	punch1 = Attack::createAttack(Box::PLAYER, pos, glm::vec2(22 * scaleFactor, -15 * scaleFactor), glm::vec2(44 * scaleFactor, 14 * scaleFactor), 3.5f / 8.f, 0, 1.5f / 8.f, true, false, glm::vec2(0, 0));
+	punch2 = Attack::createAttack(Box::PLAYER, pos, glm::vec2(53 * scaleFactor, -1 * scaleFactor), glm::vec2(22 * scaleFactor, 50 * scaleFactor), 5.5f / 8.f, 0, 3.5f / 8.f, true, false, glm::vec2(0, 0));
 	spin = Attack::createAttack(Box::PLAYER, pos, glm::vec2(0, 0), glm::vec2(120 * scaleFactor, 50 * scaleFactor), 16.5f / 8.f, 0, .5f / 8.f, false, true, glm::vec2(0, 0));
 	special = Attack::createAttack(Box::PLAYER, pos, glm::vec2(48 * scaleFactor, -11 * scaleFactor), glm::vec2(40 * scaleFactor, 50 * scaleFactor), 10.5f / 8.f, 0, 6.f / 8.f, false, false, glm::vec2(0, 0));
 
@@ -143,3 +145,4 @@ float Ramona::getSpecialAttackDuration()
 	return 9.5f / 8.f;
 }
 
+float Ramona::getLastPunchDuration() { return 5.5f; }

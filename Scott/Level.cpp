@@ -28,17 +28,17 @@ Level::~Level()
 	enemies.clear();
 }
 
-Level * Level::createLevel(int character, int difficulty, int lvl, ShaderProgram * program)
+Level * Level::createLevel(int character, bool hardDifficulty, int lvl, ShaderProgram * program)
 {
-	Level *l = new Level(character, difficulty, lvl, program);
+	Level *l = new Level(character, hardDifficulty, lvl, program);
 	return l;
 }
 
-Level::Level(int character, int difficulty, int lvl, ShaderProgram * program)
+Level::Level(int character, bool hardDifficulty, int lvl, ShaderProgram * program)
 {
 	this->program = program;
 	this->lvl = lvl;
-	this->difficulty = difficulty;
+	this->hardDifficulty = hardDifficulty;
 	this->character = character;
 
 	// Physics
@@ -50,7 +50,7 @@ Level::Level(int character, int difficulty, int lvl, ShaderProgram * program)
 
 	// Cam & UI
 	Camera::instance().init(glm::vec2(SCREEN_WIDTH, SCREEN_HEIGHT), background->getSize());
-	ui = UI::createUI(character, 0.5f, 5.f, 10.f, glm::vec2(SCREEN_WIDTH, SCREEN_HEIGHT), program);
+	ui = UI::createUI(character, lvl, 0.5f, 5.f, 10.f, glm::vec2(SCREEN_WIDTH, SCREEN_HEIGHT), program);
 	Game::instance().projection = Camera::instance().getProjectionMatrix();
 
 	// Player
@@ -66,6 +66,7 @@ Level::Level(int character, int difficulty, int lvl, ShaderProgram * program)
 
 	enemies.push_back(Enemy::createEnemy(1, glm::vec2(7.f * SCREEN_WIDTH / 4, 2.5f * SCREEN_HEIGHT / 4), SCREEN_HEIGHT, program));
 	Physics::instance().enemies.push_back(enemies[enemies.size() - 1]);
+
 }
 
 void Level::update(int deltaTime)
@@ -93,6 +94,9 @@ void Level::update(int deltaTime)
 
 	// End level if player has no hit poits left
 	if (player->hp <= 0) gameOver();
+
+	// Debug
+	if(Game::instance().getKey('b')) ui->showBossIntro();
 }
 
 void Level::render()

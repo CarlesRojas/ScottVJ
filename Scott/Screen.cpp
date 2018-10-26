@@ -93,19 +93,19 @@ Screen::Screen(int id, const glm::vec2 windowSize, ShaderProgram * program)
 	message = Sprite::createSprite(false, glm::vec2(960.f * scaleFactor, 540.f * scaleFactor), texSize, &Load::instance().screens, program);
 	message->setNumberAnimations(4);
 
-	message->setAnimationSpeed(M_START, 2);
+	message->setAnimationSpeed(M_START, 1);
 	message->addKeyframe(M_START, glm::vec2(6 * texSize.x, 4 * texSize.y));
 	message->addKeyframe(M_START, glm::vec2(6 * texSize.x, 5 * texSize.y));
 
-	message->setAnimationSpeed(M_PLAY, 2);
+	message->setAnimationSpeed(M_PLAY, 1);
 	message->addKeyframe(M_PLAY, glm::vec2(0 * texSize.x, 5 * texSize.y));
 	message->addKeyframe(M_PLAY, glm::vec2(0 * texSize.x, 6 * texSize.y));
 
-	message->setAnimationSpeed(M_MENU, 2);
+	message->setAnimationSpeed(M_MENU, 1);
 	message->addKeyframe(M_MENU, glm::vec2(1 * texSize.x, 5 * texSize.y));
 	message->addKeyframe(M_MENU, glm::vec2(1 * texSize.x, 6 * texSize.y));
 
-	message->setAnimationSpeed(M_NONE, 2);
+	message->setAnimationSpeed(M_NONE, 1);
 	message->addKeyframe(M_NONE, glm::vec2(6 * texSize.x, 6 * texSize.y));
 
 	message->changeAnimation(M_NONE);
@@ -118,11 +118,8 @@ Screen::Screen(int id, const glm::vec2 windowSize, ShaderProgram * program)
 	difficulty->setAnimationSpeed(D_EASY, 8);
 	difficulty->addKeyframe(D_EASY, glm::vec2(2 * texSize.x, 5 * texSize.y));
 
-	difficulty->setAnimationSpeed(D_MEDIUM, 8);
-	difficulty->addKeyframe(D_MEDIUM, glm::vec2(3 * texSize.x, 5 * texSize.y));
-
 	difficulty->setAnimationSpeed(D_HARD, 8);
-	difficulty->addKeyframe(D_HARD, glm::vec2(4 * texSize.x, 5 * texSize.y));
+	difficulty->addKeyframe(D_HARD, glm::vec2(3 * texSize.x, 5 * texSize.y));
 
 	difficulty->setAnimationSpeed(D_NONE, 8);
 	difficulty->addKeyframe(D_NONE, glm::vec2(6 * texSize.x, 6 * texSize.y));

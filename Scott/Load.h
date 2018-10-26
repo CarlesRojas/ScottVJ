@@ -18,6 +18,7 @@ public:
 	void init();
 
 	Texture screens;
+	Texture boss;
 	Texture ui;
 
 	Texture lvl0;
@@ -31,6 +32,10 @@ public:
 	Texture malcolm;
 	Texture roxilla;
 	Texture turret;
+
+	Texture todd;
+	Texture roxanne;
+	Texture robot;
 
 	Texture red;
 	Texture green;

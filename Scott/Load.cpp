@@ -9,6 +9,12 @@ void Load::init()
 	screens.setMinFilter(GL_NEAREST);
 	screens.setMagFilter(GL_NEAREST);
 
+	boss.loadFromFile("sprites/ui/BossUI_670x110.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	boss.setWrapS(GL_CLAMP_TO_EDGE);
+	boss.setWrapT(GL_CLAMP_TO_EDGE);
+	boss.setMinFilter(GL_NEAREST);
+	boss.setMagFilter(GL_NEAREST);
+
 	ui.loadFromFile("sprites/ui/Scott_UI_256.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	ui.setWrapS(GL_CLAMP_TO_EDGE);
 	ui.setWrapT(GL_CLAMP_TO_EDGE);

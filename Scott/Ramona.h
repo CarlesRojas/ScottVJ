@@ -9,6 +9,7 @@ public:
 	Ramona() { }
 	virtual void init(const glm::vec2 &initialPos, UI *ui, const int windowHeight, ShaderProgram *shaderProgram);
 	virtual float getSpecialAttackDuration();
+	virtual float getLastPunchDuration();
 };
 
 #endif // _RAMONA_INCLUDE

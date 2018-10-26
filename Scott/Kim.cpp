@@ -116,7 +116,9 @@ void Kim::init(const glm::vec2 & initialPos, UI * ui, const int windowHeight, Sh
 	sprite->addKeyframe(REVIVE, glm::vec2(3 * 0.05f, 4 * 0.05f));
 
 	// Add Attacks
-	punch = Attack::createAttack(Box::PLAYER, pos, glm::vec2(20 * scaleFactor, -25 * scaleFactor), glm::vec2(40 * scaleFactor, 20 * scaleFactor), 3.5f / 8.f, 0, 1.5f / 8.f, true, false, glm::vec2(0, 0));
+	punch0 = Attack::createAttack(Box::PLAYER, pos, glm::vec2(17 * scaleFactor, -28 * scaleFactor), glm::vec2(34 * scaleFactor, 10 * scaleFactor), 3.5f / 8.f, 0, 1.5f / 8.f, true, false, glm::vec2(0, 0));
+	punch1 = Attack::createAttack(Box::PLAYER, pos, glm::vec2(16 * scaleFactor, -28 * scaleFactor), glm::vec2(32 * scaleFactor, 10 * scaleFactor), 3.5f / 8.f, 0, 1.5f / 8.f, true, false, glm::vec2(0, 0));
+	punch2 = Attack::createAttack(Box::PLAYER, pos, glm::vec2(16 * scaleFactor, -21 * scaleFactor), glm::vec2(32 * scaleFactor, 14 * scaleFactor), 3.5f / 8.f, 0, 1.5f / 8.f, true, false, glm::vec2(0, 0));
 	spin = Attack::createAttack(Box::PLAYER, pos, glm::vec2(0, 0), glm::vec2(120 * scaleFactor, 50 * scaleFactor), 16.5f / 8.f, 0, .5f / 8.f, false, true, glm::vec2(0, 0));
 	special = Attack::createAttack(Box::PLAYER, pos, glm::vec2(53 * scaleFactor, -8 * scaleFactor), glm::vec2(60 * scaleFactor, 50 * scaleFactor), 8.5f / 8.f, 5.f / 8.f, .5f / 8.f, false, true, glm::vec2(800.f, 0));
 
