@@ -15,10 +15,10 @@ Roxilla::~Roxilla()
 void Roxilla::init(const glm::vec2 & initialPos, const int windowHeight, ShaderProgram * shaderProgram)
 {
 	this->pos = initialPos;
+	scaleFactor = ((float)windowHeight / 256.f);
 	delay = 0.f;
 	flip = fixAnim = fixPos = dying = dead = false;
-	scaleFactor = ((float)windowHeight / 256.f);
-	speed = 150;
+	speed = 35 * scaleFactor;
 	fireCooldown = 5.f;
 
 	sprite = Sprite::createSprite(true, glm::vec2(256.f * scaleFactor, 256.f * scaleFactor), glm::vec2(0.05, 0.05), &Load::instance().roxilla, shaderProgram);

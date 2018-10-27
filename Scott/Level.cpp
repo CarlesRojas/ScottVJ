@@ -1,9 +1,6 @@
-#include <cmath>
-#include <algorithm>
-#include <glm/gtc/matrix_transform.hpp>
 #include "Level.h"
 #include "Game.h"
-
+#include <fstream>
 
 Level::Level()
 {
@@ -40,6 +37,9 @@ Level::Level(int character, bool hardDifficulty, int lvl, ShaderProgram * progra
 	this->lvl = lvl;
 	this->hardDifficulty = hardDifficulty;
 	this->character = character;
+	float scaleFactor = SCREEN_HEIGHT / 256.f;
+	
+	layout = loadLevel("levels/lvl" + to_string(lvl) + ".txt", hardDifficulty);
 
 	// Physics
 	Physics::instance().init(program);
@@ -50,7 +50,7 @@ Level::Level(int character, bool hardDifficulty, int lvl, ShaderProgram * progra
 
 	// Cam & UI
 	Camera::instance().init(glm::vec2(SCREEN_WIDTH, SCREEN_HEIGHT), background->getSize());
-	ui = UI::createUI(character, lvl, 0.5f, 5.f, 10.f, glm::vec2(SCREEN_WIDTH, SCREEN_HEIGHT), program);
+	ui = UI::createUI(character, lvl, 0.5f, 10.f, 10.f, glm::vec2(SCREEN_WIDTH, SCREEN_HEIGHT), program);
 	Game::instance().projection = Camera::instance().getProjectionMatrix();
 
 	// Player
@@ -58,15 +58,20 @@ Level::Level(int character, bool hardDifficulty, int lvl, ShaderProgram * progra
 	Physics::instance().player = player;
 
 	// Enemies
-	enemies.push_back(Enemy::createEnemy(0, glm::vec2(3.0f * SCREEN_WIDTH / 4, 3.5f * SCREEN_HEIGHT / 4), SCREEN_HEIGHT, program));
-	Physics::instance().enemies.push_back(enemies[enemies.size() - 1]);
+	for(int i = 0; i < layout.size(); ++i)
+		for (int j = 0; j < layout[i].size(); ++j)
+		{
+			int enemy = -1;
+			if (layout[i][j] == 'm') enemy = 0;
+			else if (layout[i][j] == 't') enemy = 1;
+			else if (layout[i][j] == 'r') enemy = 2;
 
-	enemies.push_back(Enemy::createEnemy(0, glm::vec2(2.5f * SCREEN_WIDTH / 4, 3.f * SCREEN_HEIGHT / 4), SCREEN_HEIGHT, program));
-	Physics::instance().enemies.push_back(enemies[enemies.size() - 1]);
-
-	enemies.push_back(Enemy::createEnemy(1, glm::vec2(7.f * SCREEN_WIDTH / 4, 2.5f * SCREEN_HEIGHT / 4), SCREEN_HEIGHT, program));
-	Physics::instance().enemies.push_back(enemies[enemies.size() - 1]);
-
+			if (enemy != -1) 
+			{
+				enemies.push_back(Enemy::createEnemy(enemy, glm::vec2((32 * j + 282) * scaleFactor, (27 * i + 148) * scaleFactor), SCREEN_HEIGHT, program));
+				Physics::instance().enemies.push_back(enemies[enemies.size() - 1]);
+			}
+		}
 }
 
 void Level::update(int deltaTime)
@@ -127,6 +132,41 @@ void Level::render()
 
 	// Debug
 	Physics::instance().render();
+}
+
+vector< vector<char> > Level::loadLevel(const string &levelFile, bool hard)
+{
+	vector< vector<char> > l;
+	ifstream fin;
+	string line;
+
+	fin.open(levelFile.c_str());
+
+	getline(fin, line);
+	for (int i = 0; i < 5; ++i)
+	{
+		getline(fin, line);
+		if (!hard)
+		{
+			vector<char> data(line.begin() + 1, line.end() - 1);
+			l.push_back(data);
+		}
+	}
+
+	getline(fin, line);
+	getline(fin, line);
+	for (int i = 0; i < 5; ++i)
+	{
+		getline(fin, line);
+		if (hard)
+		{
+			vector<char> data(line.begin() + 1, line.end() - 1);
+			l.push_back(data);
+		}
+	}
+	
+	fin.close();
+	return l;
 }
 
 void Level::gameOver()

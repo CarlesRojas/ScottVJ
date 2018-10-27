@@ -20,7 +20,7 @@ public:
 	TurretState state;
 
 	Attack *shoot;
-	float shootCooldownTimer;
+	float shootCooldownTimer, shootSpeed;
 };
 
 #endif _TURRET_INCLUDE

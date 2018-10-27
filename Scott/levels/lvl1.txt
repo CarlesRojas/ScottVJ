@@ -1,0 +1,31 @@
+##################################################################################
+#                                                                                #
+#                                                                                #
+#                                                                                #
+#                                                                                #
+#                                                                                #
+##################################################################################
+
+##################################################################################
+#                                                                                #
+#                                                                                #
+#                                                                                #
+#                                                                                #
+#                                                                                #
+##################################################################################
+
+Possible Enemies:
+    r = roxilla
+    m = malcolmn
+    t = turret
+
+
+Size of Background =            3584 x 256 pixels
+Size Player Spawn =              256 x 256 pixels
+Size Boss Fight =                768 x 256 pixels
+Size Top NonPlayable Area =     3584 x 121 pixels
+
+Size Enemies Area =             2560 x 135 pixels
+
+Number of enemy slots =           80 x 5   slots
+Slot size =                       32 x 27  pixels

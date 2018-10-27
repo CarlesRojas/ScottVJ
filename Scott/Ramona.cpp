@@ -5,12 +5,12 @@ void Ramona::init(const glm::vec2 & initialPos, UI * ui, const int windowHeight,
 {
 	this->ui = ui;
 	this->pos = initialPos;
-	speed = 250;
-	runSpeed = 500;
+	scaleFactor = ((float)windowHeight / 256.f);
+	speed = 60 * scaleFactor;
+	runSpeed = 120 * scaleFactor;
 	hp = 3;
 	delay = 0.f;
 	flip = fixAnim = fixPos = dying = reviving = false;
-	scaleFactor = ((float)windowHeight / 256.f);
 
 	sprite = Sprite::createSprite(true, glm::vec2(256.f * scaleFactor, 256.f * scaleFactor), glm::vec2(0.05, 0.05), &Load::instance().ramona, shaderProgram);
 	sprite->setNumberAnimations(10);

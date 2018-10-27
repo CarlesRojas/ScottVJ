@@ -15,10 +15,11 @@ Turret::~Turret()
 void Turret::init(const glm::vec2 & initialPos, const int windowHeight, ShaderProgram * shaderProgram)
 {
 	this->pos = initialPos;
+	scaleFactor = ((float)windowHeight / 256.f);
+	shootSpeed = 240 * scaleFactor;
 	delay = 0.f;
 	flip = true;
 	fixAnim = fixPos = dying = dead = false;
-	scaleFactor = ((float)windowHeight / 256.f);
 
 	sprite = Sprite::createSprite(true, glm::vec2(256.f * scaleFactor, 256.f * scaleFactor), glm::vec2(0.05, 0.05), &Load::instance().turret, shaderProgram);
 	sprite->setNumberAnimations(6);
@@ -74,7 +75,7 @@ void Turret::init(const glm::vec2 & initialPos, const int windowHeight, ShaderPr
 	// Add Boxes
 	hitBox = Box::createBox(Box::ENEMY, Box::HIT, pos, glm::vec2(86 * scaleFactor, 77 * scaleFactor));
 	baseBox = Box::createBox(Box::ENEMY, Box::BASE, pos, glm::vec2(86 * scaleFactor, 29 * scaleFactor));
-	shoot = Attack::createAttack(Box::ENEMY, pos, glm::vec2(-46 * scaleFactor, -46 * scaleFactor), glm::vec2(8 * scaleFactor, 8 * scaleFactor), 3, 0, 0, true, false, glm::vec2(-1000.f, 0));
+	shoot = Attack::createAttack(Box::ENEMY, pos, glm::vec2(-46 * scaleFactor, -46 * scaleFactor), glm::vec2(8 * scaleFactor, 8 * scaleFactor), 3, 0, 0, true, false, glm::vec2(-shootSpeed, 0));
 
 	// Shoot Attack Sprite
 	Sprite * shot = Sprite::createSprite(true, glm::vec2(256.f * scaleFactor, 256.f * scaleFactor), glm::vec2(0.05, 0.05), &Load::instance().turret, shaderProgram);

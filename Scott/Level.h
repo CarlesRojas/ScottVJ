@@ -10,9 +10,7 @@
 #include "Enemy.h"
 #include "Camera.h"
 #include "UI.h"
-#include "Texture.h"
 #include "Physics.h"
-#include "Screen.h"
 
 class Level
 {
@@ -27,7 +25,7 @@ public:
 
 	void update(int deltaTime);
 	void render();
-
+	vector< vector<char> > loadLevel(const string & levelFile, bool hard);
 	void gameOver();
 	void theEnd();
 
@@ -43,6 +41,7 @@ private:
 	// Level Info
 	int character, lvl;
 	bool hardDifficulty;
+	vector< vector<char> > layout;
 };
 
 

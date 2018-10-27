@@ -17,10 +17,10 @@ Malcolm::~Malcolm()
 void Malcolm::init(const glm::vec2 & initialPos, const int windowHeight, ShaderProgram * shaderProgram)
 {
 	this->pos = initialPos;
+	scaleFactor = ((float)windowHeight / 256.f);
 	delay = 0.f;
 	flip = fixAnim = fixPos = dying = dead = false;
-	scaleFactor = ((float)windowHeight / 256.f);
-	speed = 200;
+	speed = 50 * scaleFactor;
 	atkCooldown = 3.f;
 
 	sprite = Sprite::createSprite(true, glm::vec2(256.f * scaleFactor, 256.f * scaleFactor), glm::vec2(0.05, 0.05), &Load::instance().malcolm, shaderProgram);
@@ -219,8 +219,8 @@ void Malcolm::enemyIA(int deltaTime)
 			if (playerPos.x > pos.x && flip) flip = false;
 
 			if (sprite->animation() != BLOCK) sprite->changeAnimation(BLOCK);
-			uniform_int_distribution<mt19937::result_type> random4(1, 3);
-			delay = random4(random);
+			uniform_int_distribution<mt19937::result_type> random2(1, 2);
+			delay = random2(random);
 			state = WAIT;
 		}
 		break;

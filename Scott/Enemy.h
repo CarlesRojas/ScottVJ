@@ -7,7 +7,6 @@
 #include "Sprite.h"
 #include "Attack.h"
 
-
 class Enemy
 {
 

@@ -9,6 +9,9 @@ public:
 	Kim() { }
 	virtual void init(const glm::vec2 &initialPos, UI *ui, const int windowHeight, ShaderProgram *shaderProgram);
 	virtual float getSpecialAttackDuration();
+
+private:
+	float monsterSpeed;
 };
 
 #endif // _KIM_INCLUDE

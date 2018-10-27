@@ -1,9 +1,7 @@
 #ifndef _BACKGROUND_INCLUDE
 #define _BACKGROUND_INCLUDE
 
-#include <glm/glm.hpp>
 #include <vector>
-#include "Texture.h"
 #include "ShaderProgram.h"
 #include "Box.h"
 

@@ -1,6 +1,4 @@
 #include "Box.h"
-#include "Player.h"
-#include "Enemy.h"
 
 
 Box * Box::createBox(BoxOwner owner, BoxType type, const glm::vec2 & bottomMidPoint, const glm::vec2 &size)
