@@ -20,6 +20,7 @@ public:
 	Texture screens;
 	Texture boss;
 	Texture ui;
+	Texture fade;
 
 	Texture lvl0;
 	Texture lvl1;
@@ -33,9 +34,12 @@ public:
 	Texture roxilla;
 	Texture turret;
 
-	Texture todd;
-	Texture roxanne;
 	Texture robot;
+	Texture robotLaser;
+	Texture roxanne;
+	Texture roxanneWhip;
+	Texture todd;
+	Texture toddMutant;
 
 	Texture red;
 	Texture green;

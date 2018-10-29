@@ -11,6 +11,7 @@ UI::UI()
 	bossSprite = NULL;
 	playerSprite = NULL;
 	bgSprite = NULL;
+	fadeSprite = NULL;
 }
 
 UI::~UI()
@@ -22,6 +23,7 @@ UI::~UI()
 	if (bossSprite != NULL) delete bossSprite;
 	if (playerSprite != NULL) delete playerSprite;
 	if (bgSprite != NULL) delete bgSprite;
+	if (fadeSprite != NULL) delete fadeSprite;
 }
 
 UI * UI::createUI(int playerCharacter, int boss, float attackCD, float spinCD, float specialCD, const glm::vec2 windowSize, ShaderProgram * program)
@@ -376,6 +378,39 @@ UI::UI(int playerCharacter, int boss, float attackCD, float spinCD, float specia
 
 	bgSprite->changeAnimation(BG_NONE);
 	bgSprite->setPosition(bossDispl);
+
+	// Fade 
+	scaleFactor = (float)windowSize.y / 256.f;
+	glm::vec2 fadeTexSize = glm::vec2(1.f, 1.f / 7.f);
+	fadeSprite = Sprite::createSprite(false, glm::vec2(512.f * scaleFactor, 256.f * scaleFactor), fadeTexSize, &Load::instance().fade, program);
+	fadeSprite->setNumberAnimations(4);
+
+	fadeSprite->setAnimationSpeed(FADE_BLACK, 1);
+	fadeSprite->addKeyframe(FADE_BLACK, glm::vec2(0 * fadeTexSize.x, 0 * fadeTexSize.y));
+	
+	fadeSprite->setAnimationSpeed(FADE_NONE, 1);
+	fadeSprite->addKeyframe(FADE_NONE, glm::vec2(0 * fadeTexSize.x, 6 * fadeTexSize.y));
+	
+	fadeSprite->setAnimationSpeed(FADE_IN, 20);
+	fadeSprite->addKeyframe(FADE_IN, glm::vec2(0 * fadeTexSize.x, 0 * fadeTexSize.y));
+	fadeSprite->addKeyframe(FADE_IN, glm::vec2(0 * fadeTexSize.x, 1 * fadeTexSize.y));
+	fadeSprite->addKeyframe(FADE_IN, glm::vec2(0 * fadeTexSize.x, 2 * fadeTexSize.y));
+	fadeSprite->addKeyframe(FADE_IN, glm::vec2(0 * fadeTexSize.x, 3 * fadeTexSize.y));
+	fadeSprite->addKeyframe(FADE_IN, glm::vec2(0 * fadeTexSize.x, 4 * fadeTexSize.y));
+	fadeSprite->addKeyframe(FADE_IN, glm::vec2(0 * fadeTexSize.x, 5 * fadeTexSize.y));
+	fadeSprite->addKeyframe(FADE_IN, glm::vec2(0 * fadeTexSize.x, 6 * fadeTexSize.y));
+
+	fadeSprite->setAnimationSpeed(FADE_OUT, 20);
+	fadeSprite->addKeyframe(FADE_OUT, glm::vec2(0 * fadeTexSize.x, 6 * fadeTexSize.y));
+	fadeSprite->addKeyframe(FADE_OUT, glm::vec2(0 * fadeTexSize.x, 5 * fadeTexSize.y));
+	fadeSprite->addKeyframe(FADE_OUT, glm::vec2(0 * fadeTexSize.x, 4 * fadeTexSize.y));
+	fadeSprite->addKeyframe(FADE_OUT, glm::vec2(0 * fadeTexSize.x, 3 * fadeTexSize.y));
+	fadeSprite->addKeyframe(FADE_OUT, glm::vec2(0 * fadeTexSize.x, 2 * fadeTexSize.y));
+	fadeSprite->addKeyframe(FADE_OUT, glm::vec2(0 * fadeTexSize.x, 1 * fadeTexSize.y));
+	fadeSprite->addKeyframe(FADE_OUT, glm::vec2(0 * fadeTexSize.x, 0 * fadeTexSize.y));
+	
+	fadeSprite->changeAnimation(FADE_BLACK);
+	fadeSprite->setPosition(glm::vec2(0.f));
 }
 
 void UI::render() const
@@ -399,6 +434,7 @@ void UI::render() const
 	bgSprite->render(false);
 	bossSprite->render(false);
 	playerSprite->render(false);
+	fadeSprite->render(false);
 }
 
 void UI::update(int deltaTime, glm::vec2 camPos)
@@ -418,6 +454,7 @@ void UI::update(int deltaTime, glm::vec2 camPos)
 	bgSprite->update(deltaTime);
 	bossSprite->update(deltaTime);
 	playerSprite->update(deltaTime);
+	fadeSprite->update(deltaTime);
 
 	hpSprite->setPosition(glm::vec2(camPos.x - (winSize.x / 2.f), 0.f));
 	attackSprite->setPosition(glm::vec2(camPos.x - (winSize.x / 2.f), 0.f));
@@ -426,6 +463,7 @@ void UI::update(int deltaTime, glm::vec2 camPos)
 	bgSprite->setPosition(glm::vec2(camPos.x - (winSize.x / 2.f), 0.f) + bossDispl);
 	bossSprite->setPosition(glm::vec2(camPos.x - (winSize.x / 2.f), 0.f) + bossDispl);
 	playerSprite->setPosition(glm::vec2(camPos.x - (winSize.x / 2.f), 0.f) + bossDispl);
+	fadeSprite->setPosition(glm::vec2(camPos.x - (winSize.x / 2.f), 0.f));
 
 	// Update cooldowns
 	if (attackCooldownTimer > 0) attackCooldownTimer -= dt;
@@ -515,6 +553,38 @@ void UI::update(int deltaTime, glm::vec2 camPos)
 			showingBossIntro = false;
 		}
 	}
+
+	// Fade
+	if (fadding)
+	{
+		if (fadeIn)
+		{
+			fadding = false;
+			if (fadeSprite->animation() != FADE_IN) fadeSprite->changeAnimation(FADE_IN);
+			fadeDelay = 5.f / 20.f;
+		}
+		else if (fadeOut)
+		{
+			fadding = false;
+			if (fadeSprite->animation() != FADE_OUT) fadeSprite->changeAnimation(FADE_OUT);
+			fadeDelay = 5.f / 20.f;
+		}
+	}
+
+	else
+	{
+		if (fadeDelay > 0) fadeDelay -= dt;
+		else if (fadeIn)
+		{
+			fadeIn = false;
+			if (fadeSprite->animation() != FADE_NONE) fadeSprite->changeAnimation(FADE_NONE);
+		}
+		else if (fadeOut)
+		{
+			fadeOut = false;
+			if (fadeSprite->animation() != FADE_BLACK) fadeSprite->changeAnimation(FADE_BLACK);
+		}
+	}
 }
 
 bool UI::canAttack()
@@ -565,4 +635,11 @@ void UI::showBossIntro()
 		introStage = 0;
 		introDelay = -1;
 	}
+}
+
+void UI::fade(bool in)
+{
+	fadding = true;
+	fadeIn = in;
+	fadeOut = !in;
 }

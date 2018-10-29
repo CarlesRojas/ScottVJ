@@ -37,6 +37,7 @@ Level::Level(int character, bool hardDifficulty, int lvl, ShaderProgram * progra
 	this->lvl = lvl;
 	this->hardDifficulty = hardDifficulty;
 	this->character = character;
+	this->fadding = false;
 	float scaleFactor = SCREEN_HEIGHT / 256.f;
 	
 	layout = loadLevel("levels/lvl" + to_string(lvl) + ".txt", hardDifficulty);
@@ -72,6 +73,8 @@ Level::Level(int character, bool hardDifficulty, int lvl, ShaderProgram * progra
 				Physics::instance().enemies.push_back(enemies[enemies.size() - 1]);
 			}
 		}
+
+	ui->fade(true);
 }
 
 void Level::update(int deltaTime)
@@ -98,17 +101,18 @@ void Level::update(int deltaTime)
 	background->update(deltaTime, Camera::instance().getPos());
 
 	// End level if player has no hit poits left
-	if (player->hp <= 0) gameOver();
+	if (player->hp <= 0) gameOver(deltaTime);
 
 	// Debug
-	if(Game::instance().getKey('b')) ui->showBossIntro();
+	if (Game::instance().getKey('b')) ui->showBossIntro();
+	if (Game::instance().getKey('l')) ui->fade(true);
+	if (Game::instance().getKey('k')) ui->fade(false);
 }
 
 void Level::render()
 {
 	// Background && UI
 	background->render();
-	ui->render();
 
 	// Enemies & Player in order
 	vector< pair<int, int> > entities;
@@ -132,6 +136,7 @@ void Level::render()
 
 	// Debug
 	Physics::instance().render();
+	ui->render();
 }
 
 vector< vector<char> > Level::loadLevel(const string &levelFile, bool hard)
@@ -169,13 +174,32 @@ vector< vector<char> > Level::loadLevel(const string &levelFile, bool hard)
 	return l;
 }
 
-void Level::gameOver()
+void Level::gameOver(int deltaTime)
 {
-	Game::instance().gameOver = true;
+	if (!fadding)
+	{
+		ui->fade(false);
+		fadding = true;
+		fadeDelay = 15.f / 20.f;
+	}
+	else 
+	{
+		if (fadeDelay > 0) fadeDelay -= (deltaTime / 1000.f);
+		else Game::instance().gameOver = true;
+	}
 }
 
-void Level::theEnd() 
+void Level::theEnd(int deltaTime)
 {
-	Game::instance().theEnd = true;
+	if (!fadding)
+	{
+		ui->fade(false);
+		fadding = true;
+		fadeDelay = 15.f / 20.f;
+	}
+	else
+	{
+		if (fadeDelay > 0) fadeDelay -= (deltaTime / 1000.f);
+		Game::instance().theEnd = true;
+	}
 }
-

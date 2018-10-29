@@ -26,8 +26,8 @@ public:
 	void update(int deltaTime);
 	void render();
 	vector< vector<char> > loadLevel(const string & levelFile, bool hard);
-	void gameOver();
-	void theEnd();
+	void gameOver(int deltaTime);
+	void theEnd(int deltaTime);
 
 private:
 	ShaderProgram * program;
@@ -42,6 +42,10 @@ private:
 	int character, lvl;
 	bool hardDifficulty;
 	vector< vector<char> > layout;
+
+	// Fade
+	float fadeDelay;
+	bool fadding;
 };
 
 

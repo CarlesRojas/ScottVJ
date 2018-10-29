@@ -43,7 +43,7 @@ bool Game::update(int deltaTime)
 		level->update(deltaTime);
 
 		// Debug
-		if (Game::instance().getKey('v')) { Game::instance().setKey('v', false); level->theEnd(); }
+		if (Game::instance().getKey('v')) { Game::instance().setKey('v', false); level->theEnd(deltaTime); }
 	}
 	else if (state != LVL0 && state != LVL1 && state != LVL2 && screen != NULL)
 	{

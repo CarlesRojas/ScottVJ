@@ -20,6 +20,12 @@ void Load::init()
 	ui.setWrapT(GL_CLAMP_TO_EDGE);
 	ui.setMinFilter(GL_NEAREST);
 	ui.setMagFilter(GL_NEAREST);
+	
+	fade.loadFromFile("sprites/ui/ui_fade_512x256.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	fade.setWrapS(GL_CLAMP_TO_EDGE);
+	fade.setWrapT(GL_CLAMP_TO_EDGE);
+	fade.setMinFilter(GL_NEAREST);
+	fade.setMagFilter(GL_NEAREST);
 
 	// Backgrounds
 	lvl0.loadFromFile("sprites/background/lvl0.png", TEXTURE_PIXEL_FORMAT_RGBA);
@@ -79,6 +85,41 @@ void Load::init()
 	turret.setMagFilter(GL_NEAREST);
 
 	// Bosses
+	robot.loadFromFile("sprites/robot/robot_256.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	robot.setWrapS(GL_CLAMP_TO_EDGE);
+	robot.setWrapT(GL_CLAMP_TO_EDGE);
+	robot.setMinFilter(GL_NEAREST);
+	robot.setMagFilter(GL_NEAREST);
+
+	robotLaser.loadFromFile("sprites/robot/robot_laser_1024x64.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	robotLaser.setWrapS(GL_CLAMP_TO_EDGE);
+	robotLaser.setWrapT(GL_CLAMP_TO_EDGE);
+	robotLaser.setMinFilter(GL_NEAREST);
+	robotLaser.setMagFilter(GL_NEAREST);
+
+	roxanne.loadFromFile("sprites/roxanne/roxanne_256.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	roxanne.setWrapS(GL_CLAMP_TO_EDGE);
+	roxanne.setWrapT(GL_CLAMP_TO_EDGE);
+	roxanne.setMinFilter(GL_NEAREST);
+	roxanne.setMagFilter(GL_NEAREST);
+
+	roxanneWhip.loadFromFile("sprites/roxanne/roxanne_512x128.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	roxanneWhip.setWrapS(GL_CLAMP_TO_EDGE);
+	roxanneWhip.setWrapT(GL_CLAMP_TO_EDGE);
+	roxanneWhip.setMinFilter(GL_NEAREST);
+	roxanneWhip.setMagFilter(GL_NEAREST);
+
+	todd.loadFromFile("sprites/todd/todd_256.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	todd.setWrapS(GL_CLAMP_TO_EDGE);
+	todd.setWrapT(GL_CLAMP_TO_EDGE);
+	todd.setMinFilter(GL_NEAREST);
+	todd.setMagFilter(GL_NEAREST);
+
+	toddMutant.loadFromFile("sprites/todd/todd768x320.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	toddMutant.setWrapS(GL_CLAMP_TO_EDGE);
+	toddMutant.setWrapT(GL_CLAMP_TO_EDGE);
+	toddMutant.setMinFilter(GL_NEAREST);
+	toddMutant.setMagFilter(GL_NEAREST);
 
 	// Outlines
 	red.loadFromFile("sprites/debug/outline_red.png", TEXTURE_PIXEL_FORMAT_RGBA);

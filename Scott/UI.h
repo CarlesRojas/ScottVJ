@@ -14,6 +14,7 @@ public:
 	enum PlayerAnims { SCOTT_SHOW, SCOTT_HIDE, SCOTT, KIM_SHOW, KIM_HIDE, KIM, RAMONA_SHOW, RAMONA_HIDE, RAMONA, P_NONE };
 	enum BossAnims { ROXANNE_SHOW, ROXANNE_HIDE, ROXANNE, ROBOT_SHOW, ROBOT_HIDE, ROBOT, TODD_SHOW, TODD_HIDE, TODD, B_NONE };
 	enum BGAnims { SHOW, HIDE, LOOP, BG_NONE };
+	enum FadeAnims { FADE_OUT, FADE_IN, FADE_NONE, FADE_BLACK };
 
 	UI();
 	~UI();
@@ -29,6 +30,7 @@ public:
 	bool canSpecial();
 	void changeHP(int hp);
 	void showBossIntro();
+	void fade(bool in);
 
 private:
 	// Static UI
@@ -40,7 +42,7 @@ private:
 	vector<float> vertices;
 
 	// Animatied UI
-	Sprite *hpSprite, *attackSprite, *spinSprite, *specialSprite, *bossSprite, *playerSprite, *bgSprite;
+	Sprite *hpSprite, *attackSprite, *spinSprite, *specialSprite, *bossSprite, *playerSprite, *bgSprite, *fadeSprite;
 
 	// Cooldowns
 	int player, boss;
@@ -51,6 +53,10 @@ private:
 	bool showingBossIntro;
 	float introDelay;
 	int introStage;
+
+	// Fade
+	bool fadeIn, fadeOut, fadding;
+	float fadeDelay;
 };
 
 #endif // _UI_INCLUDE
