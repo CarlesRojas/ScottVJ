@@ -120,7 +120,7 @@ void Robot::init(const glm::vec2 & initialPos, const int windowHeight, ShaderPro
 	sprite->addKeyframe(DYING, glm::vec2(15 * 0.05f, 15 * 0.1f));
 
 	sprite->setAnimationSpeed(NONE, 8);
-	sprite->addKeyframe(NONE, glm::vec2(15 * 0.05f, 15 * 0.1f));
+	sprite->addKeyframe(NONE, glm::vec2(9 * 0.05f, 9 * 0.1f));
 
 	// Sprite Laser
 	spriteLaser = Sprite::createSprite(true, glm::vec2(1024.f * scaleFactor, 64.f * scaleFactor), glm::vec2(1, .05f), &Load::instance().robotLaser, shaderProgram);
@@ -467,7 +467,7 @@ void Robot::kill()
 	// Down
 	if (sprite->animation() != SHIELD &&
 		sprite->animation() != FALLDOWN &&
-		sprite->animation() != DEAD &&
+		sprite->animation() != DYING &&
 		sprite->animation() != PUNCH &&
 		sprite->animation() != TOAST &&
 		spriteLaser->animation() != LASER &&

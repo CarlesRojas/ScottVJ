@@ -90,6 +90,9 @@
     <ClCompile Include="Roxanne.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Todd.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Attack.h">
@@ -165,6 +168,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Roxanne.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Todd.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -5,6 +5,7 @@
 #include "Roxilla.h"
 #include "Robot.h"
 #include "Roxanne.h"
+#include "Todd.h"
 
 Enemy::Enemy()
 {
@@ -61,9 +62,9 @@ Enemy * Enemy::createEnemy(const int enemy, const glm::vec2 & initialPos, const 
 	}
 	default:
 	{
-		Robot *r = new Robot();
-		r->init(initialPos, windowHeight, program);
-		return r;
+		Todd *t = new Todd();
+		t->init(initialPos, windowHeight, program);
+		return t;
 		break;
 	}
 	}

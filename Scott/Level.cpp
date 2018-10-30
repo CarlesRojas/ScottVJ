@@ -71,7 +71,7 @@ Level::Level(int character, bool hardDifficulty, int lvl, ShaderProgram * progra
 	}
 	else 
 	{
-		enemies.push_back(Enemy::createEnemy(5, glm::vec2(background->getSize().x - SCREEN_WIDTH, 3 * SCREEN_HEIGHT / 4), SCREEN_HEIGHT, program));
+		enemies.push_back(Enemy::createEnemy(5, glm::vec2(background->getSize().x - SCREEN_WIDTH / 2.f, 3 * SCREEN_HEIGHT / 4), SCREEN_HEIGHT, program));
 		Physics::instance().enemies.push_back(enemies[enemies.size() - 1]);
 	}
 	

@@ -188,7 +188,7 @@ void Roxanne::init(const glm::vec2 & initialPos, const int windowHeight, ShaderP
 	sprite->addKeyframe(DYING, glm::vec2(10 * 0.05f, 9 * 0.1f));
 
 	sprite->setAnimationSpeed(NONE, 8);
-	sprite->addKeyframe(NONE, glm::vec2(15 * 0.05f, 15 * 0.1f));
+	sprite->addKeyframe(NONE, glm::vec2(9 * 0.05f, 9 * 0.1f));
 
 	// Sprite Laser
 	spriteSword = Sprite::createSprite(true, glm::vec2(512.f * scaleFactor, 128.f * scaleFactor), glm::vec2(1, .25f), &Load::instance().roxanneWhip, shaderProgram);
