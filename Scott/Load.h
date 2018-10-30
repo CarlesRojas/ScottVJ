@@ -16,11 +16,12 @@ public:
 	void operator=(Load const&) = delete;
 
 	void init();
+	void load(int lvl);
+	void unload();
 
 	Texture screens;
 	Texture boss;
 	Texture ui;
-	Texture fade;
 
 	Texture lvl0;
 	Texture lvl1;

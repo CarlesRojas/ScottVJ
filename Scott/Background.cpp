@@ -10,7 +10,7 @@ Background::Background()
 
 Background::~Background()
 {
-	for (int i = 0; i < walls.size(); i++) {
+	for (int i = 0; i < (int)walls.size(); i++) {
 		Box* p = walls[i];
 		delete p;
 	}
@@ -39,7 +39,7 @@ Background::Background(const int lvlNum, const glm::vec2 windowSize, ShaderProgr
 	backgroundSize.y = winSize.y;
 	backgroundSize.x = backgroundSize.y * numHorizontalTiles;
 	tileTexSize = glm::vec2(1.f / (float)numHorizontalTiles, 1.f);
-	numTilesVisible = ceil((float)winSize.x / (float)winSize.y) + 1;
+	numTilesVisible = (int)ceil((float)winSize.x / (float)winSize.y) + 1;
 
 	// First triangle
 	vertices.push_back(0); vertices.push_back(0);
@@ -100,7 +100,7 @@ void Background::render()
 
 void Background::update(int deltaTime, glm::vec2 camPos)
 {
-	firstTile = floor((camPos.x - (winSize.x / 2.f)) / backgroundSize.y);
+	firstTile = (int)floor((camPos.x - (winSize.x / 2.f)) / backgroundSize.y);
 	if (firstTile < 0) firstTile = 0;
 	if (firstTile >= numHorizontalTiles) firstTile = numHorizontalTiles - 1;
 }

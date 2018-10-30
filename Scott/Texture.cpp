@@ -110,4 +110,9 @@ void Texture::use() const
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, magFilter);
 }
 
+void Texture::unload() const
+{
+	glDeleteTextures(1, &texId);
+}
+
 

@@ -24,6 +24,7 @@ public:
 	void setSprite(Sprite * sprite, glm::vec2 spriteDispl);
 
 	Box *box;
+	bool playerHit;
 
 private:
 	Sprite *sprite;

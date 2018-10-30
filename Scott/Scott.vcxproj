@@ -134,6 +134,8 @@
     <ClCompile Include="Physics.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Ramona.cpp" />
+    <ClCompile Include="Robot.cpp" />
+    <ClCompile Include="Roxanne.cpp" />
     <ClCompile Include="Roxilla.cpp" />
     <ClCompile Include="Scott.cpp" />
     <ClCompile Include="Screen.cpp" />
@@ -159,6 +161,8 @@
     <ClInclude Include="Physics.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Ramona.h" />
+    <ClInclude Include="Robot.h" />
+    <ClInclude Include="Roxanne.h" />
     <ClInclude Include="Roxilla.h" />
     <ClInclude Include="Scott.h" />
     <ClInclude Include="Screen.h" />

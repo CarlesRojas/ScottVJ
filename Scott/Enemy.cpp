@@ -3,6 +3,8 @@
 #include "Malcolm.h"
 #include "Turret.h"
 #include "Roxilla.h"
+#include "Robot.h"
+#include "Roxanne.h"
 
 Enemy::Enemy()
 {
@@ -36,9 +38,30 @@ Enemy * Enemy::createEnemy(const int enemy, const glm::vec2 & initialPos, const 
 		return t;
 		break;
 	}
-	default:
+	case 2:
 	{
 		Roxilla *r = new Roxilla();
+		r->init(initialPos, windowHeight, program);
+		return r;
+		break;
+	}
+	case 3:
+	{
+		Roxanne *r = new Roxanne();
+		r->init(initialPos, windowHeight, program);
+		return r;
+		break;
+	}
+	case 4:
+	{
+		Robot *r = new Robot();
+		r->init(initialPos, windowHeight, program);
+		return r;
+		break;
+	}
+	default:
+	{
+		Robot *r = new Robot();
 		r->init(initialPos, windowHeight, program);
 		return r;
 		break;
@@ -64,7 +87,10 @@ void Enemy::update(int deltaTime)
 	sprite->setPosition(pos);
 }
 
-void Enemy::render() { sprite->render(flip); }
+void Enemy::render() 
+{ 
+	sprite->render(flip); 
+}
 
 void Enemy::enemyIA(int deltaTime) { }
 

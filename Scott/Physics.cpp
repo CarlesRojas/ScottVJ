@@ -50,13 +50,13 @@ bool Physics::correctPosition(Box * box)
 {
 	if (box->type == Box::BASE)
 	{
-		for (int i = 0; i < background->walls.size(); ++i)
+		for (int i = 0; i < (int)background->walls.size(); ++i)
 			if (overlap(box, background->walls[i]))
 				return false;
 
 		if (box->owner == Box::PLAYER)
 		{
-			for (int i = 0; i < enemies.size(); ++i)
+			for (int i = 0; i < (int)enemies.size(); ++i)
 				if (overlap(box, enemies[i]->baseBox))
 					return false;
 		}
@@ -66,7 +66,7 @@ bool Physics::correctPosition(Box * box)
 			if (overlap(box, player->baseBox))
 				return false;
 
-			for (int i = 0; i < enemies.size(); ++i)
+			for (int i = 0; i < (int)enemies.size(); ++i)
 				if (enemies[i]->baseBox != box && overlap(box, enemies[i]->baseBox))
 					return false;
 		}
@@ -91,7 +91,11 @@ void Physics::attack(Attack * attack)
 		}
 		else if (attack->box->owner == Box::ENEMY)
 		{
-			if (overlap(player->hitBox, attack->box)) player->kill();
+			if (overlap(player->hitBox, attack->box))
+			{
+				attack->playerHit = true;
+				player->kill();
+			}
 		}
 	}
 }

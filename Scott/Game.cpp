@@ -25,10 +25,14 @@ void Game::init()
 	theEnd = gameOver = false;
 	
 	Load::instance().init();
+	Load::instance().load(0);
+	Load::instance().load(1);
+	Load::instance().load(2);
 	Camera::instance().init(glm::vec2(SCREEN_WIDTH, SCREEN_HEIGHT), glm::vec2(SCREEN_WIDTH, SCREEN_HEIGHT));
 	Physics::instance().init(&program);
 
 	state = Game::MAIN;
+	Game::instance().setKey(' ', false);
 	screen = Screen::createScreen(0, glm::vec2(SCREEN_WIDTH, SCREEN_HEIGHT), &program);
 	screen->screen->changeAnimation(Screen::S_MAIN);
 	screen->message->changeAnimation(Screen::M_START);
@@ -39,12 +43,9 @@ bool Game::update(int deltaTime)
 {
 	currentTime += deltaTime;
 
-	if ((state == LVL0 || state == LVL1 || state == LVL2) && level != NULL) {
+	if ((state == LVL0 || state == LVL1 || state == LVL2) && level != NULL) 
 		level->update(deltaTime);
-
-		// Debug
-		if (Game::instance().getKey('v')) { Game::instance().setKey('v', false); level->theEnd(deltaTime); }
-	}
+	
 	else if (state != LVL0 && state != LVL1 && state != LVL2 && screen != NULL)
 	{
 		screen->update(deltaTime);
@@ -62,6 +63,7 @@ bool Game::update(int deltaTime)
 			screen->message->changeAnimation(Screen::M_PLAY);
 			screen->difficulty->changeAnimation(Screen::D_EASY);
 			state = CHOOSE;
+			Game::instance().setKey(' ', false);
 		}
 
 		break;
@@ -141,6 +143,7 @@ bool Game::update(int deltaTime)
 			screen->message->changeAnimation(Screen::M_MENU);
 			screen->difficulty->changeAnimation(Screen::D_NONE);
 			state = GAMEOVER;
+			Game::instance().setKey(' ', false);
 		}
 		break;
 	case Game::LVL1:
@@ -163,6 +166,7 @@ bool Game::update(int deltaTime)
 			screen->message->changeAnimation(Screen::M_MENU);
 			screen->difficulty->changeAnimation(Screen::D_NONE);
 			state = GAMEOVER;
+			Game::instance().setKey(' ', false);
 		}
 		break;
 	case Game::LVL2:
@@ -175,6 +179,7 @@ bool Game::update(int deltaTime)
 			screen->message->changeAnimation(Screen::M_MENU);
 			screen->difficulty->changeAnimation(Screen::D_NONE);
 			state = THEEND;
+			Game::instance().setKey(' ', false);
 		}
 		if (gameOver)
 		{
@@ -188,6 +193,7 @@ bool Game::update(int deltaTime)
 			screen->message->changeAnimation(Screen::M_MENU);
 			screen->difficulty->changeAnimation(Screen::D_NONE);
 			state = GAMEOVER;
+			Game::instance().setKey(' ', false);
 		}
 		break;
 	case Game::GAMEOVER:
@@ -198,6 +204,7 @@ bool Game::update(int deltaTime)
 			screen->message->changeAnimation(Screen::M_START);
 			screen->difficulty->changeAnimation(Screen::D_NONE);
 			state = MAIN;
+			Game::instance().setKey(' ', false);
 		}
 		break;
 	case Game::THEEND:
@@ -208,6 +215,7 @@ bool Game::update(int deltaTime)
 			screen->message->changeAnimation(Screen::M_START);
 			screen->difficulty->changeAnimation(Screen::D_NONE);
 			state = MAIN;
+			Game::instance().setKey(' ', false);
 		}
 		break;
 	default: break;

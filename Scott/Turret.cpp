@@ -19,58 +19,58 @@ void Turret::init(const glm::vec2 & initialPos, const int windowHeight, ShaderPr
 	shootSpeed = 240 * scaleFactor;
 	delay = 0.f;
 	flip = true;
-	fixAnim = fixPos = dying = dead = false;
+	fixAnim = fixPos = dying = dead = isBoss = active = false;
 
-	sprite = Sprite::createSprite(true, glm::vec2(256.f * scaleFactor, 256.f * scaleFactor), glm::vec2(0.05, 0.05), &Load::instance().turret, shaderProgram);
+	sprite = Sprite::createSprite(true, glm::vec2(256.f * scaleFactor, 256.f * scaleFactor), glm::vec2(0.05f, 0.1f), &Load::instance().turret, shaderProgram);
 	sprite->setNumberAnimations(6);
 
 	sprite->setAnimationSpeed(DOWN, 8);
-	sprite->addKeyframe(DOWN, glm::vec2(0 * 0.05f, 0 * 0.05f));
-	sprite->addKeyframe(DOWN, glm::vec2(1 * 0.05f, 0 * 0.05f));
-	sprite->addKeyframe(DOWN, glm::vec2(2 * 0.05f, 0 * 0.05f));
-	sprite->addKeyframe(DOWN, glm::vec2(3 * 0.05f, 0 * 0.05f));
-	sprite->addKeyframe(DOWN, glm::vec2(4 * 0.05f, 0 * 0.05f));
-	sprite->addKeyframe(DOWN, glm::vec2(5 * 0.05f, 0 * 0.05f));
-	sprite->addKeyframe(DOWN, glm::vec2(6 * 0.05f, 0 * 0.05f));
-	sprite->addKeyframe(DOWN, glm::vec2(7 * 0.05f, 0 * 0.05f));
-	sprite->addKeyframe(DOWN, glm::vec2(8 * 0.05f, 0 * 0.05f));
-	sprite->addKeyframe(DOWN, glm::vec2(9 * 0.05f, 0 * 0.05f));
-	sprite->addKeyframe(DOWN, glm::vec2(10 * 0.05f, 0 * 0.05f));
+	sprite->addKeyframe(DOWN, glm::vec2(0 * 0.05f, 0 * 0.1f));
+	sprite->addKeyframe(DOWN, glm::vec2(1 * 0.05f, 0 * 0.1f));
+	sprite->addKeyframe(DOWN, glm::vec2(2 * 0.05f, 0 * 0.1f));
+	sprite->addKeyframe(DOWN, glm::vec2(3 * 0.05f, 0 * 0.1f));
+	sprite->addKeyframe(DOWN, glm::vec2(4 * 0.05f, 0 * 0.1f));
+	sprite->addKeyframe(DOWN, glm::vec2(5 * 0.05f, 0 * 0.1f));
+	sprite->addKeyframe(DOWN, glm::vec2(6 * 0.05f, 0 * 0.1f));
+	sprite->addKeyframe(DOWN, glm::vec2(7 * 0.05f, 0 * 0.1f));
+	sprite->addKeyframe(DOWN, glm::vec2(8 * 0.05f, 0 * 0.1f));
+	sprite->addKeyframe(DOWN, glm::vec2(9 * 0.05f, 0 * 0.1f));
+	sprite->addKeyframe(DOWN, glm::vec2(10 * 0.05f, 0 * 0.1f));
 
 	sprite->setAnimationSpeed(DEPLOY, 8);
-	sprite->addKeyframe(DEPLOY, glm::vec2(0 * 0.05f, 1 * 0.05f));
-	sprite->addKeyframe(DEPLOY, glm::vec2(1 * 0.05f, 1 * 0.05f));
-	sprite->addKeyframe(DEPLOY, glm::vec2(2 * 0.05f, 1 * 0.05f));
-	sprite->addKeyframe(DEPLOY, glm::vec2(3 * 0.05f, 1 * 0.05f));
-	sprite->addKeyframe(DEPLOY, glm::vec2(4 * 0.05f, 1 * 0.05f));
-	sprite->addKeyframe(DEPLOY, glm::vec2(5 * 0.05f, 1 * 0.05f));
-	sprite->addKeyframe(DEPLOY, glm::vec2(6 * 0.05f, 1 * 0.05f));
-	sprite->addKeyframe(DEPLOY, glm::vec2(7 * 0.05f, 1 * 0.05f));
-	sprite->addKeyframe(DEPLOY, glm::vec2(8 * 0.05f, 1 * 0.05f));
-	sprite->addKeyframe(DEPLOY, glm::vec2(9 * 0.05f, 1 * 0.05f));
+	sprite->addKeyframe(DEPLOY, glm::vec2(0 * 0.05f, 1 * 0.1f));
+	sprite->addKeyframe(DEPLOY, glm::vec2(1 * 0.05f, 1 * 0.1f));
+	sprite->addKeyframe(DEPLOY, glm::vec2(2 * 0.05f, 1 * 0.1f));
+	sprite->addKeyframe(DEPLOY, glm::vec2(3 * 0.05f, 1 * 0.1f));
+	sprite->addKeyframe(DEPLOY, glm::vec2(4 * 0.05f, 1 * 0.1f));
+	sprite->addKeyframe(DEPLOY, glm::vec2(5 * 0.05f, 1 * 0.1f));
+	sprite->addKeyframe(DEPLOY, glm::vec2(6 * 0.05f, 1 * 0.1f));
+	sprite->addKeyframe(DEPLOY, glm::vec2(7 * 0.05f, 1 * 0.1f));
+	sprite->addKeyframe(DEPLOY, glm::vec2(8 * 0.05f, 1 * 0.1f));
+	sprite->addKeyframe(DEPLOY, glm::vec2(9 * 0.05f, 1 * 0.1f));
 
 	sprite->setAnimationSpeed(HIDE, 8);
-	sprite->addKeyframe(HIDE, glm::vec2(9 * 0.05f, 1 * 0.05f));
-	sprite->addKeyframe(HIDE, glm::vec2(8 * 0.05f, 1 * 0.05f));
-	sprite->addKeyframe(HIDE, glm::vec2(7 * 0.05f, 1 * 0.05f));
-	sprite->addKeyframe(HIDE, glm::vec2(6 * 0.05f, 1 * 0.05f));
-	sprite->addKeyframe(HIDE, glm::vec2(5 * 0.05f, 1 * 0.05f));
-	sprite->addKeyframe(HIDE, glm::vec2(4 * 0.05f, 1 * 0.05f));
-	sprite->addKeyframe(HIDE, glm::vec2(3 * 0.05f, 1 * 0.05f));
-	sprite->addKeyframe(HIDE, glm::vec2(2 * 0.05f, 1 * 0.05f));
-	sprite->addKeyframe(HIDE, glm::vec2(1 * 0.05f, 1 * 0.05f));
-	sprite->addKeyframe(HIDE, glm::vec2(0 * 0.05f, 1 * 0.05f));
+	sprite->addKeyframe(HIDE, glm::vec2(9 * 0.05f, 1 * 0.1f));
+	sprite->addKeyframe(HIDE, glm::vec2(8 * 0.05f, 1 * 0.1f));
+	sprite->addKeyframe(HIDE, glm::vec2(7 * 0.05f, 1 * 0.1f));
+	sprite->addKeyframe(HIDE, glm::vec2(6 * 0.05f, 1 * 0.1f));
+	sprite->addKeyframe(HIDE, glm::vec2(5 * 0.05f, 1 * 0.1f));
+	sprite->addKeyframe(HIDE, glm::vec2(4 * 0.05f, 1 * 0.1f));
+	sprite->addKeyframe(HIDE, glm::vec2(3 * 0.05f, 1 * 0.1f));
+	sprite->addKeyframe(HIDE, glm::vec2(2 * 0.05f, 1 * 0.1f));
+	sprite->addKeyframe(HIDE, glm::vec2(1 * 0.05f, 1 * 0.1f));
+	sprite->addKeyframe(HIDE, glm::vec2(0 * 0.05f, 1 * 0.1f));
 
 	sprite->setAnimationSpeed(SHOOT, 8);
-	sprite->addKeyframe(SHOOT, glm::vec2(0 * 0.05f, 2 * 0.05f));
-	sprite->addKeyframe(SHOOT, glm::vec2(1 * 0.05f, 2 * 0.05f));
+	sprite->addKeyframe(SHOOT, glm::vec2(0 * 0.05f, 2 * 0.1f));
+	sprite->addKeyframe(SHOOT, glm::vec2(1 * 0.05f, 2 * 0.1f));
 	
 	sprite->setAnimationSpeed(IDLE, 8);
-	sprite->addKeyframe(IDLE, glm::vec2(0 * 0.05f, 3 * 0.05f));
-	sprite->addKeyframe(IDLE, glm::vec2(1 * 0.05f, 3 * 0.05f));
+	sprite->addKeyframe(IDLE, glm::vec2(0 * 0.05f, 3 * 0.1f));
+	sprite->addKeyframe(IDLE, glm::vec2(1 * 0.05f, 3 * 0.1f));
 
 	sprite->setAnimationSpeed(HIDDEN, 8);
-	sprite->addKeyframe(HIDDEN, glm::vec2(0 * 0.05f, 1 * 0.05f));
+	sprite->addKeyframe(HIDDEN, glm::vec2(0 * 0.05f, 1 * 0.1f));
 
 	// Add Boxes
 	hitBox = Box::createBox(Box::ENEMY, Box::HIT, pos, glm::vec2(86 * scaleFactor, 77 * scaleFactor));
@@ -78,13 +78,13 @@ void Turret::init(const glm::vec2 & initialPos, const int windowHeight, ShaderPr
 	shoot = Attack::createAttack(Box::ENEMY, pos, glm::vec2(-46 * scaleFactor, -46 * scaleFactor), glm::vec2(8 * scaleFactor, 8 * scaleFactor), 3, 0, 0, true, false, glm::vec2(-shootSpeed, 0));
 
 	// Shoot Attack Sprite
-	Sprite * shot = Sprite::createSprite(true, glm::vec2(256.f * scaleFactor, 256.f * scaleFactor), glm::vec2(0.05, 0.05), &Load::instance().turret, shaderProgram);
+	Sprite * shot = Sprite::createSprite(true, glm::vec2(256.f * scaleFactor, 256.f * scaleFactor), glm::vec2(0.05, 0.1f), &Load::instance().turret, shaderProgram);
 	shot->setNumberAnimations(1);
 
 	shot->setAnimationSpeed(0, 8);
-	shot->addKeyframe(0, glm::vec2(0 * 0.05f, 4 * 0.05f));
-	shot->addKeyframe(0, glm::vec2(1 * 0.05f, 4 * 0.05f));
-	shot->addKeyframe(0, glm::vec2(2 * 0.05f, 4 * 0.05f));
+	shot->addKeyframe(0, glm::vec2(0 * 0.05f, 4 * 0.1f));
+	shot->addKeyframe(0, glm::vec2(1 * 0.05f, 4 * 0.1f));
+	shot->addKeyframe(0, glm::vec2(2 * 0.05f, 4 * 0.1f));
 
 	shot->changeAnimation(0);
 	shoot->setSprite(shot, glm::vec2(0, 0));
@@ -118,6 +118,7 @@ void Turret::enemyIA(int deltaTime)
 				if (sprite->animation() != DEPLOY) sprite->changeAnimation(DEPLOY);
 				delay = 9.5f / 8.f;
 				state = WAIT;
+				active = true;
 			}
 		}
 		break;

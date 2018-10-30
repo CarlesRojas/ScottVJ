@@ -1,20 +1,20 @@
-﻿  Game.cpp
+﻿  Attack.cpp
+  Enemy.cpp
+  Game.cpp
+  Kim.cpp
   Level.cpp
-d:\onedrive\documents\upc\any 4\semestre 1\vj\scott\scott\level.cpp(20): warning C4018: '<': signed/unsigned mismatch
-d:\onedrive\documents\upc\any 4\semestre 1\vj\scott\scott\level.cpp(62): warning C4018: '<': signed/unsigned mismatch
-d:\onedrive\documents\upc\any 4\semestre 1\vj\scott\scott\level.cpp(63): warning C4018: '<': signed/unsigned mismatch
-d:\onedrive\documents\upc\any 4\semestre 1\vj\scott\scott\level.cpp(84): warning C4018: '<': signed/unsigned mismatch
-c:\program files (x86)\microsoft visual studio\2017\community\vc\tools\msvc\14.15.26726\include\utility(239): warning C4244: 'initializing': conversion from '_Ty' to '_Ty1', possible loss of data
-          with
-          [
-              _Ty=float
-          ]
-          and
-          [
-              _Ty1=int
-          ]
-  d:\onedrive\documents\upc\any 4\semestre 1\vj\scott\scott\level.cpp(119): note: see reference to function template instantiation 'std::pair<int,int>::pair<float,int,0>(std::pair<float,int> &&) noexcept' being compiled
-  d:\onedrive\documents\upc\any 4\semestre 1\vj\scott\scott\level.cpp(119): note: see reference to function template instantiation 'std::pair<int,int>::pair<float,int,0>(std::pair<float,int> &&) noexcept' being compiled
+  Malcolm.cpp
+  Physics.cpp
+  Player.cpp
+  Ramona.cpp
+  Robot.cpp
+  Roxanne.cpp
+  Roxilla.cpp
+  Scott.cpp
+  Screen.cpp
+  Turret.cpp
+  UI.cpp
+  main.cpp
   Generating Code...
 SOIL.lib(image_DXT.obj) : warning LNK4099: PDB 'vc100.pdb' was not found with 'SOIL.lib(image_DXT.obj)' or at 'D:\OneDrive\Documents\UPC\Any 4\Semestre 1\VJ\Scott\Debug\vc100.pdb'; linking object as if no debug info
 SOIL.lib(image_helper.obj) : warning LNK4099: PDB 'vc100.pdb' was not found with 'SOIL.lib(image_helper.obj)' or at 'D:\OneDrive\Documents\UPC\Any 4\Semestre 1\VJ\Scott\Debug\vc100.pdb'; linking object as if no debug info

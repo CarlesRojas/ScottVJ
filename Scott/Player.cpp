@@ -89,11 +89,6 @@ void Player::update(int deltaTime)
 				delay = 9.5f / 8.f;
 				if(sprite->animation() != REVIVE) sprite->changeAnimation(REVIVE);
 			}
-			else
-			{
-				// Anim Fade
-				// Game Over
-			}
 		}
 	}
 

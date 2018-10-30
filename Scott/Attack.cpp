@@ -5,7 +5,7 @@
 Attack::Attack()
 {
 	box = NULL;
-	sprite == NULL;
+	sprite = NULL;
 }
 
 Attack::~Attack()
@@ -35,6 +35,7 @@ Attack::Attack(Box::BoxOwner owner, glm::vec2 playerOrigin, glm::vec2 displaceme
 	this->oneKillOnly = oneKillOnly;
 	this->multiHits = multiHits;
 	this->flipped = false;
+	this->playerHit = false;
 	this->deltaPos = deltaPos;
 	this->originBoxDispl = displacement;
 }

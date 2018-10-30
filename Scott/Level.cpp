@@ -17,7 +17,7 @@ Level::~Level()
 	if (ui != NULL) delete ui;
 	if (player != NULL) delete player;
 	
-	for (int i = 0; i < enemies.size(); i++) {
+	for (int i = 0; i < (int)enemies.size(); i++) {
 		Enemy* p = enemies[i];
 		delete p;
 	}
@@ -37,9 +37,9 @@ Level::Level(int character, bool hardDifficulty, int lvl, ShaderProgram * progra
 	this->lvl = lvl;
 	this->hardDifficulty = hardDifficulty;
 	this->character = character;
-	this->fadding = false;
 	float scaleFactor = SCREEN_HEIGHT / 256.f;
 	
+	//Load::instance().load(lvl);
 	layout = loadLevel("levels/lvl" + to_string(lvl) + ".txt", hardDifficulty);
 
 	// Physics
@@ -58,9 +58,26 @@ Level::Level(int character, bool hardDifficulty, int lvl, ShaderProgram * progra
 	player = Player::createPlayer(character, glm::vec2(SCREEN_WIDTH / 4, 3 * SCREEN_HEIGHT / 4), ui, SCREEN_HEIGHT, program);
 	Physics::instance().player = player;
 
+	// Boss
+	if (lvl == 0)
+	{
+		enemies.push_back(Enemy::createEnemy(3, glm::vec2(background->getSize().x - SCREEN_WIDTH, 3 * SCREEN_HEIGHT / 4), SCREEN_HEIGHT, program));
+		Physics::instance().enemies.push_back(enemies[enemies.size() - 1]);
+	}
+	else if (lvl == 1) 
+	{
+		enemies.push_back(Enemy::createEnemy(4, glm::vec2(background->getSize().x - SCREEN_WIDTH, 3 * SCREEN_HEIGHT / 4), SCREEN_HEIGHT, program));
+		Physics::instance().enemies.push_back(enemies[enemies.size() - 1]);
+	}
+	else 
+	{
+		enemies.push_back(Enemy::createEnemy(5, glm::vec2(background->getSize().x - SCREEN_WIDTH, 3 * SCREEN_HEIGHT / 4), SCREEN_HEIGHT, program));
+		Physics::instance().enemies.push_back(enemies[enemies.size() - 1]);
+	}
+	
 	// Enemies
-	for(int i = 0; i < layout.size(); ++i)
-		for (int j = 0; j < layout[i].size(); ++j)
+	for(int i = 0; i < (int)layout.size(); ++i)
+		for (int j = 0; j < (int)layout[i].size(); ++j)
 		{
 			int enemy = -1;
 			if (layout[i][j] == 'm') enemy = 0;
@@ -73,22 +90,22 @@ Level::Level(int character, bool hardDifficulty, int lvl, ShaderProgram * progra
 				Physics::instance().enemies.push_back(enemies[enemies.size() - 1]);
 			}
 		}
-
-	ui->fade(true);
 }
 
 void Level::update(int deltaTime)
 {
 	// Entities
 	player->update(deltaTime);
-	for (int i = 0; i < enemies.size(); ++i)
+	for (int i = 0; i < (int)enemies.size(); ++i)
 	{
 		enemies[i]->update(deltaTime);
 		if (enemies[i]->dead)
 		{
+			bool isBoss = enemies[i]->isBoss;
 			delete enemies[i];
 			enemies.erase(enemies.begin() + i);
 			Physics::instance().enemies.erase(Physics::instance().enemies.begin() + i);
+			if (isBoss) theEnd();
 		}
 	}
 
@@ -101,12 +118,10 @@ void Level::update(int deltaTime)
 	background->update(deltaTime, Camera::instance().getPos());
 
 	// End level if player has no hit poits left
-	if (player->hp <= 0) gameOver(deltaTime);
+	if (player->hp <= 0) gameOver();
 
-	// Debug
-	if (Game::instance().getKey('b')) ui->showBossIntro();
-	if (Game::instance().getKey('l')) ui->fade(true);
-	if (Game::instance().getKey('k')) ui->fade(false);
+	// Show boss intro when it is active
+	if (enemies[0] != NULL && enemies[0]->active) { enemies[0]->active = false; ui->showBossIntro(); }
 }
 
 void Level::render()
@@ -115,7 +130,7 @@ void Level::render()
 	background->render();
 
 	// Enemies & Player in order
-	vector< pair<int, int> > entities;
+	vector< pair<float, int> > entities;
 	entities.push_back(make_pair(player->pos.y, 0));
 	int i = 1;
 	for (auto e : enemies) { entities.push_back(make_pair(e->pos.y, i)); ++i; }
@@ -136,6 +151,7 @@ void Level::render()
 
 	// Debug
 	Physics::instance().render();
+
 	ui->render();
 }
 
@@ -174,32 +190,14 @@ vector< vector<char> > Level::loadLevel(const string &levelFile, bool hard)
 	return l;
 }
 
-void Level::gameOver(int deltaTime)
+void Level::gameOver()
 {
-	if (!fadding)
-	{
-		ui->fade(false);
-		fadding = true;
-		fadeDelay = 15.f / 20.f;
-	}
-	else 
-	{
-		if (fadeDelay > 0) fadeDelay -= (deltaTime / 1000.f);
-		else Game::instance().gameOver = true;
-	}
+	//Load::instance().unload();
+	Game::instance().gameOver = true;
 }
 
-void Level::theEnd(int deltaTime)
+void Level::theEnd()
 {
-	if (!fadding)
-	{
-		ui->fade(false);
-		fadding = true;
-		fadeDelay = 15.f / 20.f;
-	}
-	else
-	{
-		if (fadeDelay > 0) fadeDelay -= (deltaTime / 1000.f);
-		Game::instance().theEnd = true;
-	}
+	//Load::instance().unload();
+	Game::instance().theEnd = true;
 }

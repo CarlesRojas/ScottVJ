@@ -23,7 +23,7 @@ public:
 
 private:
 	glm::vec2 winSize, bgSize, pos;
-	int halfWidth, maxX;
+	float halfWidth, maxX;
 	glm::mat4 projection;
 
 };

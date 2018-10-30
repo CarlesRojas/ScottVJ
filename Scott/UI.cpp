@@ -11,7 +11,6 @@ UI::UI()
 	bossSprite = NULL;
 	playerSprite = NULL;
 	bgSprite = NULL;
-	fadeSprite = NULL;
 }
 
 UI::~UI()
@@ -23,7 +22,6 @@ UI::~UI()
 	if (bossSprite != NULL) delete bossSprite;
 	if (playerSprite != NULL) delete playerSprite;
 	if (bgSprite != NULL) delete bgSprite;
-	if (fadeSprite != NULL) delete fadeSprite;
 }
 
 UI * UI::createUI(int playerCharacter, int boss, float attackCD, float spinCD, float specialCD, const glm::vec2 windowSize, ShaderProgram * program)
@@ -50,10 +48,10 @@ UI::UI(int playerCharacter, int boss, float attackCD, float spinCD, float specia
 
 	bossDispl = glm::vec2(0.f, windowSize.y / 5.5f);
 	winSize = windowSize;
-	tileTexSize = 1.f / 20.f;
+	tileTexSize = glm::vec2(1.f / 20.f, 1.f / 10.f);
 
 	glm::vec2 texCoordTile[2];
-	texCoordTile[0] = glm::vec2(player * tileTexSize, 5 * tileTexSize);
+	texCoordTile[0] = glm::vec2(player * tileTexSize.x, 5 * tileTexSize.y);
 	texCoordTile[1] = texCoordTile[0] + tileTexSize;
 
 	// First triangle
@@ -81,101 +79,101 @@ UI::UI(int playerCharacter, int boss, float attackCD, float spinCD, float specia
 	texCoordLocation = program->bindVertexAttribute("texCoord", 2, 4 * sizeof(float), (void *)(2 * sizeof(float)));
 
 	// Animatied UI - Numbers
-	hpSprite = Sprite::createSprite(false, glm::vec2(256.f * scaleFactor, 256.f * scaleFactor), glm::vec2(0.05, 0.05), &Load::instance().ui, program);
+	hpSprite = Sprite::createSprite(false, glm::vec2(256.f * scaleFactor, 256.f * scaleFactor), glm::vec2(0.05f, 0.1f), &Load::instance().ui, program);
 	hpSprite->setNumberAnimations(4);
 
 	hpSprite->setAnimationSpeed(0, 1);
-	hpSprite->addKeyframe(0, glm::vec2(3 * 0.05f, 5 * 0.05f));
+	hpSprite->addKeyframe(0, glm::vec2(3 * 0.05f, 5 * 0.1f));
 	hpSprite->setAnimationSpeed(1, 1);
-	hpSprite->addKeyframe(1, glm::vec2(4 * 0.05f, 5 * 0.05f));
+	hpSprite->addKeyframe(1, glm::vec2(4 * 0.05f, 5 * 0.1f));
 	hpSprite->setAnimationSpeed(2, 1);
-	hpSprite->addKeyframe(2, glm::vec2(5 * 0.05f, 5 * 0.05f));
+	hpSprite->addKeyframe(2, glm::vec2(5 * 0.05f, 5 * 0.1f));
 	hpSprite->setAnimationSpeed(3, 1);
-	hpSprite->addKeyframe(3, glm::vec2(6 * 0.05f, 5 * 0.05f));
+	hpSprite->addKeyframe(3, glm::vec2(6 * 0.05f, 5 * 0.1f));
 	hpSprite->changeAnimation(3);
 	hpSprite->setPosition(glm::vec2(0.f, 0.f));
 
 	// Animatied UI - Attack
-	attackSprite = Sprite::createSprite(false, glm::vec2(256.f * scaleFactor, 256.f * scaleFactor), glm::vec2(0.05, 0.05), &Load::instance().ui, program);
+	attackSprite = Sprite::createSprite(false, glm::vec2(256.f * scaleFactor, 256.f * scaleFactor), glm::vec2(0.05f, 0.1f), &Load::instance().ui, program);
 	attackSprite->setNumberAnimations(2);
 
 	attackSprite->setAnimationSpeed(WHITE, 1);
-	attackSprite->addKeyframe(WHITE, glm::vec2(0 * 0.05f, 0 * 0.05f));
+	attackSprite->addKeyframe(WHITE, glm::vec2(0 * 0.05f, 0 * 0.1f));
 
 	attackSprite->setAnimationSpeed(COOLDOWN, 16.f / attackCooldown);
-	attackSprite->addKeyframe(COOLDOWN, glm::vec2(1 * 0.05f, 0 * 0.05f));
-	attackSprite->addKeyframe(COOLDOWN, glm::vec2(2 * 0.05f, 0 * 0.05f));
-	attackSprite->addKeyframe(COOLDOWN, glm::vec2(3 * 0.05f, 0 * 0.05f));
-	attackSprite->addKeyframe(COOLDOWN, glm::vec2(4 * 0.05f, 0 * 0.05f));
-	attackSprite->addKeyframe(COOLDOWN, glm::vec2(5 * 0.05f, 0 * 0.05f));
-	attackSprite->addKeyframe(COOLDOWN, glm::vec2(6 * 0.05f, 0 * 0.05f));
-	attackSprite->addKeyframe(COOLDOWN, glm::vec2(7 * 0.05f, 0 * 0.05f));
-	attackSprite->addKeyframe(COOLDOWN, glm::vec2(8 * 0.05f, 0 * 0.05f));
-	attackSprite->addKeyframe(COOLDOWN, glm::vec2(9 * 0.05f, 0 * 0.05f));
-	attackSprite->addKeyframe(COOLDOWN, glm::vec2(10 * 0.05f, 0 * 0.05f));
-	attackSprite->addKeyframe(COOLDOWN, glm::vec2(11 * 0.05f, 0 * 0.05f));
-	attackSprite->addKeyframe(COOLDOWN, glm::vec2(12 * 0.05f, 0 * 0.05f));
-	attackSprite->addKeyframe(COOLDOWN, glm::vec2(13 * 0.05f, 0 * 0.05f));
-	attackSprite->addKeyframe(COOLDOWN, glm::vec2(14 * 0.05f, 0 * 0.05f));
-	attackSprite->addKeyframe(COOLDOWN, glm::vec2(15 * 0.05f, 0 * 0.05f));
-	attackSprite->addKeyframe(COOLDOWN, glm::vec2(16 * 0.05f, 0 * 0.05f));
-	attackSprite->addKeyframe(COOLDOWN, glm::vec2(17 * 0.05f, 0 * 0.05f));
+	attackSprite->addKeyframe(COOLDOWN, glm::vec2(1 * 0.05f, 0 * 0.1f));
+	attackSprite->addKeyframe(COOLDOWN, glm::vec2(2 * 0.05f, 0 * 0.1f));
+	attackSprite->addKeyframe(COOLDOWN, glm::vec2(3 * 0.05f, 0 * 0.1f));
+	attackSprite->addKeyframe(COOLDOWN, glm::vec2(4 * 0.05f, 0 * 0.1f));
+	attackSprite->addKeyframe(COOLDOWN, glm::vec2(5 * 0.05f, 0 * 0.1f));
+	attackSprite->addKeyframe(COOLDOWN, glm::vec2(6 * 0.05f, 0 * 0.1f));
+	attackSprite->addKeyframe(COOLDOWN, glm::vec2(7 * 0.05f, 0 * 0.1f));
+	attackSprite->addKeyframe(COOLDOWN, glm::vec2(8 * 0.05f, 0 * 0.1f));
+	attackSprite->addKeyframe(COOLDOWN, glm::vec2(9 * 0.05f, 0 * 0.1f));
+	attackSprite->addKeyframe(COOLDOWN, glm::vec2(10 * 0.05f, 0 * 0.1f));
+	attackSprite->addKeyframe(COOLDOWN, glm::vec2(11 * 0.05f, 0 * 0.1f));
+	attackSprite->addKeyframe(COOLDOWN, glm::vec2(12 * 0.05f, 0 * 0.1f));
+	attackSprite->addKeyframe(COOLDOWN, glm::vec2(13 * 0.05f, 0 * 0.1f));
+	attackSprite->addKeyframe(COOLDOWN, glm::vec2(14 * 0.05f, 0 * 0.1f));
+	attackSprite->addKeyframe(COOLDOWN, glm::vec2(15 * 0.05f, 0 * 0.1f));
+	attackSprite->addKeyframe(COOLDOWN, glm::vec2(16 * 0.05f, 0 * 0.1f));
+	attackSprite->addKeyframe(COOLDOWN, glm::vec2(17 * 0.05f, 0 * 0.1f));
 	attackSprite->changeAnimation(WHITE);
 	attackSprite->setPosition(glm::vec2(0.f, 0.f));
 
 	// Animatied UI - Spin
-	spinSprite = Sprite::createSprite(false, glm::vec2(256.f * scaleFactor, 256.f * scaleFactor), glm::vec2(0.05, 0.05), &Load::instance().ui, program);
+	spinSprite = Sprite::createSprite(false, glm::vec2(256.f * scaleFactor, 256.f * scaleFactor), glm::vec2(0.05f, 0.1f), &Load::instance().ui, program);
 	spinSprite->setNumberAnimations(2);
 
 	spinSprite->setAnimationSpeed(WHITE, 1);
-	spinSprite->addKeyframe(WHITE, glm::vec2(0 * 0.05f, 1 * 0.05f));
+	spinSprite->addKeyframe(WHITE, glm::vec2(0 * 0.05f, 1 * 0.1f));
 
 	spinSprite->setAnimationSpeed(COOLDOWN, 16.f / spinCooldown);
-	spinSprite->addKeyframe(COOLDOWN, glm::vec2(1 * 0.05f, 1 * 0.05f));
-	spinSprite->addKeyframe(COOLDOWN, glm::vec2(2 * 0.05f, 1 * 0.05f));
-	spinSprite->addKeyframe(COOLDOWN, glm::vec2(3 * 0.05f, 1 * 0.05f));
-	spinSprite->addKeyframe(COOLDOWN, glm::vec2(4 * 0.05f, 1 * 0.05f));
-	spinSprite->addKeyframe(COOLDOWN, glm::vec2(5 * 0.05f, 1 * 0.05f));
-	spinSprite->addKeyframe(COOLDOWN, glm::vec2(6 * 0.05f, 1 * 0.05f));
-	spinSprite->addKeyframe(COOLDOWN, glm::vec2(7 * 0.05f, 1 * 0.05f));
-	spinSprite->addKeyframe(COOLDOWN, glm::vec2(8 * 0.05f, 1 * 0.05f));
-	spinSprite->addKeyframe(COOLDOWN, glm::vec2(9 * 0.05f, 1 * 0.05f));
-	spinSprite->addKeyframe(COOLDOWN, glm::vec2(10 * 0.05f, 1 * 0.05f));
-	spinSprite->addKeyframe(COOLDOWN, glm::vec2(11 * 0.05f, 1 * 0.05f));
-	spinSprite->addKeyframe(COOLDOWN, glm::vec2(12 * 0.05f, 1 * 0.05f));
-	spinSprite->addKeyframe(COOLDOWN, glm::vec2(13 * 0.05f, 1 * 0.05f));
-	spinSprite->addKeyframe(COOLDOWN, glm::vec2(14 * 0.05f, 1 * 0.05f));
-	spinSprite->addKeyframe(COOLDOWN, glm::vec2(15 * 0.05f, 1 * 0.05f));
-	spinSprite->addKeyframe(COOLDOWN, glm::vec2(16 * 0.05f, 1 * 0.05f));
-	spinSprite->addKeyframe(COOLDOWN, glm::vec2(17 * 0.05f, 1 * 0.05f));
+	spinSprite->addKeyframe(COOLDOWN, glm::vec2(1 * 0.05f, 1 * 0.1f));
+	spinSprite->addKeyframe(COOLDOWN, glm::vec2(2 * 0.05f, 1 * 0.1f));
+	spinSprite->addKeyframe(COOLDOWN, glm::vec2(3 * 0.05f, 1 * 0.1f));
+	spinSprite->addKeyframe(COOLDOWN, glm::vec2(4 * 0.05f, 1 * 0.1f));
+	spinSprite->addKeyframe(COOLDOWN, glm::vec2(5 * 0.05f, 1 * 0.1f));
+	spinSprite->addKeyframe(COOLDOWN, glm::vec2(6 * 0.05f, 1 * 0.1f));
+	spinSprite->addKeyframe(COOLDOWN, glm::vec2(7 * 0.05f, 1 * 0.1f));
+	spinSprite->addKeyframe(COOLDOWN, glm::vec2(8 * 0.05f, 1 * 0.1f));
+	spinSprite->addKeyframe(COOLDOWN, glm::vec2(9 * 0.05f, 1 * 0.1f));
+	spinSprite->addKeyframe(COOLDOWN, glm::vec2(10 * 0.05f, 1 * 0.1f));
+	spinSprite->addKeyframe(COOLDOWN, glm::vec2(11 * 0.05f, 1 * 0.1f));
+	spinSprite->addKeyframe(COOLDOWN, glm::vec2(12 * 0.05f, 1 * 0.1f));
+	spinSprite->addKeyframe(COOLDOWN, glm::vec2(13 * 0.05f, 1 * 0.1f));
+	spinSprite->addKeyframe(COOLDOWN, glm::vec2(14 * 0.05f, 1 * 0.1f));
+	spinSprite->addKeyframe(COOLDOWN, glm::vec2(15 * 0.05f, 1 * 0.1f));
+	spinSprite->addKeyframe(COOLDOWN, glm::vec2(16 * 0.05f, 1 * 0.1f));
+	spinSprite->addKeyframe(COOLDOWN, glm::vec2(17 * 0.05f, 1 * 0.1f));
 	spinSprite->changeAnimation(WHITE);
 	spinSprite->setPosition(glm::vec2(0.f, 0.f));
 
 	// Animatied UI - Special
-	specialSprite = Sprite::createSprite(false, glm::vec2(256.f * scaleFactor, 256.f * scaleFactor), glm::vec2(0.05, 0.05), &Load::instance().ui, program);
+	specialSprite = Sprite::createSprite(false, glm::vec2(256.f * scaleFactor, 256.f * scaleFactor), glm::vec2(0.05f, 0.1f), &Load::instance().ui, program);
 	specialSprite->setNumberAnimations(2);
 
 	specialSprite->setAnimationSpeed(WHITE, 1);
-	specialSprite->addKeyframe(WHITE, glm::vec2(0 * 0.05f, (2 + player) * 0.05f));
+	specialSprite->addKeyframe(WHITE, glm::vec2(0 * 0.05f, (2 + player) * 0.1f));
 
 	specialSprite->setAnimationSpeed(COOLDOWN, 16.f / specialCooldown);
-	specialSprite->addKeyframe(COOLDOWN, glm::vec2(1 * 0.05f, (2 + player) * 0.05f));
-	specialSprite->addKeyframe(COOLDOWN, glm::vec2(2 * 0.05f, (2 + player) * 0.05f));
-	specialSprite->addKeyframe(COOLDOWN, glm::vec2(3 * 0.05f, (2 + player) * 0.05f));
-	specialSprite->addKeyframe(COOLDOWN, glm::vec2(4 * 0.05f, (2 + player) * 0.05f));
-	specialSprite->addKeyframe(COOLDOWN, glm::vec2(5 * 0.05f, (2 + player) * 0.05f));
-	specialSprite->addKeyframe(COOLDOWN, glm::vec2(6 * 0.05f, (2 + player) * 0.05f));
-	specialSprite->addKeyframe(COOLDOWN, glm::vec2(7 * 0.05f, (2 + player) * 0.05f));
-	specialSprite->addKeyframe(COOLDOWN, glm::vec2(8 * 0.05f, (2 + player) * 0.05f));
-	specialSprite->addKeyframe(COOLDOWN, glm::vec2(9 * 0.05f, (2 + player) * 0.05f));
-	specialSprite->addKeyframe(COOLDOWN, glm::vec2(10 * 0.05f, (2 + player) * 0.05f));
-	specialSprite->addKeyframe(COOLDOWN, glm::vec2(11 * 0.05f, (2 + player) * 0.05f));
-	specialSprite->addKeyframe(COOLDOWN, glm::vec2(12 * 0.05f, (2 + player) * 0.05f));
-	specialSprite->addKeyframe(COOLDOWN, glm::vec2(13 * 0.05f, (2 + player) * 0.05f));
-	specialSprite->addKeyframe(COOLDOWN, glm::vec2(14 * 0.05f, (2 + player) * 0.05f));
-	specialSprite->addKeyframe(COOLDOWN, glm::vec2(15 * 0.05f, (2 + player) * 0.05f));
-	specialSprite->addKeyframe(COOLDOWN, glm::vec2(16 * 0.05f, (2 + player) * 0.05f));
-	specialSprite->addKeyframe(COOLDOWN, glm::vec2(17 * 0.05f, (2 + player) * 0.05f));
+	specialSprite->addKeyframe(COOLDOWN, glm::vec2(1 * 0.05f, (2 + player) * 0.1f));
+	specialSprite->addKeyframe(COOLDOWN, glm::vec2(2 * 0.05f, (2 + player) * 0.1f));
+	specialSprite->addKeyframe(COOLDOWN, glm::vec2(3 * 0.05f, (2 + player) * 0.1f));
+	specialSprite->addKeyframe(COOLDOWN, glm::vec2(4 * 0.05f, (2 + player) * 0.1f));
+	specialSprite->addKeyframe(COOLDOWN, glm::vec2(5 * 0.05f, (2 + player) * 0.1f));
+	specialSprite->addKeyframe(COOLDOWN, glm::vec2(6 * 0.05f, (2 + player) * 0.1f));
+	specialSprite->addKeyframe(COOLDOWN, glm::vec2(7 * 0.05f, (2 + player) * 0.1f));
+	specialSprite->addKeyframe(COOLDOWN, glm::vec2(8 * 0.05f, (2 + player) * 0.1f));
+	specialSprite->addKeyframe(COOLDOWN, glm::vec2(9 * 0.05f, (2 + player) * 0.1f));
+	specialSprite->addKeyframe(COOLDOWN, glm::vec2(10 * 0.05f, (2 + player) * 0.1f));
+	specialSprite->addKeyframe(COOLDOWN, glm::vec2(11 * 0.05f, (2 + player) * 0.1f));
+	specialSprite->addKeyframe(COOLDOWN, glm::vec2(12 * 0.05f, (2 + player) * 0.1f));
+	specialSprite->addKeyframe(COOLDOWN, glm::vec2(13 * 0.05f, (2 + player) * 0.1f));
+	specialSprite->addKeyframe(COOLDOWN, glm::vec2(14 * 0.05f, (2 + player) * 0.1f));
+	specialSprite->addKeyframe(COOLDOWN, glm::vec2(15 * 0.05f, (2 + player) * 0.1f));
+	specialSprite->addKeyframe(COOLDOWN, glm::vec2(16 * 0.05f, (2 + player) * 0.1f));
+	specialSprite->addKeyframe(COOLDOWN, glm::vec2(17 * 0.05f, (2 + player) * 0.1f));
 	specialSprite->changeAnimation(WHITE);
 	specialSprite->setPosition(glm::vec2(0.f, 0.f));
 
@@ -378,39 +376,6 @@ UI::UI(int playerCharacter, int boss, float attackCD, float spinCD, float specia
 
 	bgSprite->changeAnimation(BG_NONE);
 	bgSprite->setPosition(bossDispl);
-
-	// Fade 
-	scaleFactor = (float)windowSize.y / 256.f;
-	glm::vec2 fadeTexSize = glm::vec2(1.f, 1.f / 7.f);
-	fadeSprite = Sprite::createSprite(false, glm::vec2(512.f * scaleFactor, 256.f * scaleFactor), fadeTexSize, &Load::instance().fade, program);
-	fadeSprite->setNumberAnimations(4);
-
-	fadeSprite->setAnimationSpeed(FADE_BLACK, 1);
-	fadeSprite->addKeyframe(FADE_BLACK, glm::vec2(0 * fadeTexSize.x, 0 * fadeTexSize.y));
-	
-	fadeSprite->setAnimationSpeed(FADE_NONE, 1);
-	fadeSprite->addKeyframe(FADE_NONE, glm::vec2(0 * fadeTexSize.x, 6 * fadeTexSize.y));
-	
-	fadeSprite->setAnimationSpeed(FADE_IN, 20);
-	fadeSprite->addKeyframe(FADE_IN, glm::vec2(0 * fadeTexSize.x, 0 * fadeTexSize.y));
-	fadeSprite->addKeyframe(FADE_IN, glm::vec2(0 * fadeTexSize.x, 1 * fadeTexSize.y));
-	fadeSprite->addKeyframe(FADE_IN, glm::vec2(0 * fadeTexSize.x, 2 * fadeTexSize.y));
-	fadeSprite->addKeyframe(FADE_IN, glm::vec2(0 * fadeTexSize.x, 3 * fadeTexSize.y));
-	fadeSprite->addKeyframe(FADE_IN, glm::vec2(0 * fadeTexSize.x, 4 * fadeTexSize.y));
-	fadeSprite->addKeyframe(FADE_IN, glm::vec2(0 * fadeTexSize.x, 5 * fadeTexSize.y));
-	fadeSprite->addKeyframe(FADE_IN, glm::vec2(0 * fadeTexSize.x, 6 * fadeTexSize.y));
-
-	fadeSprite->setAnimationSpeed(FADE_OUT, 20);
-	fadeSprite->addKeyframe(FADE_OUT, glm::vec2(0 * fadeTexSize.x, 6 * fadeTexSize.y));
-	fadeSprite->addKeyframe(FADE_OUT, glm::vec2(0 * fadeTexSize.x, 5 * fadeTexSize.y));
-	fadeSprite->addKeyframe(FADE_OUT, glm::vec2(0 * fadeTexSize.x, 4 * fadeTexSize.y));
-	fadeSprite->addKeyframe(FADE_OUT, glm::vec2(0 * fadeTexSize.x, 3 * fadeTexSize.y));
-	fadeSprite->addKeyframe(FADE_OUT, glm::vec2(0 * fadeTexSize.x, 2 * fadeTexSize.y));
-	fadeSprite->addKeyframe(FADE_OUT, glm::vec2(0 * fadeTexSize.x, 1 * fadeTexSize.y));
-	fadeSprite->addKeyframe(FADE_OUT, glm::vec2(0 * fadeTexSize.x, 0 * fadeTexSize.y));
-	
-	fadeSprite->changeAnimation(FADE_BLACK);
-	fadeSprite->setPosition(glm::vec2(0.f));
 }
 
 void UI::render() const
@@ -434,7 +399,6 @@ void UI::render() const
 	bgSprite->render(false);
 	bossSprite->render(false);
 	playerSprite->render(false);
-	fadeSprite->render(false);
 }
 
 void UI::update(int deltaTime, glm::vec2 camPos)
@@ -454,7 +418,6 @@ void UI::update(int deltaTime, glm::vec2 camPos)
 	bgSprite->update(deltaTime);
 	bossSprite->update(deltaTime);
 	playerSprite->update(deltaTime);
-	fadeSprite->update(deltaTime);
 
 	hpSprite->setPosition(glm::vec2(camPos.x - (winSize.x / 2.f), 0.f));
 	attackSprite->setPosition(glm::vec2(camPos.x - (winSize.x / 2.f), 0.f));
@@ -463,7 +426,6 @@ void UI::update(int deltaTime, glm::vec2 camPos)
 	bgSprite->setPosition(glm::vec2(camPos.x - (winSize.x / 2.f), 0.f) + bossDispl);
 	bossSprite->setPosition(glm::vec2(camPos.x - (winSize.x / 2.f), 0.f) + bossDispl);
 	playerSprite->setPosition(glm::vec2(camPos.x - (winSize.x / 2.f), 0.f) + bossDispl);
-	fadeSprite->setPosition(glm::vec2(camPos.x - (winSize.x / 2.f), 0.f));
 
 	// Update cooldowns
 	if (attackCooldownTimer > 0) attackCooldownTimer -= dt;
@@ -553,38 +515,6 @@ void UI::update(int deltaTime, glm::vec2 camPos)
 			showingBossIntro = false;
 		}
 	}
-
-	// Fade
-	if (fadding)
-	{
-		if (fadeIn)
-		{
-			fadding = false;
-			if (fadeSprite->animation() != FADE_IN) fadeSprite->changeAnimation(FADE_IN);
-			fadeDelay = 5.f / 20.f;
-		}
-		else if (fadeOut)
-		{
-			fadding = false;
-			if (fadeSprite->animation() != FADE_OUT) fadeSprite->changeAnimation(FADE_OUT);
-			fadeDelay = 5.f / 20.f;
-		}
-	}
-
-	else
-	{
-		if (fadeDelay > 0) fadeDelay -= dt;
-		else if (fadeIn)
-		{
-			fadeIn = false;
-			if (fadeSprite->animation() != FADE_NONE) fadeSprite->changeAnimation(FADE_NONE);
-		}
-		else if (fadeOut)
-		{
-			fadeOut = false;
-			if (fadeSprite->animation() != FADE_BLACK) fadeSprite->changeAnimation(FADE_BLACK);
-		}
-	}
 }
 
 bool UI::canAttack()
@@ -635,11 +565,4 @@ void UI::showBossIntro()
 		introStage = 0;
 		introDelay = -1;
 	}
-}
-
-void UI::fade(bool in)
-{
-	fadding = true;
-	fadeIn = in;
-	fadeOut = !in;
 }

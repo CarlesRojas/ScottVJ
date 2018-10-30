@@ -15,10 +15,9 @@ public:
 	~Enemy();
 	static Enemy * createEnemy(const int enemy, const glm::vec2 & initialPos, const int windowHeight, ShaderProgram * program);
 
-
 	virtual void init(const glm::vec2 &initialPos, const int windowHeight, ShaderProgram * shaderProgram);
-	void update(int deltaTime);
-	void render();
+	virtual void update(int deltaTime);
+	virtual void render();
 
 	virtual void enemyIA(int deltaTime);
 	virtual void move(glm::vec2 deltaPos, float deltaTime);
@@ -29,7 +28,7 @@ public:
 	Box *baseBox;
 
 	Sprite *sprite;
-	bool dead, flip, fixAnim, fixPos, dying;
+	bool dead, isBoss, active, flip, fixAnim, fixPos, dying;
 	glm::vec2 pos;
 
 protected:

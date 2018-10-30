@@ -17,81 +17,81 @@ void Roxilla::init(const glm::vec2 & initialPos, const int windowHeight, ShaderP
 	this->pos = initialPos;
 	scaleFactor = ((float)windowHeight / 256.f);
 	delay = 0.f;
-	flip = fixAnim = fixPos = dying = dead = false;
-	speed = 35 * scaleFactor;
+	flip = fixAnim = fixPos = dying = dead = isBoss = active = false;
+	speed = (int)(35 * scaleFactor);
 	fireCooldown = 5.f;
 
-	sprite = Sprite::createSprite(true, glm::vec2(256.f * scaleFactor, 256.f * scaleFactor), glm::vec2(0.05, 0.05), &Load::instance().roxilla, shaderProgram);
+	sprite = Sprite::createSprite(true, glm::vec2(256.f * scaleFactor, 256.f * scaleFactor), glm::vec2(0.05, 0.1f), &Load::instance().roxilla, shaderProgram);
 	sprite->setNumberAnimations(5);
 
 	sprite->setAnimationSpeed(IDLE, 8);
-	sprite->addKeyframe(IDLE, glm::vec2(0 * 0.05f, 4 * 0.05f));
-	sprite->addKeyframe(IDLE, glm::vec2(1 * 0.05f, 4 * 0.05f));
-	sprite->addKeyframe(IDLE, glm::vec2(2 * 0.05f, 4 * 0.05f));
-	sprite->addKeyframe(IDLE, glm::vec2(3 * 0.05f, 4 * 0.05f));
-	sprite->addKeyframe(IDLE, glm::vec2(4 * 0.05f, 4 * 0.05f));
-	sprite->addKeyframe(IDLE, glm::vec2(5 * 0.05f, 4 * 0.05f));
+	sprite->addKeyframe(IDLE, glm::vec2(0 * 0.05f, 4 * 0.1f));
+	sprite->addKeyframe(IDLE, glm::vec2(1 * 0.05f, 4 * 0.1f));
+	sprite->addKeyframe(IDLE, glm::vec2(2 * 0.05f, 4 * 0.1f));
+	sprite->addKeyframe(IDLE, glm::vec2(3 * 0.05f, 4 * 0.1f));
+	sprite->addKeyframe(IDLE, glm::vec2(4 * 0.05f, 4 * 0.1f));
+	sprite->addKeyframe(IDLE, glm::vec2(5 * 0.05f, 4 * 0.1f));
 
 	sprite->setAnimationSpeed(WALK, 8);
-	sprite->addKeyframe(WALK, glm::vec2(0 * 0.05f, 1 * 0.05f));
-	sprite->addKeyframe(WALK, glm::vec2(1 * 0.05f, 1 * 0.05f));
-	sprite->addKeyframe(WALK, glm::vec2(2 * 0.05f, 1 * 0.05f));
-	sprite->addKeyframe(WALK, glm::vec2(3 * 0.05f, 1 * 0.05f));
-	sprite->addKeyframe(WALK, glm::vec2(4 * 0.05f, 1 * 0.05f));
-	sprite->addKeyframe(WALK, glm::vec2(5 * 0.05f, 1 * 0.05f));
+	sprite->addKeyframe(WALK, glm::vec2(0 * 0.05f, 1 * 0.1f));
+	sprite->addKeyframe(WALK, glm::vec2(1 * 0.05f, 1 * 0.1f));
+	sprite->addKeyframe(WALK, glm::vec2(2 * 0.05f, 1 * 0.1f));
+	sprite->addKeyframe(WALK, glm::vec2(3 * 0.05f, 1 * 0.1f));
+	sprite->addKeyframe(WALK, glm::vec2(4 * 0.05f, 1 * 0.1f));
+	sprite->addKeyframe(WALK, glm::vec2(5 * 0.05f, 1 * 0.1f));
 
 	sprite->setAnimationSpeed(FIRE, 8);
-	sprite->addKeyframe(FIRE, glm::vec2(0 * 0.05f, 3 * 0.05f));
-	sprite->addKeyframe(FIRE, glm::vec2(1 * 0.05f, 3 * 0.05f));
-	sprite->addKeyframe(FIRE, glm::vec2(2 * 0.05f, 3 * 0.05f));
-	sprite->addKeyframe(FIRE, glm::vec2(3 * 0.05f, 3 * 0.05f));
-	sprite->addKeyframe(FIRE, glm::vec2(4 * 0.05f, 3 * 0.05f));
-	sprite->addKeyframe(FIRE, glm::vec2(5 * 0.05f, 3 * 0.05f));
-	sprite->addKeyframe(FIRE, glm::vec2(6 * 0.05f, 3 * 0.05f));
-	sprite->addKeyframe(FIRE, glm::vec2(7 * 0.05f, 3 * 0.05f));
-	sprite->addKeyframe(FIRE, glm::vec2(8 * 0.05f, 3 * 0.05f));
-	sprite->addKeyframe(FIRE, glm::vec2(9 * 0.05f, 3 * 0.05f));
-	sprite->addKeyframe(FIRE, glm::vec2(10 * 0.05f, 3 * 0.05f));
-	sprite->addKeyframe(FIRE, glm::vec2(11 * 0.05f, 3 * 0.05f));
-	sprite->addKeyframe(FIRE, glm::vec2(12 * 0.05f, 3 * 0.05f));
+	sprite->addKeyframe(FIRE, glm::vec2(0 * 0.05f, 3 * 0.1f));
+	sprite->addKeyframe(FIRE, glm::vec2(1 * 0.05f, 3 * 0.1f));
+	sprite->addKeyframe(FIRE, glm::vec2(2 * 0.05f, 3 * 0.1f));
+	sprite->addKeyframe(FIRE, glm::vec2(3 * 0.05f, 3 * 0.1f));
+	sprite->addKeyframe(FIRE, glm::vec2(4 * 0.05f, 3 * 0.1f));
+	sprite->addKeyframe(FIRE, glm::vec2(5 * 0.05f, 3 * 0.1f));
+	sprite->addKeyframe(FIRE, glm::vec2(6 * 0.05f, 3 * 0.1f));
+	sprite->addKeyframe(FIRE, glm::vec2(7 * 0.05f, 3 * 0.1f));
+	sprite->addKeyframe(FIRE, glm::vec2(8 * 0.05f, 3 * 0.1f));
+	sprite->addKeyframe(FIRE, glm::vec2(9 * 0.05f, 3 * 0.1f));
+	sprite->addKeyframe(FIRE, glm::vec2(10 * 0.05f, 3 * 0.1f));
+	sprite->addKeyframe(FIRE, glm::vec2(11 * 0.05f, 3 * 0.1f));
+	sprite->addKeyframe(FIRE, glm::vec2(12 * 0.05f, 3 * 0.1f));
 
 	sprite->setAnimationSpeed(MASKOFF, 8);
-	sprite->addKeyframe(MASKOFF, glm::vec2(0 * 0.05f, 2 * 0.05f));
-	sprite->addKeyframe(MASKOFF, glm::vec2(1 * 0.05f, 2 * 0.05f));
-	sprite->addKeyframe(MASKOFF, glm::vec2(2 * 0.05f, 2 * 0.05f));
-	sprite->addKeyframe(MASKOFF, glm::vec2(3 * 0.05f, 2 * 0.05f));
-	sprite->addKeyframe(MASKOFF, glm::vec2(4 * 0.05f, 2 * 0.05f));
-	sprite->addKeyframe(MASKOFF, glm::vec2(5 * 0.05f, 2 * 0.05f));
-	sprite->addKeyframe(MASKOFF, glm::vec2(6 * 0.05f, 2 * 0.05f));
-	sprite->addKeyframe(MASKOFF, glm::vec2(7 * 0.05f, 2 * 0.05f));
-	sprite->addKeyframe(MASKOFF, glm::vec2(8 * 0.05f, 2 * 0.05f));
-	sprite->addKeyframe(MASKOFF, glm::vec2(9 * 0.05f, 2 * 0.05f));
-	sprite->addKeyframe(MASKOFF, glm::vec2(10 * 0.05f, 2 * 0.05f));
-	sprite->addKeyframe(MASKOFF, glm::vec2(11 * 0.05f, 2 * 0.05f));
-	sprite->addKeyframe(MASKOFF, glm::vec2(12 * 0.05f, 2 * 0.05f));
-	sprite->addKeyframe(MASKOFF, glm::vec2(13 * 0.05f, 2 * 0.05f));
-	sprite->addKeyframe(MASKOFF, glm::vec2(14 * 0.05f, 2 * 0.05f));
-	sprite->addKeyframe(MASKOFF, glm::vec2(15 * 0.05f, 2 * 0.05f));
-	sprite->addKeyframe(MASKOFF, glm::vec2(16 * 0.05f, 2 * 0.05f));
+	sprite->addKeyframe(MASKOFF, glm::vec2(0 * 0.05f, 2 * 0.1f));
+	sprite->addKeyframe(MASKOFF, glm::vec2(1 * 0.05f, 2 * 0.1f));
+	sprite->addKeyframe(MASKOFF, glm::vec2(2 * 0.05f, 2 * 0.1f));
+	sprite->addKeyframe(MASKOFF, glm::vec2(3 * 0.05f, 2 * 0.1f));
+	sprite->addKeyframe(MASKOFF, glm::vec2(4 * 0.05f, 2 * 0.1f));
+	sprite->addKeyframe(MASKOFF, glm::vec2(5 * 0.05f, 2 * 0.1f));
+	sprite->addKeyframe(MASKOFF, glm::vec2(6 * 0.05f, 2 * 0.1f));
+	sprite->addKeyframe(MASKOFF, glm::vec2(7 * 0.05f, 2 * 0.1f));
+	sprite->addKeyframe(MASKOFF, glm::vec2(8 * 0.05f, 2 * 0.1f));
+	sprite->addKeyframe(MASKOFF, glm::vec2(9 * 0.05f, 2 * 0.1f));
+	sprite->addKeyframe(MASKOFF, glm::vec2(10 * 0.05f, 2 * 0.1f));
+	sprite->addKeyframe(MASKOFF, glm::vec2(11 * 0.05f, 2 * 0.1f));
+	sprite->addKeyframe(MASKOFF, glm::vec2(12 * 0.05f, 2 * 0.1f));
+	sprite->addKeyframe(MASKOFF, glm::vec2(13 * 0.05f, 2 * 0.1f));
+	sprite->addKeyframe(MASKOFF, glm::vec2(14 * 0.05f, 2 * 0.1f));
+	sprite->addKeyframe(MASKOFF, glm::vec2(15 * 0.05f, 2 * 0.1f));
+	sprite->addKeyframe(MASKOFF, glm::vec2(16 * 0.05f, 2 * 0.1f));
 
 	sprite->setAnimationSpeed(DOWN, 8);
-	sprite->addKeyframe(DOWN, glm::vec2(0 * 0.05f, 0 * 0.05f));
-	sprite->addKeyframe(DOWN, glm::vec2(1 * 0.05f, 0 * 0.05f));
-	sprite->addKeyframe(DOWN, glm::vec2(2 * 0.05f, 0 * 0.05f));
-	sprite->addKeyframe(DOWN, glm::vec2(3 * 0.05f, 0 * 0.05f));
-	sprite->addKeyframe(DOWN, glm::vec2(4 * 0.05f, 0 * 0.05f));
-	sprite->addKeyframe(DOWN, glm::vec2(5 * 0.05f, 0 * 0.05f));
-	sprite->addKeyframe(DOWN, glm::vec2(6 * 0.05f, 0 * 0.05f));
-	sprite->addKeyframe(DOWN, glm::vec2(7 * 0.05f, 0 * 0.05f));
-	sprite->addKeyframe(DOWN, glm::vec2(8 * 0.05f, 0 * 0.05f));
-	sprite->addKeyframe(DOWN, glm::vec2(9 * 0.05f, 0 * 0.05f));
-	sprite->addKeyframe(DOWN, glm::vec2(10 * 0.05f, 0 * 0.05f));
-	sprite->addKeyframe(DOWN, glm::vec2(11 * 0.05f, 0 * 0.05f));
-	sprite->addKeyframe(DOWN, glm::vec2(12 * 0.05f, 0 * 0.05f));
-	sprite->addKeyframe(DOWN, glm::vec2(13 * 0.05f, 0 * 0.05f));
-	sprite->addKeyframe(DOWN, glm::vec2(14 * 0.05f, 0 * 0.05f));
-	sprite->addKeyframe(DOWN, glm::vec2(15 * 0.05f, 0 * 0.05f));
-	sprite->addKeyframe(DOWN, glm::vec2(16 * 0.05f, 0 * 0.05f));
+	sprite->addKeyframe(DOWN, glm::vec2(0 * 0.05f, 0 * 0.1f));
+	sprite->addKeyframe(DOWN, glm::vec2(1 * 0.05f, 0 * 0.1f));
+	sprite->addKeyframe(DOWN, glm::vec2(2 * 0.05f, 0 * 0.1f));
+	sprite->addKeyframe(DOWN, glm::vec2(3 * 0.05f, 0 * 0.1f));
+	sprite->addKeyframe(DOWN, glm::vec2(4 * 0.05f, 0 * 0.1f));
+	sprite->addKeyframe(DOWN, glm::vec2(5 * 0.05f, 0 * 0.1f));
+	sprite->addKeyframe(DOWN, glm::vec2(6 * 0.05f, 0 * 0.1f));
+	sprite->addKeyframe(DOWN, glm::vec2(7 * 0.05f, 0 * 0.1f));
+	sprite->addKeyframe(DOWN, glm::vec2(8 * 0.05f, 0 * 0.1f));
+	sprite->addKeyframe(DOWN, glm::vec2(9 * 0.05f, 0 * 0.1f));
+	sprite->addKeyframe(DOWN, glm::vec2(10 * 0.05f, 0 * 0.1f));
+	sprite->addKeyframe(DOWN, glm::vec2(11 * 0.05f, 0 * 0.1f));
+	sprite->addKeyframe(DOWN, glm::vec2(12 * 0.05f, 0 * 0.1f));
+	sprite->addKeyframe(DOWN, glm::vec2(13 * 0.05f, 0 * 0.1f));
+	sprite->addKeyframe(DOWN, glm::vec2(14 * 0.05f, 0 * 0.1f));
+	sprite->addKeyframe(DOWN, glm::vec2(15 * 0.05f, 0 * 0.1f));
+	sprite->addKeyframe(DOWN, glm::vec2(16 * 0.05f, 0 * 0.1f));
 
 	// Add Boxes
 	hitBox = Box::createBox(Box::ENEMY, Box::HIT, pos, glm::vec2(40 * scaleFactor, 70 * scaleFactor));
@@ -120,7 +120,11 @@ void Roxilla::enemyIA(int deltaTime)
 	{
 	case Roxilla::INACTIVE:
 		if (sprite->animation() != IDLE) sprite->changeAnimation(IDLE);
-		if (Physics::instance().isCloseThan(this, alertRange)) state = WAIT;
+		if (Physics::instance().isCloseThan(this, alertRange))
+		{
+			state = WAIT;
+			active = true;
+		}
 		break;
 	case Roxilla::WAIT:
 		if (delay <= 0)
