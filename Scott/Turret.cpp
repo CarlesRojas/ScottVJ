@@ -1,6 +1,7 @@
 #include "Turret.h"
 #include "Physics.h"
 #include "Load.h"
+#include "Audio.h"
 
 Turret::Turret()
 {
@@ -73,8 +74,8 @@ void Turret::init(const glm::vec2 & initialPos, const int windowHeight, ShaderPr
 	sprite->addKeyframe(HIDDEN, glm::vec2(0 * 0.05f, 1 * 0.1f));
 
 	// Add Boxes
-	hitBox = Box::createBox(Box::ENEMY, Box::HIT, pos, glm::vec2(86 * scaleFactor, 77 * scaleFactor));
-	baseBox = Box::createBox(Box::ENEMY, Box::BASE, pos, glm::vec2(86 * scaleFactor, 29 * scaleFactor));
+	hitBox = Box::createBox(Box::ENEMY, Box::HIT, pos, glm::vec2(80 * scaleFactor, 77 * scaleFactor));
+	baseBox = Box::createBox(Box::ENEMY, Box::BASE, pos, glm::vec2(80 * scaleFactor, 15 * scaleFactor));
 	shoot = Attack::createAttack(Box::ENEMY, pos, glm::vec2(-46 * scaleFactor, -46 * scaleFactor), glm::vec2(8 * scaleFactor, 8 * scaleFactor), 3, 0, 0, true, false, glm::vec2(-shootSpeed, 0));
 
 	// Shoot Attack Sprite
@@ -116,6 +117,7 @@ void Turret::enemyIA(int deltaTime)
 			if (playerPos.x - pos.x > 0 && Physics::instance().isCloseThan(this, alertRange))
 			{
 				if (sprite->animation() != DEPLOY) sprite->changeAnimation(DEPLOY);
+				Audio::instance().PlaySounds("audio/turret_deploy.wav", Vector3{ 0, 0, 0 }, Audio::instance().VolumeTodB(1.0f));
 				delay = 9.5f / 8.f;
 				state = WAIT;
 				active = true;
@@ -142,7 +144,8 @@ void Turret::enemyIA(int deltaTime)
 		{
 			if (sprite->animation() != SHOOT) sprite->changeAnimation(SHOOT);
 			shoot->activate(pos, flip);
-			shootCooldownTimer = 1.f;
+			Audio::instance().PlaySounds("audio/turret_shot.wav", Vector3{ 0, 0, 0 }, Audio::instance().VolumeTodB(1.0f));
+			shootCooldownTimer = 1.5f;
 			delay = 1.5f / 8.f;
 			state = WAIT;
 		}
@@ -152,7 +155,7 @@ void Turret::enemyIA(int deltaTime)
 	}
 }
 
-void Turret::kill()
+bool Turret::kill()
 {
 	// Down
 	if (sprite->animation() != HIDDEN && !dying)
@@ -165,7 +168,10 @@ void Turret::kill()
 		dying = true;
 		delay = 10.5f / 8.f;
 		if (sprite->animation() != DOWN) sprite->changeAnimation(DOWN);
+		Audio::instance().PlaySounds("audio/turret_destroy.wav", Vector3{ 0, 0, 0 }, Audio::instance().VolumeTodB(1.0f));
+		return true;
 	}
+	return false;
 }
 
 vector<Attack*> Turret::getAttacks()

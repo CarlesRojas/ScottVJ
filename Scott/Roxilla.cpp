@@ -1,6 +1,7 @@
 #include "Roxilla.h"
 #include "Physics.h"
 #include "Load.h"
+#include "Audio.h"
 
 Roxilla::Roxilla()
 {
@@ -195,6 +196,7 @@ void Roxilla::enemyIA(int deltaTime)
 
 			if (sprite->animation() != FIRE) sprite->changeAnimation(FIRE);
 			fire->activate(pos, flip);
+			Audio::instance().PlaySounds("audio/roxilla_fire.wav", Vector3{ 0, 0, 0 }, Audio::instance().VolumeTodB(1.0f));
 			fireCooldownTimer = fireCooldown;
 			delay = 12.5f / 8.f;
 			state = MASK;
@@ -204,6 +206,8 @@ void Roxilla::enemyIA(int deltaTime)
 		if (delay <= 0)
 		{
 			if (sprite->animation() != MASKOFF) sprite->changeAnimation(MASKOFF);
+			Audio::instance().PlaySounds("audio/tired_male.wav", Vector3{ 0, 0, 0 }, Audio::instance().VolumeTodB(1.0f));
+
 			delay = 16.5f / 8.f;
 			state = WAIT;
 		}
@@ -232,7 +236,7 @@ void Roxilla::move(glm::vec2 deltaPos, float deltaTime)
 	}
 }
 
-void Roxilla::kill()
+bool Roxilla::kill()
 {
 	// Down
 	if (sprite->animation() == MASKOFF && !dying)
@@ -245,7 +249,9 @@ void Roxilla::kill()
 		dying = true;
 		delay = 16.5f / 8.f;
 		if(sprite->animation() != DOWN) sprite->changeAnimation(DOWN);
+		return true;
 	}
+	return false;
 }
 
 vector<Attack*> Roxilla::getAttacks()

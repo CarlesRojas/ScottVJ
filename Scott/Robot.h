@@ -20,7 +20,7 @@ public:
 	virtual void render();
 	virtual void enemyIA(int deltaTime);
 	virtual void move(glm::vec2 deltaPos, float deltaTime);
-	virtual void kill();
+	virtual bool kill();
 	virtual vector<Attack*> getAttacks();
 
 	RobotState state;

@@ -1,6 +1,7 @@
 #include <GL/glew.h>
 #include <GL/glut.h>
 #include "Game.h"
+#include "Audio.h"
 
 //Remove console (only works in Visual Studio)
 #pragma comment(linker, "/subsystem:\"windows\" /entry:\"mainCRTStartup\"")
@@ -8,6 +9,7 @@
 
 static int prevTime;
 static Game game;
+static Audio audio;
 
 // If a key is pressed this callback is called
 static void keyboardDownCallback(unsigned char key, int x, int y)
@@ -63,7 +65,10 @@ static void idleCallback()
 	{
 		// Every time we enter here is equivalent to a game loop execution
 		if (!Game::instance().update(deltaTime)) 
+		{
+			audio.Shutdown();
 			exit(0);
+		}	
 		prevTime = currentTime;
 		glutPostRedisplay();
 	}
@@ -71,6 +76,9 @@ static void idleCallback()
 
 int main(int argc, char **argv)
 {
+	// Audio
+	Audio::instance().Init();
+
 	// GLUT initialization
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH);

@@ -46,7 +46,7 @@ public:
 	void setMouseKey(int key, bool set);
 
 	glm::mat4 projection;
-	bool theEnd, gameOver;
+	bool theEnd, gameOver, showOutlines;
 
 private:
 	void initShaders();

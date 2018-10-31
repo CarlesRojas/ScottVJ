@@ -14,13 +14,13 @@ Attack::~Attack()
 	if (sprite != NULL) delete sprite;
 }
 
-Attack * Attack::createAttack(Box::BoxOwner owner, glm::vec2 playerOrigin, glm::vec2 displacement, glm::vec2 size, float duration, float startDelay, float impactDelay, bool oneKillOnly, bool multiHits, glm::vec2 deltaPos)
+Attack * Attack::createAttack(Box::BoxOwner owner, glm::vec2 playerOrigin, glm::vec2 displacement, glm::vec2 size, float duration, float startDelay, float impactDelay, bool oneKillOnly, bool multiHits, glm::vec2 deltaPos, string hitSound)
 {
-	Attack *a = new Attack(owner, playerOrigin, displacement, size, duration, startDelay, impactDelay, oneKillOnly, multiHits, deltaPos);
+	Attack *a = new Attack(owner, playerOrigin, displacement, size, duration, startDelay, impactDelay, oneKillOnly, multiHits, deltaPos, hitSound);
 	return a;
 }
 
-Attack::Attack(Box::BoxOwner owner, glm::vec2 playerOrigin, glm::vec2 displacement, glm::vec2 size, float duration, float startDelay, float impactDelay, bool oneKillOnly, bool multiHits, glm::vec2 deltaPos)
+Attack::Attack(Box::BoxOwner owner, glm::vec2 playerOrigin, glm::vec2 displacement, glm::vec2 size, float duration, float startDelay, float impactDelay, bool oneKillOnly, bool multiHits, glm::vec2 deltaPos, string hitSound)
 {
 	this->sprite = NULL;
 	this->box = Box::createBox(owner, Box::ATTACK, playerOrigin + displacement, size);
@@ -38,6 +38,7 @@ Attack::Attack(Box::BoxOwner owner, glm::vec2 playerOrigin, glm::vec2 displaceme
 	this->playerHit = false;
 	this->deltaPos = deltaPos;
 	this->originBoxDispl = displacement;
+	this->hitSound = hitSound;
 }
 
 void Attack::update(int deltaTime)

@@ -1,6 +1,7 @@
 #include "Robot.h"
 #include "Physics.h"
 #include "Load.h"
+#include "Audio.h"
 
 Robot::Robot()
 {
@@ -219,6 +220,8 @@ void Robot::enemyIA(int deltaTime)
 	case Robot::TOASTING:
 		if (delay <= 0)
 		{
+			Audio::instance().PlaySounds("audio/robot_toast.wav", Vector3{ 0, 0, 0 }, Audio::instance().VolumeTodB(1.0f));
+
 			if (sprite->animation() != TOAST) sprite->changeAnimation(TOAST);
 			delay = 10.5f / 8.f;
 			state = WAIT;
@@ -364,6 +367,8 @@ void Robot::enemyIA(int deltaTime)
 
 			if (sprite->animation() != PUNCH) sprite->changeAnimation(PUNCH);
 			punch->activate(pos, flip);
+			Audio::instance().PlaySounds("audio/punch_air.wav", Vector3{ 0, 0, 0 }, Audio::instance().VolumeTodB(1.0f));
+
 			atkCooldownTimer = 3.f;
 			delay = 6.5f / 8.f;
 			state = WAIT;
@@ -386,6 +391,8 @@ void Robot::enemyIA(int deltaTime)
 			if (spriteLaser->animation() != LASER) spriteLaser->changeAnimation(LASER);
 
 			laser->activate(pos, flip);
+			Audio::instance().PlaySounds("audio/robot_laser.wav", Vector3{ 0, 0, 0 }, Audio::instance().VolumeTodB(1.0f));
+
 			atkCooldownTimer = 5.f;
 			delay = 15.5f / 8.f;
 			
@@ -462,7 +469,7 @@ void Robot::move(glm::vec2 deltaPos, float deltaTime)
 	}
 }
 
-void Robot::kill()
+bool Robot::kill()
 {
 	
 	// Down
@@ -482,6 +489,8 @@ void Robot::kill()
 		}
 		else
 		{
+			Audio::instance().PlaySounds("audio/robot_dead.wav", Vector3{ 0, 0, 0 }, Audio::instance().VolumeTodB(1.0f));
+
 			state = DEAD;
 			hitBox->active = false;
 			baseBox->active = false;
@@ -492,7 +501,9 @@ void Robot::kill()
 			delay = 16.5f / 8.f;
 			if (sprite->animation() != DYING) sprite->changeAnimation(DYING);
 		}
+		return true;
 	}
+	return false;
 }
 
 vector<Attack*> Robot::getAttacks()

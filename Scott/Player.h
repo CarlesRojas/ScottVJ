@@ -21,7 +21,7 @@ public:
 	void render();
 
 	void move(glm::vec2 deltaPos, float deltaTime);
-	void kill();
+	bool kill();
 	vector<Attack*> getAttacks();
 
 	Box *hitBox;
@@ -35,7 +35,7 @@ public:
 	Sprite *sprite;
 	glm::vec2 pos;
 	bool flip, fixAnim, fixPos, dying, reviving;
-	int hp;
+	int hp, character;
 
 protected:
 	virtual float getSpecialAttackDuration();

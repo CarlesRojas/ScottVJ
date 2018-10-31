@@ -9,8 +9,8 @@ class Attack
 public:
 	Attack();
 	~Attack();
-	static Attack * createAttack(Box::BoxOwner owner, glm::vec2 playerOrigin, glm::vec2 displacement, glm::vec2 size, float duration, float startDelay, float impactDelay, bool oneKillOnly, bool multiHits, glm::vec2 deltaPos);
-	Attack(Box::BoxOwner owner, glm::vec2 playerOrigin, glm::vec2 displacement, glm::vec2 size, float duration, float startDelay, float impactDelay, bool oneKillOnly, bool multiHits, glm::vec2 deltaPos);
+	static Attack * createAttack(Box::BoxOwner owner, glm::vec2 playerOrigin, glm::vec2 displacement, glm::vec2 size, float duration, float startDelay, float impactDelay, bool oneKillOnly, bool multiHits, glm::vec2 deltaPos, string hitSound = "audio/punch_hit.wav");
+	Attack(Box::BoxOwner owner, glm::vec2 playerOrigin, glm::vec2 displacement, glm::vec2 size, float duration, float startDelay, float impactDelay, bool oneKillOnly, bool multiHits, glm::vec2 deltaPos, string hitSound = "audio/punch_hit.wav");
 
 	void update(int deltaTime);
 	void render();
@@ -25,10 +25,10 @@ public:
 
 	Box *box;
 	bool playerHit;
+	string hitSound;
 
 private:
 	Sprite *sprite;
-
 
 	float duration, durationTimer, impactDelay, impactDelayTimer, startDelay, startDelayTimer;
 	bool multiHits, oneKillOnly, active, flipped;

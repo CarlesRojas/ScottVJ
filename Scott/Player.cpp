@@ -7,6 +7,7 @@
 #include "Scott.h"
 #include "Kim.h"
 #include "Ramona.h"
+#include "Audio.h"
 
 Player::Player()
 {
@@ -40,6 +41,7 @@ Player * Player::createPlayer(const int player, const glm::vec2 & initialPos, UI
 	{
 		Scott *s = new Scott();
 		s->init(initialPos, ui, windowHeight, program);
+		s->character = player;
 		return s;
 		break;
 	}
@@ -47,6 +49,7 @@ Player * Player::createPlayer(const int player, const glm::vec2 & initialPos, UI
 	{
 		Ramona *r = new Ramona();
 		r->init(initialPos, ui, windowHeight, program);
+		r->character = player;
 		return r;
 		break;
 	}
@@ -54,6 +57,7 @@ Player * Player::createPlayer(const int player, const glm::vec2 & initialPos, UI
 	{
 		Kim *k = new Kim();
 		k->init(initialPos, ui, windowHeight, program);
+		k->character = player;
 		return k;
 		break;
 	}
@@ -87,6 +91,10 @@ void Player::update(int deltaTime)
 				reviving = true;
 				delay = 9.5f / 8.f;
 				if(sprite->animation() != REVIVE) sprite->changeAnimation(REVIVE);
+				if(character == 0)
+					Audio::instance().PlaySounds("audio/tired_male.wav", Vector3{ 0, 0, 0 }, Audio::instance().VolumeTodB(1.0f));
+				else 
+					Audio::instance().PlaySounds("audio/tired_female.wav", Vector3{ 0, 0, 0 }, Audio::instance().VolumeTodB(1.0f));
 			}
 		}
 	}
@@ -120,6 +128,8 @@ void Player::update(int deltaTime)
 		{
 			if (punchType == 0)
 			{
+				Audio::instance().PlaySounds("audio/punch_air.wav", Vector3{ 0, 0, 0 }, Audio::instance().VolumeTodB(1.0f));
+				
 				punch0->activate(pos, flip);
 				delay = 3.5f / 8.f;
 				punchType = 1;
@@ -128,6 +138,8 @@ void Player::update(int deltaTime)
 			}
 			else if (punchType == 1)
 			{
+				Audio::instance().PlaySounds("audio/punch_air.wav", Vector3{ 0, 0, 0 }, Audio::instance().VolumeTodB(1.0f));
+
 				punch1->activate(pos, flip);
 				delay = 3.5f / 8.f;
 				punchType = 2;
@@ -136,6 +148,8 @@ void Player::update(int deltaTime)
 			}
 			else
 			{
+				Audio::instance().PlaySounds("audio/punch_air.wav", Vector3{ 0, 0, 0 }, Audio::instance().VolumeTodB(1.0f));
+
 				punch2->activate(pos, flip);
 				delay = getLastPunchDuration() / 8.f;
 				punchType = 0;
@@ -151,6 +165,7 @@ void Player::update(int deltaTime)
 		if (Game::instance().getKey('o') && sprite->animation() != SPIN && !fixAnim && ui->canSpin())
 		{
 			spin->activate(pos, flip);
+			Audio::instance().PlaySounds("audio/spin.wav", Vector3{ 0, 0, 0 }, Audio::instance().VolumeTodB(2.0f));
 
 			fixAnim = true;
 			delay = 16.5f / 8.f;
@@ -161,7 +176,10 @@ void Player::update(int deltaTime)
 		if (Game::instance().getKey('p') && sprite->animation() != SPECIAL && !fixAnim && ui->canSpecial())
 		{
 			special->activate(pos, flip);
-
+			if (character == 2)
+				Audio::instance().PlaySounds("audio/kim_monster.wav", Vector3{ 0, 0, 0 }, Audio::instance().VolumeTodB(1.0f));
+			else
+				Audio::instance().PlaySounds("audio/scott_ramona_fire.wav", Vector3{ 0, 0, 0 }, Audio::instance().VolumeTodB(1.0f));
 			fixAnim = true;
 			fixPos = true;
 			delay = getSpecialAttackDuration();
@@ -212,7 +230,7 @@ void Player::move(glm::vec2 deltaPos, float deltaTime)
 	}
 }
 
-void Player::kill()
+bool Player::kill()
 {
 	// Down
 	if (!dying && !reviving && sprite->animation() != DOWN && !fixAnim)
@@ -229,7 +247,9 @@ void Player::kill()
 		dying = true;
 		delay = 18.5f / 8.f;
 		sprite->changeAnimation(DOWN);
+		return true;
 	}
+	return false;
 }
 
 vector<Attack*> Player::getAttacks()

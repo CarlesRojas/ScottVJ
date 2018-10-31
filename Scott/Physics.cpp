@@ -3,6 +3,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include "Physics.h"
 #include "Load.h"
+#include "Audio.h"
 
 Physics::Physics()
 {
@@ -22,13 +23,11 @@ void Physics::init(ShaderProgram * texProgram)
 {
 	program = texProgram;
 
-	// Debug
 	Physics::instance().loadOutlineTextures();
 }
 
 void Physics::render()
 {
-	// Debug
 	Physics::instance().printBoxes(true);
 }
 
@@ -85,7 +84,8 @@ void Physics::attack(Attack * attack)
 			for (auto e : enemies)
 				if (overlap(e->hitBox, attack->box))
 				{
-					e->kill();
+					if(e->kill())
+						Audio::instance().PlaySounds(attack->hitSound, Vector3{ 0, 0, 0 }, Audio::instance().VolumeTodB(1.0f));
 					if (attack->entityHit()) break;
 				}
 		}
@@ -94,7 +94,8 @@ void Physics::attack(Attack * attack)
 			if (overlap(player->hitBox, attack->box))
 			{
 				attack->playerHit = true;
-				player->kill();
+				if (player->kill())
+					Audio::instance().PlaySounds(attack->hitSound, Vector3{ 0, 0, 0 }, Audio::instance().VolumeTodB(1.0f));
 			}
 		}
 	}

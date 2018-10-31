@@ -21,7 +21,7 @@ public:
 	virtual void enemyIA(int deltaTime);
 	virtual void move(glm::vec2 deltaPos, float deltaTime);
 	bool tp(glm::vec2 deltaPos);
-	virtual void kill();
+	virtual bool kill();
 	virtual vector<Attack*> getAttacks();
 
 	RoxanneState state;

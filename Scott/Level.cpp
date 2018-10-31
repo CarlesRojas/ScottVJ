@@ -150,8 +150,8 @@ void Level::render()
 		for (auto a : e->getAttacks())
 			a->render();
 
-	// Debug
-	Physics::instance().render();
+	
+	if(Game::instance().showOutlines) Physics::instance().render();
 
 	ui->render();
 }

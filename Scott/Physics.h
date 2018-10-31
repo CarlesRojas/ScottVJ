@@ -40,7 +40,6 @@ public:
 	vector<Enemy*> enemies;
 
 private:
-	// Debug
 	void loadOutlineTextures();
 	void printBoxes(bool printBackground);
 	GLuint vao, vbo;

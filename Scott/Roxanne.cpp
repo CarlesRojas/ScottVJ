@@ -1,6 +1,7 @@
 #include "Roxanne.h"
 #include "Physics.h"
 #include "Load.h"
+#include "Audio.h"
 
 Roxanne::Roxanne()
 {
@@ -348,6 +349,8 @@ void Roxanne::enemyIA(int deltaTime)
 			if (!tping) 
 			{
 				if (sprite->animation() != TP_DISAPPEAR) sprite->changeAnimation(TP_DISAPPEAR);
+				Audio::instance().PlaySounds("audio/roxanne_vanish.wav", Vector3{ 0, 0, 0 }, Audio::instance().VolumeTodB(1.0f));
+
 				delay = 17.5f / 8.f;
 				tping = true;
 			}
@@ -365,6 +368,8 @@ void Roxanne::enemyIA(int deltaTime)
 					tp(newPos - pos);
 				}
 				if (sprite->animation() != TP_APPEAR) sprite->changeAnimation(TP_APPEAR);
+				Audio::instance().PlaySounds("audio/roxanne_appear.wav", Vector3{ 0, 0, 0 }, Audio::instance().VolumeTodB(1.0f));
+
 				delay = 4.5f / 8.f; 
 				tping = false;
 				state = COMBO;
@@ -384,6 +389,8 @@ void Roxanne::enemyIA(int deltaTime)
 
 				if (sprite->animation() != ATK1) sprite->changeAnimation(ATK1);
 				atk1->activate(pos, flip);
+				Audio::instance().PlaySounds("audio/roxanne_sword.wav", Vector3{ 0, 0, 0 }, Audio::instance().VolumeTodB(1.0f));
+
 				delay = 4.5f / 8.f;
 				comboStage++;
 			}
@@ -395,6 +402,8 @@ void Roxanne::enemyIA(int deltaTime)
 
 				if (sprite->animation() != ATK2) sprite->changeAnimation(ATK2);
 				if (!atk1->playerHit) atk2->activate(pos, flip);
+				Audio::instance().PlaySounds("audio/roxanne_sword.wav", Vector3{ 0, 0, 0 }, Audio::instance().VolumeTodB(1.0f));
+
 				delay = 4.5f / 8.f;
 				comboStage++;
 			}
@@ -406,6 +415,8 @@ void Roxanne::enemyIA(int deltaTime)
 
 				if (sprite->animation() != ATK3) sprite->changeAnimation(ATK3);
 				if (!atk1->playerHit && !atk2->playerHit) atk3->activate(pos, flip);
+				Audio::instance().PlaySounds("audio/roxanne_sword.wav", Vector3{ 0, 0, 0 }, Audio::instance().VolumeTodB(1.0f));
+
 				delay = 4.5f / 8.f;
 				comboStage++;
 			}
@@ -417,6 +428,8 @@ void Roxanne::enemyIA(int deltaTime)
 
 				if (sprite->animation() != ATK4) sprite->changeAnimation(ATK4);
 				if (!atk1->playerHit && !atk2->playerHit && !atk3->playerHit) atk4->activate(pos, flip);
+				Audio::instance().PlaySounds("audio/roxanne_sword.wav", Vector3{ 0, 0, 0 }, Audio::instance().VolumeTodB(1.0f));
+
 				delay = 4.5f / 8.f;
 				comboStage++;
 			}
@@ -428,6 +441,8 @@ void Roxanne::enemyIA(int deltaTime)
 
 				if (sprite->animation() != ATK5) sprite->changeAnimation(ATK5);
 				if (!atk1->playerHit && !atk2->playerHit && !atk3->playerHit && !atk4->playerHit) atk5->activate(pos, flip);
+				Audio::instance().PlaySounds("audio/roxanne_sword.wav", Vector3{ 0, 0, 0 }, Audio::instance().VolumeTodB(1.0f));
+
 				delay = 4.5f / 8.f;
 				comboStage++;
 			}
@@ -448,6 +463,8 @@ void Roxanne::enemyIA(int deltaTime)
 			{
 				if (sprite->animation() != NONE) sprite->changeAnimation(NONE);
 				if (spriteSword->animation() != SWORD) spriteSword->changeAnimation(SWORD);
+				Audio::instance().PlaySounds("audio/roxanne_sword.wav", Vector3{ 0, 0, 0 }, Audio::instance().VolumeTodB(1.0f));
+
 				delay = 2.5f / 8.f;
 				comboStage++;
 			}
@@ -473,6 +490,8 @@ void Roxanne::enemyIA(int deltaTime)
 		if (delay <= 0)
 		{
 			if (sprite->animation() != TIRED) sprite->changeAnimation(TIRED);
+			Audio::instance().PlaySounds("audio/tired_female.wav", Vector3{ 0, 0, 0 }, Audio::instance().VolumeTodB(1.0f));
+
 			delay = 2.f;
 			state = WAIT;
 		}
@@ -494,7 +513,6 @@ void Roxanne::enemyIA(int deltaTime)
 		break;
 	}
 }
-
 
 void Roxanne::move(glm::vec2 deltaPos, float deltaTime)
 {
@@ -553,7 +571,7 @@ bool Roxanne::tp(glm::vec2 deltaPos)
 	return true;
 }
 
-void Roxanne::kill()
+bool Roxanne::kill()
 {
 
 	// Down
@@ -592,8 +610,11 @@ void Roxanne::kill()
 			dying = true;
 			delay = 30.5f / 8.f;
 			if (sprite->animation() != DYING) sprite->changeAnimation(DYING);
+			Audio::instance().PlaySounds("audio/roxanne_die_explosion.wav", Vector3{ 0, 0, 0 }, Audio::instance().VolumeTodB(1.0f));
 		}
+		return true;
 	}
+	return false;
 }
 
 vector<Attack*> Roxanne::getAttacks()

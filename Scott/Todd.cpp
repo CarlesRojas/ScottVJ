@@ -1,6 +1,7 @@
 #include "Todd.h"
 #include "Physics.h"
 #include "Load.h"
+#include "Audio.h"
 
 Todd::Todd()
 {
@@ -227,7 +228,7 @@ void Todd::init(const glm::vec2 & initialPos, const int windowHeight, ShaderProg
 	mutantSprite->addKeyframe(NONE_MUTANT, glm::vec2(4 * .2f, 5 / 6.f));
 
 	// Add Boxes
-	hitBox = Box::createBox(Box::ENEMY, Box::HIT, pos, glm::vec2(38 * scaleFactor, 53 * scaleFactor));
+	hitBox = Box::createBox(Box::ENEMY, Box::HIT, pos, glm::vec2(38 * scaleFactor, 100 * scaleFactor));
 	baseBox = Box::createBox(Box::ENEMY, Box::BASE, pos, glm::vec2(38 * scaleFactor, 10 * scaleFactor));
 	atk1 = Attack::createAttack(Box::ENEMY, pos, glm::vec2(12 * scaleFactor, -25 * scaleFactor), glm::vec2(92 * scaleFactor, 66 * scaleFactor), 9.5f / 8.f, 0, 4.5f / 8.f, false, false, glm::vec2(0, 0));
 	atk2 = Attack::createAttack(Box::ENEMY, pos, glm::vec2(0.f), glm::vec2(270 * scaleFactor, 120 * scaleFactor), 17.5f / 8.f, 0, 14.5f / 8.f, false, false, glm::vec2(0, 0));
@@ -255,7 +256,6 @@ void Todd::init(const glm::vec2 & initialPos, const int windowHeight, ShaderProg
 	random.seed(random_device()());
 }
 
-
 void Todd::update(int deltaTime)
 {
 	sprite->update(deltaTime);
@@ -279,7 +279,6 @@ void Todd::render()
 	sprite->render(flip);
 	mutantSprite->render(flip);
 }
-
 
 void Todd::enemyIA(int deltaTime)
 {
@@ -505,6 +504,8 @@ void Todd::enemyIA(int deltaTime)
 
 			if (sprite->animation() != PUNCH) sprite->changeAnimation(PUNCH);
 			atk1->activate(pos, flip);
+			Audio::instance().PlaySounds("audio/punch_air.wav", Vector3{ 0, 0, 0 }, Audio::instance().VolumeTodB(1.0f));
+
 			atkCooldownTimer = 2.f;
 			delay = 9.5f / 8.f;
 			state = WAIT;
@@ -520,6 +521,7 @@ void Todd::enemyIA(int deltaTime)
 				if (playerPos.x > pos.x && flip) flip = false;
 
 				if (sprite->animation() != EXPLOSION_START) sprite->changeAnimation(EXPLOSION_START);
+				Audio::instance().PlaySounds("audio/todd_chord.wav", Vector3{ 0, 0, 0 }, Audio::instance().VolumeTodB(1.0f));
 
 				atk2->activate(pos, flip);
 				delay = 12.5f / 8.f;
@@ -555,6 +557,7 @@ void Todd::enemyIA(int deltaTime)
 				if (playerPos.x > pos.x && flip) flip = false;
 
 				if (sprite->animation() != ARM_START) sprite->changeAnimation(ARM_START);
+				Audio::instance().PlaySounds("audio/todd_arm.wav", Vector3{ 0, 0, 0 }, Audio::instance().VolumeTodB(1.0f));
 
 				atk3->activate(pos, flip);
 				delay = 19.5f / 8.f;
@@ -572,6 +575,7 @@ void Todd::enemyIA(int deltaTime)
 			{
 				if (sprite->animation() != ARM_END) sprite->changeAnimation(ARM_END);
 				if (mutantSprite->animation() != NONE_MUTANT) mutantSprite->changeAnimation(NONE_MUTANT);
+				Audio::instance().PlaySounds("audio/tired_male.wav", Vector3{ 0, 0, 0 }, Audio::instance().VolumeTodB(1.0f));
 
 				delay = 10.5f / 8.f;
 				armStage++;
@@ -623,7 +627,6 @@ void Todd::enemyIA(int deltaTime)
 	}
 }
 
-
 void Todd::move(glm::vec2 deltaPos, float deltaTime)
 {
 	if (sprite->animation() != WALK && !fixAnim) sprite->changeAnimation(WALK);
@@ -647,7 +650,7 @@ void Todd::move(glm::vec2 deltaPos, float deltaTime)
 	}
 }
 
-void Todd::kill()
+bool Todd::kill()
 {
 
 	// Down
@@ -680,7 +683,9 @@ void Todd::kill()
 			atk3->box->active = false;
 			fixAnim = true;
 		}
+		return true;
 	}
+	return false;
 }
 
 vector<Attack*> Todd::getAttacks()

@@ -14,7 +14,7 @@ public:
 	~Turret();
 	virtual void init(const glm::vec2 & initialPos, const int windowHeight, ShaderProgram * shaderProgram);
 	virtual void enemyIA(int deltaTime);
-	virtual void kill();
+	virtual bool kill();
 	virtual vector<Attack*> getAttacks();
 
 	TurretState state;

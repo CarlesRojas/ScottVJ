@@ -2,6 +2,7 @@
 #include <GL/glew.h>
 #include <GL/glut.h>
 #include "Game.h"
+#include "Audio.h"
 #include <glm/gtc/matrix_transform.hpp>
 
 Game::Game()
@@ -23,12 +24,16 @@ void Game::init()
 	currentTime = 0.0f;
 	initShaders();
 	theEnd = gameOver = false;
+	showOutlines = false;
 	
 	Load::instance().init();
 	Camera::instance().init(glm::vec2(SCREEN_WIDTH, SCREEN_HEIGHT), glm::vec2(SCREEN_WIDTH, SCREEN_HEIGHT));
 	Physics::instance().init(&program);
 
 	state = Game::MAIN;
+	Audio::instance().LoadSound("audio/menu.wav",false, true);
+	Audio::instance().PlaySounds("audio/menu.wav", Vector3{ 0, 0, 0 }, Audio::instance().VolumeTodB(0.25f));
+	
 	Game::instance().setKey(' ', false);
 	screen = Screen::createScreen(0, glm::vec2(SCREEN_WIDTH, SCREEN_HEIGHT), &program);
 	screen->screen->changeAnimation(Screen::S_MAIN);
@@ -38,6 +43,12 @@ void Game::init()
 
 bool Game::update(int deltaTime)
 {
+	if (Game::instance().getKey('t'))
+	{
+		Game::instance().setKey('t', false);
+		showOutlines = !showOutlines;
+	}
+
 	currentTime += deltaTime;
 
 	if ((state == LVL0 || state == LVL1 || state == LVL2) && level != NULL) 
@@ -55,12 +66,12 @@ bool Game::update(int deltaTime)
 	case Game::MAIN:
 		if (Game::instance().getKey(' '))
 		{
+			Audio::instance().PlaySounds("audio/menu_accept.wav", Vector3{ 0, 0, 0 }, Audio::instance().VolumeTodB(1.0f));
 			Game::instance().setKey(' ', false);
 			screen->screen->changeAnimation(Screen::S_TRIA_SCOTT);
 			screen->message->changeAnimation(Screen::M_PLAY);
 			screen->difficulty->changeAnimation(Screen::D_EASY);
 			state = CHOOSE;
-			Game::instance().setKey(' ', false);
 		}
 
 		break;
@@ -69,6 +80,7 @@ bool Game::update(int deltaTime)
 		// Right
 		if (Game::instance().getKey('d'))
 		{
+			Audio::instance().PlaySounds("audio/menu_change.wav", Vector3{ 0, 0, 0 }, Audio::instance().VolumeTodB(1.0f));
 			Game::instance().setKey('d', false);
 			if (screen->screen->animation() == Screen::S_TRIA_SCOTT)
 				screen->screen->changeAnimation(Screen::S_TRIA_RAMONA);
@@ -81,6 +93,7 @@ bool Game::update(int deltaTime)
 		// Left
 		else if (Game::instance().getKey('a'))
 		{
+			Audio::instance().PlaySounds("audio/menu_change.wav", Vector3{ 0, 0, 0 }, Audio::instance().VolumeTodB(1.0f));
 			Game::instance().setKey('a', false);
 			if (screen->screen->animation() == Screen::S_TRIA_SCOTT)
 				screen->screen->changeAnimation(Screen::S_TRIA_KIM);
@@ -93,6 +106,7 @@ bool Game::update(int deltaTime)
 		// Up || Down
 		else if (Game::instance().getKey('w') || Game::instance().getKey('s'))
 		{
+			Audio::instance().PlaySounds("audio/menu_change.wav", Vector3{ 0, 0, 0 }, Audio::instance().VolumeTodB(1.0f));
 			Game::instance().setKey('w', false);
 			Game::instance().setKey('s', false);
 			if (screen->difficulty->animation() == Screen::D_EASY)
@@ -103,6 +117,13 @@ bool Game::update(int deltaTime)
 
 		if (Game::instance().getKey(' '))
 		{
+			Audio::instance().PlaySounds("audio/menu_accept.wav", Vector3{ 0, 0, 0 }, Audio::instance().VolumeTodB(1.0f));
+			
+			Audio::instance().UnLoadSound("audio/victory.wav");
+			Audio::instance().UnLoadSound("audio/menu.wav");
+			Audio::instance().LoadSound("audio/lvl0.wav", false, true);
+			Audio::instance().PlaySounds("audio/lvl0.wav", Vector3{ 0, 0, 0 }, Audio::instance().VolumeTodB(0.25f));
+
 			Game::instance().setKey(' ', false);
 			if (screen->screen->animation() == Screen::S_TRIA_SCOTT) player = 0;
 			else if (screen->screen->animation() == Screen::S_TRIA_RAMONA) player = 1;
@@ -126,7 +147,10 @@ bool Game::update(int deltaTime)
 			theEnd = gameOver = false;
 			Physics::instance().reset();
 			level = Level::createLevel(player, hardDifficulty, 1, &program);
-			state = LVL1;
+			state = LVL1; 
+			Audio::instance().UnLoadSound("audio/lvl0.wav");
+			Audio::instance().LoadSound("audio/lvl1.wav", false, true);
+			Audio::instance().PlaySounds("audio/lvl1.wav", Vector3{ 0, 0, 0 }, Audio::instance().VolumeTodB(0.25f));
 		}
 		if (gameOver)
 		{
@@ -141,6 +165,9 @@ bool Game::update(int deltaTime)
 			screen->difficulty->changeAnimation(Screen::D_NONE);
 			state = GAMEOVER;
 			Game::instance().setKey(' ', false);
+			Audio::instance().UnLoadSound("audio/lvl0.wav");
+			Audio::instance().LoadSound("audio/menu.wav", false, true);
+			Audio::instance().PlaySounds("audio/menu.wav", Vector3{ 0, 0, 0 }, Audio::instance().VolumeTodB(0.25f));
 		}
 		break;
 	case Game::LVL1:
@@ -150,6 +177,9 @@ bool Game::update(int deltaTime)
 			Physics::instance().reset();
 			level = Level::createLevel(player, hardDifficulty, 2, &program);
 			state = LVL2;
+			Audio::instance().UnLoadSound("audio/lvl1.wav");
+			Audio::instance().LoadSound("audio/lvl2.wav", false, true);
+			Audio::instance().PlaySounds("audio/lvl2.wav", Vector3{ 0, 0, 0 }, Audio::instance().VolumeTodB(0.25f));
 		}
 		if (gameOver)
 		{
@@ -164,6 +194,9 @@ bool Game::update(int deltaTime)
 			screen->difficulty->changeAnimation(Screen::D_NONE);
 			state = GAMEOVER;
 			Game::instance().setKey(' ', false);
+			Audio::instance().UnLoadSound("audio/lvl1.wav");
+			Audio::instance().LoadSound("audio/menu.wav", false, true);
+			Audio::instance().PlaySounds("audio/menu.wav", Vector3{ 0, 0, 0 }, Audio::instance().VolumeTodB(0.25f));
 		}
 		break;
 	case Game::LVL2:
@@ -177,6 +210,10 @@ bool Game::update(int deltaTime)
 			screen->difficulty->changeAnimation(Screen::D_NONE);
 			state = THEEND;
 			Game::instance().setKey(' ', false);
+
+			Audio::instance().UnLoadSound("audio/lvl2.wav");
+			Audio::instance().LoadSound("audio/victory.wav", false, true);
+			Audio::instance().PlaySounds("audio/victory.wav", Vector3{ 0, 0, 0 }, Audio::instance().VolumeTodB(0.25f));
 		}
 		if (gameOver)
 		{
@@ -191,11 +228,15 @@ bool Game::update(int deltaTime)
 			screen->difficulty->changeAnimation(Screen::D_NONE);
 			state = GAMEOVER;
 			Game::instance().setKey(' ', false);
+			Audio::instance().UnLoadSound("audio/lvl2.wav");
+			Audio::instance().LoadSound("audio/menu.wav", false, true);
+			Audio::instance().PlaySounds("audio/menu.wav", Vector3{ 0, 0, 0 }, Audio::instance().VolumeTodB(0.25f));
 		}
 		break;
 	case Game::GAMEOVER:
 		if (Game::instance().getKey(' '))
 		{
+			Audio::instance().PlaySounds("audio/menu_accept.wav", Vector3{ 0, 0, 0 }, Audio::instance().VolumeTodB(1.0f));
 			Game::instance().setKey(' ', false);
 			screen->screen->changeAnimation(Screen::S_MAIN);
 			screen->message->changeAnimation(Screen::M_START);
@@ -207,6 +248,7 @@ bool Game::update(int deltaTime)
 	case Game::THEEND:
 		if (Game::instance().getKey(' '))
 		{
+			Audio::instance().PlaySounds("audio/menu_accept.wav", Vector3{ 0, 0, 0 }, Audio::instance().VolumeTodB(1.0f));
 			Game::instance().setKey(' ', false);
 			screen->screen->changeAnimation(Screen::S_MAIN);
 			screen->message->changeAnimation(Screen::M_START);

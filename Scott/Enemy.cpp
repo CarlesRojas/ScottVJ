@@ -97,7 +97,7 @@ void Enemy::enemyIA(int deltaTime) { }
 
 void Enemy::move(glm::vec2 deltaPos, float deltaTime) { }
 
-void Enemy::kill() { }
+bool Enemy::kill() { return false; }
 
 vector<Attack*> Enemy::getAttacks() { return vector<Attack*>(); }
 
