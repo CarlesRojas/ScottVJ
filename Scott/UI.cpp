@@ -1,6 +1,7 @@
 #include "UI.h"
 #include <glm/gtc/matrix_transform.hpp>
 #include "Load.h"
+#include "Camera.h"
 
 UI::UI()
 {
@@ -561,6 +562,7 @@ void UI::showBossIntro()
 {
 	if (!showingBossIntro)
 	{
+		Camera::instance().boss();
 		showingBossIntro = true;
 		introStage = 0;
 		introDelay = -1;

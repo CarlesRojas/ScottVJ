@@ -82,7 +82,6 @@ void Player::update(int deltaTime)
 		if (dying)
 		{
 			dying = false;
-			ui->changeHP(hp);
 			if (hp > 0)
 			{
 				reviving = true;
@@ -225,6 +224,7 @@ void Player::kill()
 		special->deactivate();
 
 		--hp;
+		ui->changeHP(hp);
 		fixAnim = true;
 		dying = true;
 		delay = 18.5f / 8.f;

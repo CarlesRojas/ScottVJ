@@ -10,17 +10,33 @@ void Camera::init(glm::vec2 windowSize, glm::vec2 backgroundSize)
 	halfWidth = winSize.x / 2.f;
 	maxX = halfWidth / 2.f;
 	projection = glm::ortho(0.f, float(winSize.x - 1), float(winSize.y - 1), 0.f);
+	bossMove = false;
+	speed = 1500.f;
 }
 
 void Camera::update(int deltaTime, glm::vec2 playerPos)
 {
-	if (playerPos.x - pos.x > maxX) pos.x = playerPos.x - maxX;
-	else if (pos.x - playerPos.x > maxX) pos.x = playerPos.x + maxX;
+	if (bossMove)
+	{
+		if(pos.x < finalBossPos) pos.x += speed * (deltaTime / 1000.f);
+		else bossMove = false;
+	}
+	else
+	{
+		if (playerPos.x - pos.x > maxX) pos.x = playerPos.x - maxX;
+		else if (pos.x - playerPos.x > maxX) pos.x = playerPos.x + maxX;
 
-	if (pos.x < halfWidth) pos.x = winSize.x / 2.f;
-	if (pos.x > bgSize.x - halfWidth) pos.x = bgSize.x - halfWidth;
+		if (pos.x < halfWidth) pos.x = winSize.x / 2.f;
+		if (pos.x > bgSize.x - halfWidth) pos.x = bgSize.x - halfWidth;
+	}
 
 	projection = glm::ortho((float)pos.x - halfWidth, (float)pos.x + halfWidth, float(winSize.y - 1), 0.f);
+}
+
+void Camera::boss()
+{
+	bossMove = true;
+	finalBossPos = pos.x + winSize.x * 0.75f;
 }
 
 glm::mat4 Camera::getProjectionMatrix()

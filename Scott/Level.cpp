@@ -39,7 +39,6 @@ Level::Level(int character, bool hardDifficulty, int lvl, ShaderProgram * progra
 	this->character = character;
 	float scaleFactor = SCREEN_HEIGHT / 256.f;
 	
-	//Load::instance().load(lvl);
 	layout = loadLevel("levels/lvl" + to_string(lvl) + ".txt", hardDifficulty);
 
 	// Physics
@@ -55,23 +54,23 @@ Level::Level(int character, bool hardDifficulty, int lvl, ShaderProgram * progra
 	Game::instance().projection = Camera::instance().getProjectionMatrix();
 
 	// Player
-	player = Player::createPlayer(character, glm::vec2(SCREEN_WIDTH / 4, 3 * SCREEN_HEIGHT / 4), ui, SCREEN_HEIGHT, program);
+	player = Player::createPlayer(character, glm::vec2(SCREEN_WIDTH / 4, 3.5f * SCREEN_HEIGHT / 4), ui, SCREEN_HEIGHT, program);
 	Physics::instance().player = player;
 
 	// Boss
 	if (lvl == 0)
 	{
-		enemies.push_back(Enemy::createEnemy(3, glm::vec2(background->getSize().x - SCREEN_WIDTH, 3 * SCREEN_HEIGHT / 4), SCREEN_HEIGHT, program));
+		enemies.push_back(Enemy::createEnemy(3, glm::vec2(background->getSize().x - 2 * SCREEN_WIDTH / 3.f, 3.5f * SCREEN_HEIGHT / 4), SCREEN_HEIGHT, program));
 		Physics::instance().enemies.push_back(enemies[enemies.size() - 1]);
 	}
 	else if (lvl == 1) 
 	{
-		enemies.push_back(Enemy::createEnemy(4, glm::vec2(background->getSize().x - SCREEN_WIDTH, 3 * SCREEN_HEIGHT / 4), SCREEN_HEIGHT, program));
+		enemies.push_back(Enemy::createEnemy(4, glm::vec2(background->getSize().x - 2 * SCREEN_WIDTH / 3.f, 3.5f * SCREEN_HEIGHT / 4), SCREEN_HEIGHT, program));
 		Physics::instance().enemies.push_back(enemies[enemies.size() - 1]);
 	}
 	else 
 	{
-		enemies.push_back(Enemy::createEnemy(5, glm::vec2(background->getSize().x - SCREEN_WIDTH / 2.f, 3 * SCREEN_HEIGHT / 4), SCREEN_HEIGHT, program));
+		enemies.push_back(Enemy::createEnemy(5, glm::vec2(background->getSize().x - 2 * SCREEN_WIDTH / 3.f, 3.5f * SCREEN_HEIGHT / 4), SCREEN_HEIGHT, program));
 		Physics::instance().enemies.push_back(enemies[enemies.size() - 1]);
 	}
 	
@@ -105,7 +104,9 @@ void Level::update(int deltaTime)
 			delete enemies[i];
 			enemies.erase(enemies.begin() + i);
 			Physics::instance().enemies.erase(Physics::instance().enemies.begin() + i);
-			if (isBoss) theEnd();
+			if (isBoss)
+				theEnd();
+			i--;
 		}
 	}
 
@@ -121,7 +122,7 @@ void Level::update(int deltaTime)
 	if (player->hp <= 0) gameOver();
 
 	// Show boss intro when it is active
-	if (enemies[0] != NULL && enemies[0]->active) { enemies[0]->active = false; ui->showBossIntro(); }
+	if ((int)enemies.size() > 0 && enemies[0] != NULL && enemies[0]->active) { enemies[0]->active = false; ui->showBossIntro(); }
 }
 
 void Level::render()
@@ -192,12 +193,10 @@ vector< vector<char> > Level::loadLevel(const string &levelFile, bool hard)
 
 void Level::gameOver()
 {
-	//Load::instance().unload();
 	Game::instance().gameOver = true;
 }
 
 void Level::theEnd()
 {
-	//Load::instance().unload();
 	Game::instance().theEnd = true;
 }

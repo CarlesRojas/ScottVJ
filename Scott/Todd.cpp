@@ -25,7 +25,7 @@ void Todd::init(const glm::vec2 & initialPos, const int windowHeight, ShaderProg
 	flip = true;
 	isBoss = true;
 	speed = (int)(45 * scaleFactor);
-	hp = 5; 
+	hp = 4; 
 	deadStage = 0;
 
 	sprite = Sprite::createSprite(true, glm::vec2(256.f * scaleFactor, 256.f * scaleFactor), glm::vec2(0.05, 0.1f), &Load::instance().todd, shaderProgram);
@@ -181,7 +181,7 @@ void Todd::init(const glm::vec2 & initialPos, const int windowHeight, ShaderProg
 	sprite->addKeyframe(DYING_START, glm::vec2(18 * 0.05f, 6 * 0.1f));
 
 	sprite->setAnimationSpeed(NONE, 8);
-	sprite->addKeyframe(NONE, glm::vec2(9 * 0.05f, 9 * 0.1f));
+	sprite->addKeyframe(NONE, glm::vec2(9 * 0.05f, 19 * 0.1f));
 
 	// Sprite Laser
 	mutantSprite = Sprite::createSprite(true, glm::vec2(768.f * scaleFactor, 320.f * scaleFactor), glm::vec2(.2f, 1 / 6.f), &Load::instance().toddMutant, shaderProgram);
@@ -240,7 +240,7 @@ void Todd::init(const glm::vec2 & initialPos, const int windowHeight, ShaderProg
 	mutantSprite->setPosition(pos);
 
 	state = INACTIVE;
-	alertRange = (int)windowHeight;
+	alertRange = (int)(windowHeight * 1.5f);
 
 	minAttackRange = glm::vec2(30.f * scaleFactor, 70.f * scaleFactor);
 	maxAttackRange = glm::vec2(55.f * scaleFactor, -15.f * scaleFactor);
@@ -306,7 +306,7 @@ void Todd::enemyIA(int deltaTime)
 		if (delay <= 0)
 		{
 			if (sprite->animation() != FINGER) sprite->changeAnimation(FINGER);
-			delay = 2.f;
+			delay = 3.f;
 			state = WAIT;
 		}
 		break;
@@ -658,7 +658,6 @@ void Todd::kill()
 		sprite->animation() != EXPLOSION_START &&
 		sprite->animation() != EXPLOSION_END &&
 		sprite->animation() != ARM_START &&
-		sprite->animation() != ARM_END &&
 		mutantSprite->animation() != EXPLOSION &&
 		mutantSprite->animation() != ARM &&
 		mutantSprite->animation() != DYING &&

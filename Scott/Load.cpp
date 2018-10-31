@@ -83,83 +83,58 @@ void Load::init()
 	kim.setWrapT(GL_CLAMP_TO_EDGE);
 	kim.setMinFilter(GL_NEAREST);
 	kim.setMagFilter(GL_NEAREST);
-}
 
-void Load::load(int lvl)
-{
-	if (lvl == 0) 
-	{
-		lvl0.loadFromFile("sprites/background/lvl0.png", TEXTURE_PIXEL_FORMAT_RGBA);
-		lvl0.setWrapS(GL_CLAMP_TO_EDGE);
-		lvl0.setWrapT(GL_CLAMP_TO_EDGE);
-		lvl0.setMinFilter(GL_NEAREST);
-		lvl0.setMagFilter(GL_NEAREST);
+	lvl0.loadFromFile("sprites/background/lvl0.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	lvl0.setWrapS(GL_CLAMP_TO_EDGE);
+	lvl0.setWrapT(GL_CLAMP_TO_EDGE);
+	lvl0.setMinFilter(GL_NEAREST);
+	lvl0.setMagFilter(GL_NEAREST);
 
-		roxanne.loadFromFile("sprites/roxanne/roxanne_256.png", TEXTURE_PIXEL_FORMAT_RGBA);
-		roxanne.setWrapS(GL_CLAMP_TO_EDGE);
-		roxanne.setWrapT(GL_CLAMP_TO_EDGE);
-		roxanne.setMinFilter(GL_NEAREST);
-		roxanne.setMagFilter(GL_NEAREST);
+	roxanne.loadFromFile("sprites/roxanne/roxanne_256.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	roxanne.setWrapS(GL_CLAMP_TO_EDGE);
+	roxanne.setWrapT(GL_CLAMP_TO_EDGE);
+	roxanne.setMinFilter(GL_NEAREST);
+	roxanne.setMagFilter(GL_NEAREST);
 
-		roxanneWhip.loadFromFile("sprites/roxanne/roxanne_512x128.png", TEXTURE_PIXEL_FORMAT_RGBA);
-		roxanneWhip.setWrapS(GL_CLAMP_TO_EDGE);
-		roxanneWhip.setWrapT(GL_CLAMP_TO_EDGE);
-		roxanneWhip.setMinFilter(GL_NEAREST);
-		roxanneWhip.setMagFilter(GL_NEAREST);
-	}
-	else if (lvl == 1)
-	{
-		lvl1.loadFromFile("sprites/background/lvl1.png", TEXTURE_PIXEL_FORMAT_RGBA);
-		lvl1.setWrapS(GL_CLAMP_TO_EDGE);
-		lvl1.setWrapT(GL_CLAMP_TO_EDGE);
-		lvl1.setMinFilter(GL_NEAREST);
-		lvl1.setMagFilter(GL_NEAREST);
+	roxanneWhip.loadFromFile("sprites/roxanne/roxanne_512x128.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	roxanneWhip.setWrapS(GL_CLAMP_TO_EDGE);
+	roxanneWhip.setWrapT(GL_CLAMP_TO_EDGE);
+	roxanneWhip.setMinFilter(GL_NEAREST);
+	roxanneWhip.setMagFilter(GL_NEAREST);
 
-		robot.loadFromFile("sprites/robot/robot_256.png", TEXTURE_PIXEL_FORMAT_RGBA);
-		robot.setWrapS(GL_CLAMP_TO_EDGE);
-		robot.setWrapT(GL_CLAMP_TO_EDGE);
-		robot.setMinFilter(GL_NEAREST);
-		robot.setMagFilter(GL_NEAREST);
+	lvl1.loadFromFile("sprites/background/lvl1.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	lvl1.setWrapS(GL_CLAMP_TO_EDGE);
+	lvl1.setWrapT(GL_CLAMP_TO_EDGE);
+	lvl1.setMinFilter(GL_NEAREST);
+	lvl1.setMagFilter(GL_NEAREST);
 
-		robotLaser.loadFromFile("sprites/robot/robot_laser_1024x64.png", TEXTURE_PIXEL_FORMAT_RGBA);
-		robotLaser.setWrapS(GL_CLAMP_TO_EDGE);
-		robotLaser.setWrapT(GL_CLAMP_TO_EDGE);
-		robotLaser.setMinFilter(GL_NEAREST);
-		robotLaser.setMagFilter(GL_NEAREST);
-	}
-	else
-	{
-		lvl2.loadFromFile("sprites/background/lvl2.png", TEXTURE_PIXEL_FORMAT_RGBA);
-		lvl2.setWrapS(GL_CLAMP_TO_EDGE);
-		lvl2.setWrapT(GL_CLAMP_TO_EDGE);
-		lvl2.setMinFilter(GL_NEAREST);
-		lvl2.setMagFilter(GL_NEAREST);
+	robot.loadFromFile("sprites/robot/robot_256.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	robot.setWrapS(GL_CLAMP_TO_EDGE);
+	robot.setWrapT(GL_CLAMP_TO_EDGE);
+	robot.setMinFilter(GL_NEAREST);
+	robot.setMagFilter(GL_NEAREST);
 
-		todd.loadFromFile("sprites/todd/todd_256.png", TEXTURE_PIXEL_FORMAT_RGBA);
-		todd.setWrapS(GL_CLAMP_TO_EDGE);
-		todd.setWrapT(GL_CLAMP_TO_EDGE);
-		todd.setMinFilter(GL_NEAREST);
-		todd.setMagFilter(GL_NEAREST);
+	robotLaser.loadFromFile("sprites/robot/robot_laser_1024x64.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	robotLaser.setWrapS(GL_CLAMP_TO_EDGE);
+	robotLaser.setWrapT(GL_CLAMP_TO_EDGE);
+	robotLaser.setMinFilter(GL_NEAREST);
+	robotLaser.setMagFilter(GL_NEAREST);
 
-		toddMutant.loadFromFile("sprites/todd/todd768x320.png", TEXTURE_PIXEL_FORMAT_RGBA);
-		toddMutant.setWrapS(GL_CLAMP_TO_EDGE);
-		toddMutant.setWrapT(GL_CLAMP_TO_EDGE);
-		toddMutant.setMinFilter(GL_NEAREST);
-		toddMutant.setMagFilter(GL_NEAREST);
-	}
+	lvl2.loadFromFile("sprites/background/lvl2.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	lvl2.setWrapS(GL_CLAMP_TO_EDGE);
+	lvl2.setWrapT(GL_CLAMP_TO_EDGE);
+	lvl2.setMinFilter(GL_NEAREST);
+	lvl2.setMagFilter(GL_NEAREST);
 
-}
+	todd.loadFromFile("sprites/todd/todd_256.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	todd.setWrapS(GL_CLAMP_TO_EDGE);
+	todd.setWrapT(GL_CLAMP_TO_EDGE);
+	todd.setMinFilter(GL_NEAREST);
+	todd.setMagFilter(GL_NEAREST);
 
-void Load::unload()
-{
-	lvl0.unload();
-	lvl1.unload();
-	lvl2.unload();
-
-	robot.unload();
-	robotLaser.unload();
-	roxanne.unload();
-	roxanneWhip.unload();
-	todd.unload();
-	toddMutant.unload();
+	toddMutant.loadFromFile("sprites/todd/todd768x320.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	toddMutant.setWrapS(GL_CLAMP_TO_EDGE);
+	toddMutant.setWrapT(GL_CLAMP_TO_EDGE);
+	toddMutant.setMinFilter(GL_NEAREST);
+	toddMutant.setMagFilter(GL_NEAREST);
 }

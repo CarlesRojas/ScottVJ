@@ -16,8 +16,6 @@ public:
 	void operator=(Load const&) = delete;
 
 	void init();
-	void load(int lvl);
-	void unload();
 
 	Texture screens;
 	Texture boss;

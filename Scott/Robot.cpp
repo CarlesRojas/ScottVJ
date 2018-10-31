@@ -23,7 +23,7 @@ void Robot::init(const glm::vec2 & initialPos, const int windowHeight, ShaderPro
 	flip = true;
 	isBoss = true;
 	speed = (int)(45 * scaleFactor);
-	hp = 1;
+	hp = 4;
 
 	sprite = Sprite::createSprite(true, glm::vec2(256.f * scaleFactor, 256.f * scaleFactor), glm::vec2(0.05, 0.1f), &Load::instance().robot, shaderProgram);
 	sprite->setNumberAnimations(8);
@@ -120,7 +120,7 @@ void Robot::init(const glm::vec2 & initialPos, const int windowHeight, ShaderPro
 	sprite->addKeyframe(DYING, glm::vec2(15 * 0.05f, 15 * 0.1f));
 
 	sprite->setAnimationSpeed(NONE, 8);
-	sprite->addKeyframe(NONE, glm::vec2(9 * 0.05f, 9 * 0.1f));
+	sprite->addKeyframe(NONE, glm::vec2(9 * 0.05f, 19 * 0.1f));
 
 	// Sprite Laser
 	spriteLaser = Sprite::createSprite(true, glm::vec2(1024.f * scaleFactor, 64.f * scaleFactor), glm::vec2(1, .05f), &Load::instance().robotLaser, shaderProgram);
@@ -160,7 +160,7 @@ void Robot::init(const glm::vec2 & initialPos, const int windowHeight, ShaderPro
 	spriteLaser->setPosition(pos);
 
 	state = INACTIVE;
-	alertRange = (int)windowHeight;
+	alertRange = (int)(windowHeight * 1.5f);
 	minAttackRange = glm::vec2(30.f * scaleFactor, 20.f * scaleFactor);
 	maxAttackRange = glm::vec2(55.f * scaleFactor, -30.f * scaleFactor);
 
@@ -211,6 +211,7 @@ void Robot::enemyIA(int deltaTime)
 		if (sprite->animation() != IDLE) sprite->changeAnimation(IDLE);
 		if (Physics::instance().isCloseThan(this, alertRange))
 		{
+			delay = 1.f;
 			state = TOASTING;
 			active = true;
 		}

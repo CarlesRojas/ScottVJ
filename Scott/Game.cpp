@@ -25,9 +25,6 @@ void Game::init()
 	theEnd = gameOver = false;
 	
 	Load::instance().init();
-	Load::instance().load(0);
-	Load::instance().load(1);
-	Load::instance().load(2);
 	Camera::instance().init(glm::vec2(SCREEN_WIDTH, SCREEN_HEIGHT), glm::vec2(SCREEN_WIDTH, SCREEN_HEIGHT));
 	Physics::instance().init(&program);
 

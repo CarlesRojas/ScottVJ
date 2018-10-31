@@ -31,7 +31,7 @@ void Roxanne::init(const glm::vec2 & initialPos, const int windowHeight, ShaderP
 	flip = true;
 	isBoss = true;
 	speed = (int)(45 * scaleFactor);
-	hp = 1;
+	hp = 4;
 
 	sprite = Sprite::createSprite(true, glm::vec2(256.f * scaleFactor, 256.f * scaleFactor), glm::vec2(0.05, 0.1f), &Load::instance().roxanne, shaderProgram);
 	sprite->setNumberAnimations(15);
@@ -188,7 +188,7 @@ void Roxanne::init(const glm::vec2 & initialPos, const int windowHeight, ShaderP
 	sprite->addKeyframe(DYING, glm::vec2(10 * 0.05f, 9 * 0.1f));
 
 	sprite->setAnimationSpeed(NONE, 8);
-	sprite->addKeyframe(NONE, glm::vec2(9 * 0.05f, 9 * 0.1f));
+	sprite->addKeyframe(NONE, glm::vec2(19 * 0.05f, 9 * 0.1f));
 
 	// Sprite Laser
 	spriteSword = Sprite::createSprite(true, glm::vec2(512.f * scaleFactor, 128.f * scaleFactor), glm::vec2(1, .25f), &Load::instance().roxanneWhip, shaderProgram);
@@ -219,7 +219,7 @@ void Roxanne::init(const glm::vec2 & initialPos, const int windowHeight, ShaderP
 	spriteSword->setPosition(pos);
 
 	state = INACTIVE;
-	alertRange = (int)windowHeight;
+	alertRange = (int)(windowHeight * 1.5f);
 	minAttackRange = glm::vec2(10.f * scaleFactor, 65.f * scaleFactor);
 	maxAttackRange = glm::vec2(50.f * scaleFactor, -30.f * scaleFactor);
 
@@ -438,6 +438,8 @@ void Roxanne::enemyIA(int deltaTime)
 				if (playerPos.x > pos.x && flip) flip = false;
 
 				if (sprite->animation() != SWORD_ATK_START) sprite->changeAnimation(SWORD_ATK_START);
+				if (spriteSword->animation() != NOSWORD) spriteSword->changeAnimation(NOSWORD);
+
 				if (!atk1->playerHit && !atk2->playerHit && !atk3->playerHit && !atk4->playerHit && !atk5->playerHit) sword->activate(pos, flip);
 				delay = 8.5f / 8.f;
 				comboStage++;
